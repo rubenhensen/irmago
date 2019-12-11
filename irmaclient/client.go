@@ -68,6 +68,9 @@ type Client struct {
 	signer                Signer
 	sessions              sessions
 
+	// VC
+	verifiableCredentials []irma.VerifiableCredential
+
 	jobs       chan func()   // queue of jobs to run
 	jobsPause  chan struct{} // sending pauses background jobs
 	jobsPaused bool
@@ -912,6 +915,7 @@ func (client *Client) ProofBuilders(choice *irma.DisclosureChoice, request irma.
 	if r, ok := request.(*irma.SignatureRequest); ok {
 		var sigs []*big.Int
 		var disclosed [][]*big.Int
+
 		var s *big.Int
 		var d []*big.Int
 		for _, builder := range builders {
@@ -1168,7 +1172,7 @@ func (client *Client) keyshareEnrollWorker(managerID irma.SchemeManagerIdentifie
 		client: client,
 		pin:    pin,
 		kss:    kss,
-	})
+	}, irma.IssueVC)
 
 	return nil
 }

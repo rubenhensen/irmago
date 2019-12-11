@@ -100,6 +100,16 @@ func convertDisjunctions(disjunctions []LegacyLabeledDisjunction) (
 	return
 }
 
+func parseLDContext(bts []byte) (string, error) {
+	var v struct {
+		LDContext string `json:"@context"`
+	}
+	if err := json.Unmarshal(bts, &v); err != nil {
+		return "LEGACY", err
+	}
+	return v.LDContext, nil
+}
+
 func checkType(typ, expected Action) error {
 	if typ != expected {
 		return errors.New("not a " + expected + " session request")
@@ -193,6 +203,7 @@ func (dr *DisclosureRequest) UnmarshalJSON(bts []byte) (err error) {
 	}
 	dr.BaseRequest = legacy.BaseRequest
 	dr.legacy = true
+	//dr.LDContext = [2]string{LDVerifiableCredential, LDContextDisclosureRequest}
 	dr.LDContext = LDContextDisclosureRequest
 	dr.Disclose, dr.Labels = convertDisjunctions(legacy.Content)
 

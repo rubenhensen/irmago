@@ -16,7 +16,7 @@ const LDContextSignedMessage = "https://irma.app/ld/signature/v2"
 // SignedMessage is a message signed with an attribute-based signature
 // The 'realnonce' will be calculated as: SigRequest.GetNonce() = ASN1(nonce, SHA256(message), timestampSignature)
 type SignedMessage struct {
-	LDContext string                    `json:"@context"`
+	LDContext string                 `json:"@context"`
 	Signature gabi.ProofList            `json:"signature"`
 	Indices   DisclosedAttributeIndices `json:"indices"`
 	Nonce     *big.Int                  `json:"nonce"`

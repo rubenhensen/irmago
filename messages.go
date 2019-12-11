@@ -28,6 +28,7 @@ const (
 	MinVersionHeader    = "X-IRMA-MinProtocolVersion"
 	MaxVersionHeader    = "X-IRMA-MaxProtocolVersion"
 	AuthorizationHeader = "Authorization"
+	VCHeader            = "X-IRMA-VC"
 )
 
 // ProtocolVersion encodes the IRMA protocol version of an IRMA session.
@@ -174,6 +175,14 @@ type Qr struct {
 // Tokens to identify a session from the perspective of the different agents
 type RequestorToken string
 type ClientToken string
+
+type QrSovrin struct {
+	// Server with which to perform the session
+	URL string `json:"url"`
+	// Session type (disclosing, signing, issuing)
+	Type   Action `json:"action"`
+	System string `json:"system"`
+}
 
 // ParseClientToken parses a string to a ClientToken after validating the input.
 func ParseClientToken(input string) (ClientToken, error) {

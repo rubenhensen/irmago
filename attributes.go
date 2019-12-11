@@ -72,6 +72,10 @@ func NewAttributeListFromInts(ints []*big.Int, conf *Configuration) *AttributeLi
 	}
 }
 
+func (al *AttributeList) AttrMap() map[AttributeTypeIdentifier]TranslatedString {
+	return al.attrMap
+}
+
 func (al *AttributeList) Info() *CredentialInfo {
 	if al.info == nil {
 		al.info = al.CredentialInfo()

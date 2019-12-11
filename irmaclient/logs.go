@@ -28,11 +28,13 @@ type LogEntry struct {
 	IssueCommitment *irma.IssueCommitmentMessage `json:",omitempty"`
 
 	// All session types
-	ServerName *irma.RequestorInfo   `json:",omitempty"`
-	Version    *irma.ProtocolVersion `json:",omitempty"`
-	Disclosure *irma.Disclosure      `json:",omitempty"`
-	Request    json.RawMessage       `json:",omitempty"` // Message that started the session
-	request    irma.SessionRequest   // cached parsed version of Request; get with LogEntry.SessionRequest()
+	ServerName   *irma.RequestorInfo         `json:",omitempty"`
+	Version      *irma.ProtocolVersion       `json:",omitempty"`
+	Disclosure   *irma.Disclosure            `json:",omitempty"`
+	Request      json.RawMessage             `json:",omitempty"` // Message that started the session
+	request      irma.SessionRequest         // cached parsed version of Request; get with LogEntry.SessionRequest()
+	Presentation irma.VerifiablePresentation `json:",omitempty"`
+	Credential   *irma.VerifiableCredential  `json:",omitempty"`
 }
 
 const ActionRemoval = irma.Action("removal")
@@ -123,6 +125,8 @@ func (entry *LogEntry) GetSignedMessage() (abs *irma.SignedMessage, err error) {
 	}, nil
 }
 
+const ActionRemoval = irma.Action("removal")
+
 func (session *session) createLogEntry(response interface{}) (*LogEntry, error) {
 	entry := &LogEntry{
 		Type:       session.Action,
@@ -147,9 +151,17 @@ func (session *session) createLogEntry(response interface{}) (*LogEntry, error) 
 
 		fallthrough
 	case irma.ActionDisclosing:
-		entry.Disclosure = response.(*irma.Disclosure)
+		if session.IsExtern() {
+			entry.Presentation = response.(irma.VerifiablePresentation)
+		} else {
+			entry.Disclosure = response.(*irma.Disclosure)
+		}
 	case irma.ActionIssuing:
-		entry.IssueCommitment = response.(*irma.IssueCommitmentMessage)
+		if session.IsExtern() {
+			entry.Credential = response.(*irma.VerifiableCredential)
+		} else {
+			entry.IssueCommitment = response.(*irma.IssueCommitmentMessage)
+		}
 	default:
 		return nil, errors.New("Invalid log type")
 	}

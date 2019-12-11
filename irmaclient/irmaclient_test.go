@@ -131,6 +131,46 @@ func TestStorageDeserialization(t *testing.T) {
 	verifyKeyshareIsUnmarshaled(t, client)
 }
 
+/*
+var doc = `
+{
+  "id": "did:sov:WRfXPg8dantKVubE3HX8pw",
+  "service": [
+    {
+	  "id": "test",
+      "type": "agent",
+      "serviceEndpoint": "https://agents.danubeclouds.com/agent/WRfXPg8dantKVubE3HX8pw"
+    },
+    {
+	  "id": "test1",
+      "type": "xdi",
+      "serviceEndpoint": "https://xdi03-at.danubeclouds.com/cl/+!:did:sov:WRfXPg8dantKVubE3HX8pw"
+    }
+  ],
+  "publicKey": [
+    {
+      "id": "did:sov:WRfXPg8dantKVubE3HX8pw#key-1",
+      "type": "Ed25519VerificationKey2018",
+      "publicKeyBase58": "~P7F3BNs5VmQ6eVpwkNKJ5D",
+	  "controller": "did:example:123456789abcdefghi"
+    }
+  ],
+  "@context": ["https://w3id.org/did/v1"]
+}
+`
+
+
+func TestDidResolver(t *testing.T) {
+
+	didResolver := did.NewDoc(did.WithDidMethod("sov", mockDidMethod{readValue: []byte(doc)}))
+	didDoc, _ := didResolver.Resolve("did:sov:WRfXPg8dantKVubE3HX8pw", did.WithResultType(did.DidDocumentResult) )
+
+	if didDoc != nil {
+		fmt.Println(didDoc.ID)
+	}
+}
+*/
+
 // TestCandidates tests the correctness of the function of the client that, given a disjunction of attributes
 // requested by the verifier, calculates a list of candidate attributes contained by the client that would
 // satisfy the attribute disjunction.
@@ -324,14 +364,14 @@ func TestCredentialInfoListNewAttribute(t *testing.T) {
 	defer test.ClearTestStorage(t, client, handler.storage)
 
 	schemeid := irma.NewSchemeManagerIdentifier("irma-demo")
-	credid := irma.NewCredentialTypeIdentifier("irma-demo.RU.studentCard")
+	//credid := irma.NewCredentialTypeIdentifier("irma-demo.RU.studentCard")
 	attrid := irma.NewAttributeTypeIdentifier("irma-demo.RU.studentCard.newAttribute")
 
 	scheme := client.Configuration.SchemeManagers[schemeid]
 	scheme.URL = "http://localhost:48681/irma_configuration_updated/irma-demo"
 	require.NoError(t, client.Configuration.UpdateScheme(scheme, nil))
 	require.NoError(t, client.Configuration.ParseFolder())
-	require.NotNil(t, client.Configuration.CredentialTypes[credid].AttributeType(attrid))
+	//require.NotNil(t, client.Configuration.CredentialTypes[credid].AttributeType(attrid))
 
 	// irma-demo.RU.studentCard.newAttribute now exists in the scheme but not in the instance in the testdata folder
 	for _, credinfo := range client.CredentialInfoList() {

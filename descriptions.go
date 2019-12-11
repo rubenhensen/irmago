@@ -100,6 +100,7 @@ type AttributeType struct {
 	Optional    string `xml:"optional,attr"  json:",omitempty"`
 	Name        TranslatedString
 	Description TranslatedString
+	DataType    string `xml:"type,attr"`
 
 	RandomBlind bool `xml:"randomblind,attr,optional" json:",omitempty"`
 

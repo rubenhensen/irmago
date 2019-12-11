@@ -31,6 +31,7 @@ var (
 	ErrorKeyshareProofMissing Error = Error{Type: "KEYSHARE_PROOF_MISSING", Status: 403, Description: "ProofP object from a keyshare server missing"}
 	ErrorSessionUnknown       Error = Error{Type: "SESSION_UNKNOWN", Status: 400, Description: "Unknown or expired session"}
 	ErrorMalformedInput       Error = Error{Type: "MALFORMED_INPUT", Status: 400, Description: "Input could not be parsed"}
+	ErrorMalformedPres        Error = Error{Type: "MALFORMED_INPUT", Status: 400, Description: "Input could not be parsed to a verifiable presentation"}
 	ErrorUnknown              Error = Error{Type: "EXCEPTION", Status: 500, Description: "Encountered unexpected problem"}
 	ErrorNextSession          Error = Error{Type: "NEXT_SESSION", Status: 500, Description: "Error starting next session"}
 	ErrorRevocation           Error = Error{Type: "REVOCATION", Status: 500, Description: "Revocation error"}

@@ -35,7 +35,7 @@ type Server struct {
 }
 
 // Start the server. If successful then it will not return until Stop() is called.
-func (s *Server) Start(config *Configuration) error {
+func (s *Server) Start(config *Configuration, isTypeServer bool) error {
 	if s.conf.LogJSON {
 		s.conf.Logger.WithField("configuration", s.conf).Debug("Configuration")
 	} else {
@@ -59,14 +59,24 @@ func (s *Server) Start(config *Configuration) error {
 	s.stop = make(chan struct{})
 	s.stopped = make(chan struct{}, count)
 
-	if s.conf.separateClientServer() {
+	if isTypeServer {
+
 		go func() {
-			done <- s.startClientServer()
+			done <- s.startVCServer()
 		}()
+
+	} else {
+
+		if s.conf.separateClientServer() {
+			go func() {
+				done <- s.startClientServer()
+			}()
+		}
+		go func() {
+			done <- s.startRequestorServer()
+		}()
+
 	}
-	go func() {
-		done <- s.startRequestorServer()
-	}()
 
 	var stopped bool
 	var err error
@@ -86,6 +96,11 @@ func (s *Server) Start(config *Configuration) error {
 func (s *Server) startRequestorServer() error {
 	tlsConf, _ := s.conf.tlsConfig()
 	return s.startServer(s.Handler(), "Server", s.conf.ListenAddress, s.conf.Port, tlsConf)
+}
+
+func (s *Server) startVCServer() error {
+	tlsConf, _ := s.conf.tlsConfig()
+	return s.startServer(s.VCHandler(), "Type server", s.conf.ListenAddress, s.conf.TypePort, tlsConf)
 }
 
 func (s *Server) startClientServer() error {
@@ -225,6 +240,23 @@ func (s *Server) Handler() http.Handler {
 	})
 
 	return s.prefixRouter(router)
+}
+
+func (s *Server) VCHandler() http.Handler {
+	router := chi.NewRouter()
+	router.Use(cors.New(corsOptions).Handler)
+
+	router.Use(s.logHandler("VC", true, true, true))
+
+	router.Mount("/type/", s.irmaserv.VCHandler("type"))
+	router.Mount("/schema/", s.irmaserv.VCHandler("schema"))
+	router.Mount("/issuer/", s.irmaserv.VCHandler("issuer"))
+	router.Mount("/proof", s.irmaserv.VCHandler("proof"))
+	if s.conf.StaticPath != "" {
+		router.Mount(s.conf.StaticPrefix, s.StaticFilesHandler())
+	}
+
+	return router
 }
 
 func (s *Server) StaticFilesHandler() http.Handler {

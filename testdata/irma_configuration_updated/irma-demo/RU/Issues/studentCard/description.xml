@@ -14,7 +14,13 @@
 		<en>Student Card issued by the Radboud University Nijmegen</en>
 		<nl>Studentenkaart uitgegeven door de Radboud Universiteit Nijmegen</nl>
 	</Description>
-	<IssueURL><en></en><nl></nl></IssueURL>
+	<IssueURL>
+		<en>https://privacybydesign.foundation/attribute-index/en/irma-demo.RU.studentCard.html</en>
+		<nl>https://privacybydesign.foundation/attribute-index/nl/irma-demo.RU.studentCard.html</nl>
+	</IssueURL>
+	<ShouldBeSingleton>true</ShouldBeSingleton>
+
+
 
 	<Attributes>
 		<Attribute id="university">
@@ -47,7 +53,7 @@
 				<nl>Uw studentnummer</nl>
 			</Description>
 		</Attribute>
-		<Attribute id="level" optional="true">
+		<Attribute id="level">
 			<Name>
 				<en>Type</en>
 				<nl>Soort</nl>
@@ -55,16 +61,6 @@
 			<Description>
 				<en>Whether you are a regular or PhD student</en>
 				<nl>Of u een gewone of PhD student bent</nl>
-			</Description>
-		</Attribute>
-		<Attribute id="newAttribute" optional="true">
-			<Name>
-				<en>New attribute</en>
-				<nl>Nieuw attribuut</nl>
-			</Name>
-			<Description>
-				<en>New attribute</en>
-				<nl>Nieuw attribuut</nl>
 			</Description>
 		</Attribute>
 
