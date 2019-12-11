@@ -48,6 +48,12 @@ func New(conf *server.Configuration) (*Server, error) {
 	return s, s.verifyConfiguration(s.conf)
 }
 
+
+func (s *Server) GetConfig() *server.Configuration {
+	return s.conf
+}
+
+
 func (s *Server) Stop() {
 	s.stopScheduler <- true
 	s.sessions.stop()
@@ -238,7 +244,7 @@ func (s *Server) CancelSession(token string) error {
 }
 
 func ParsePath(path string) (string, string, error) {
-	pattern := regexp.MustCompile("(\\w+)/?(|commitments|proofs|status|statusevents)$")
+	pattern := regexp.MustCompile("(\\w+)/?(|presentation|commitments|proofs|status|statusevents)$")
 	matches := pattern.FindStringSubmatch(path)
 	if len(matches) != 3 {
 		return "", "", server.LogWarning(errors.Errorf("Invalid URL: %s", path))
@@ -319,6 +325,17 @@ func (s *Server) handleProtocolMessage(
 		}
 	}
 
+	h := http.Header(headers)
+	min := &irma.ProtocolVersion{}
+	if err := json.Unmarshal([]byte(h.Get(irma.MinVersionHeader)), min); err != nil {
+	}
+
+	// Get VC Header
+	// User-Agent should be used in future production read version
+	vcHeader := h.Get(irma.VCHeader)
+
+	// possible to do without session?
+
 	token, noun, err := ParsePath(path)
 	if err != nil {
 		status, output = server.JsonResponse(nil, server.RemoteError(server.ErrorUnsupported, ""))
@@ -364,7 +381,7 @@ func (s *Server) handleProtocolMessage(
 				status, output = server.JsonResponse(nil, session.fail(server.ErrorMalformedInput, err.Error()))
 				return
 			}
-			status, output = server.JsonResponse(session.handleGetRequest(min, max))
+			status, output = server.JsonResponse(session.handleGetRequest(min, max, vcHeader))
 			return
 		}
 		status, output = server.JsonResponse(nil, session.fail(server.ErrorInvalidRequest, ""))
@@ -381,7 +398,7 @@ func (s *Server) handleProtocolMessage(
 			return
 		}
 
-		// Below are only POST enpoints
+		// Below are only POST endpoints
 		if method != http.MethodPost {
 			status, output = server.JsonResponse(nil, session.fail(server.ErrorInvalidRequest, ""))
 			return
@@ -389,19 +406,64 @@ func (s *Server) handleProtocolMessage(
 
 		if noun == "commitments" && session.action == irma.ActionIssuing {
 			commitments := &irma.IssueCommitmentMessage{}
-			if err := irma.UnmarshalValidate(message, commitments); err != nil {
-				status, output = server.JsonResponse(nil, session.fail(server.ErrorMalformedInput, ""))
-				return
+			vc := &irma.VerifiableCredential{}
+
+			// if message conforms to VC format, map ProofMsg to commitments object
+			if vcHeader == "yes" {
+					if err := irma.UnmarshalValidate(message, vc); err != nil {
+						s.conf.Logger.WithField("clientToken", token).Warn(err)
+						status, output = server.JsonResponse(nil, session.fail(server.ErrorMalformedInput, ""))
+						return
+					}
+
+					s.conf.Logger.WithField("clientToken", token).Info("Valid VC detected")
+
+					vcProof, _ := json.Marshal(vc.Proof.ProofMsg)
+					if err := irma.UnmarshalValidate(vcProof, commitments); err != nil {
+						status, output = server.JsonResponse(nil, session.fail(server.ErrorMalformedInput, ""))
+						return
+					}
+
+					status, output = server.JsonResponse(session.handlePostCommitments(commitments, "yes"))
+					return
+
+			} else {
+
+				if err := irma.UnmarshalValidate(message, commitments); err != nil {
+					status, output = server.JsonResponse(nil, session.fail(server.ErrorMalformedInput, ""))
+					return
+				} else {
+					status, output = server.JsonResponse(session.handlePostCommitments(commitments, "no"))
+					return
+				}
+
 			}
-			status, output = server.JsonResponse(session.handlePostCommitments(commitments))
-			return
 		}
-		if noun == "proofs" && session.action == irma.ActionDisclosing {
+		if noun == "proofs" && vcHeader != "yes" && session.action == irma.ActionDisclosing {
 			disclosure := irma.Disclosure{}
 			if err := irma.UnmarshalValidate(message, &disclosure); err != nil {
 				status, output = server.JsonResponse(nil, session.fail(server.ErrorMalformedInput, ""))
 				return
 			}
+			status, output = server.JsonResponse(session.handlePostDisclosure(disclosure))
+			return
+		}
+		if noun == "proofs" && vcHeader == "yes" && session.action == irma.ActionDisclosing {
+
+			disclosure := irma.Disclosure{}
+			verifiablePresentation := irma.VerifiablePresentation{}
+			if err := irma.UnmarshalValidate(message, &verifiablePresentation); err != nil {
+				status, output = server.JsonResponse(nil, session.fail(server.ErrorMalformedInput, ""))
+				return
+			}
+
+			proofByte, err := json.Marshal(verifiablePresentation.Proof.ProofMsg)
+			err = json.Unmarshal(proofByte, &disclosure)
+			if err != nil {
+				status, output = server.JsonResponse(nil, session.fail(server.ErrorMalformedInput, ""))
+				return
+			}
+
 			status, output = server.JsonResponse(session.handlePostDisclosure(disclosure))
 			return
 		}

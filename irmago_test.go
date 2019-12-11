@@ -175,6 +175,9 @@ func TestMetadataCompatibility(t *testing.T) {
 	attr := MetadataFromInt(s2big("49043481832371145193140299771658227036446546573739245068"), conf)
 	require.NotNil(t, attr.CredentialType(), "attr.CredentialType() should not be nil")
 
+	attr2 := MetadataFromInt(s2big("jo7ejO5i3K7opps="), conf)
+	Logger.Println(attr2.CredentialType().IssuerID)
+
 	require.Equal(t,
 		NewCredentialTypeIdentifier("irma-demo.RU.studentCard"),
 		attr.CredentialType().Identifier(),
@@ -258,6 +261,9 @@ func TestAttributeDecoding(t *testing.T) {
 	require.Equal(t, *oldString, expected)
 }
 
+// TODO Daniel: similar to VC test suite
+//  https://github.com/w3c/vc-test-suite/
+
 func TestSessionRequests(t *testing.T) {
 	attrval := "hello"
 	sigMessage := "message to be signed"
@@ -301,7 +307,7 @@ func TestSessionRequests(t *testing.T) {
 			}`,
 			current: &DisclosureRequest{},
 			currentJson: `{
-				"@context": "https://irma.app/ld/request/disclosure/v2",
+				"@context": ["https://www.w3.org/2018/credentials/v1","https://irma.app/ld/request/disclosure/v2"],
 				"disclose": [
 					[
 						[
@@ -355,7 +361,7 @@ func TestSessionRequests(t *testing.T) {
 			}`,
 			current: &SignatureRequest{},
 			currentJson: `{
-				"@context": "https://irma.app/ld/request/signature/v2",
+				"@context": ["https://www.w3.org/2018/credentials/v1","https://irma.app/ld/request/signature/v2"],
 				"disclose": [
 					[
 						[
@@ -418,7 +424,7 @@ func TestSessionRequests(t *testing.T) {
 			}`,
 			current: &IssuanceRequest{},
 			currentJson: `{
-				"@context": "https://irma.app/ld/request/issuance/v2",
+				"@context": ["https://www.w3.org/2018/credentials/v1","https://irma.app/ld/request/issuance/v2"],
 				"credentials": [
 					{
 						"credential": "irma-demo.MijnOverheid.root",

@@ -118,6 +118,7 @@ func (r *SessionResult) MarshalJSON() ([]byte, error) {
 		Signature   *irma.SignedMessage        `json:"signature,omitempty"`
 		Err         *irma.RemoteError          `json:"error,omitempty"`
 	}{r.Token, r.Status, r.Type, r.ProofStatus, disclosed, r.Signature, r.Err})
+
 }
 
 func (conf *Configuration) PrivateKey(id irma.IssuerIdentifier) (sk *gabi.PrivateKey, err error) {

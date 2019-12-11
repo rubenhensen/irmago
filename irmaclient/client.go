@@ -1,16 +1,16 @@
 package irmaclient
 
 import (
+	"path/filepath"
 	"strconv"
 	"time"
-	"path/filepath"
 
 	"github.com/bwesterb/go-atum"
 	"github.com/getsentry/raven-go"
 	"github.com/go-errors/errors"
 	"github.com/privacybydesign/gabi"
 	"github.com/privacybydesign/gabi/big"
-	"github.com/privacybydesign/irmago"
+	irma "github.com/privacybydesign/irmago"
 	"github.com/privacybydesign/irmago/internal/fs"
 )
 
@@ -56,6 +56,9 @@ type Client struct {
 	irmaConfigurationPath string
 	androidStoragePath    string
 	handler               ClientHandler
+
+	// VC
+	verifiableCredentials []irma.VerifiableCredential
 }
 
 // SentryDSN should be set in the init() function
@@ -141,7 +144,7 @@ func New(
 		handler:               handler,
 	}
 
-	cm.Configuration, err = irma.NewConfigurationFromAssets(filepath.Join(storagePath,"irma_configuration"), irmaConfigurationPath)
+	cm.Configuration, err = irma.NewConfigurationFromAssets(filepath.Join(storagePath, "irma_configuration"), irmaConfigurationPath)
 	if err != nil {
 		return nil, err
 	}
@@ -686,6 +689,7 @@ func (client *Client) ProofBuilders(choice *irma.DisclosureChoice, request irma.
 	if r, ok := request.(*irma.SignatureRequest); ok {
 		var sigs []*big.Int
 		var disclosed [][]*big.Int
+
 		var s *big.Int
 		var d []*big.Int
 		for _, builder := range builders {
@@ -758,6 +762,7 @@ func (client *Client) IssueCommitments(request *irma.IssuanceRequest, choice *ir
 	if err != nil {
 		return nil, nil, err
 	}
+
 	return &irma.IssueCommitmentMessage{
 		IssueCommitmentMessage: &gabi.IssueCommitmentMessage{
 			Proofs: builders.BuildProofList(request.GetContext(), request.GetNonce(nil), false),
@@ -808,6 +813,7 @@ func (client *Client) ConstructCredentials(msg []*gabi.IssueSignatureMessage, re
 
 	return nil
 }
+
 
 // Keyshare server handling
 
@@ -878,7 +884,7 @@ func (client *Client) keyshareEnrollWorker(managerID irma.SchemeManagerIdentifie
 		client: client,
 		pin:    pin,
 		kss:    kss,
-	})
+	}, irma.IssueVC)
 
 	return nil
 }

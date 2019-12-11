@@ -35,7 +35,7 @@ func StartRequestorServer(configuration *requestorserver.Configuration) {
 		if requestorServer, err = requestorserver.New(configuration); err != nil {
 			panic(err)
 		}
-		if err = requestorServer.Start(configuration); err != nil {
+		if err = requestorServer.Start(configuration, false); err != nil {
 			panic("Starting server failed: " + err.Error())
 		}
 	}()

@@ -103,7 +103,7 @@ func parseLDContext(bts []byte) (string, error) {
 		LDContext string `json:"@context"`
 	}
 	if err := json.Unmarshal(bts, &v); err != nil {
-		return "", err
+		return "LEGACY", err
 	}
 	return v.LDContext, nil
 }
@@ -201,6 +201,7 @@ func (dr *DisclosureRequest) UnmarshalJSON(bts []byte) (err error) {
 	}
 	dr.BaseRequest = legacy.BaseRequest
 	dr.legacy = true
+	//dr.LDContext = [2]string{LDVerifiableCredential, LDContextDisclosureRequest}
 	dr.LDContext = LDContextDisclosureRequest
 	dr.Disclose, dr.Labels = convertDisjunctions(legacy.Content)
 

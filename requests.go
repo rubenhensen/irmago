@@ -15,6 +15,8 @@ import (
 	"github.com/privacybydesign/irmago/internal/fs"
 )
 
+const LDVerifiableCredential = "https://www.w3.org/2018/credentials/v1"
+
 const (
 	LDContextDisclosureRequest = "https://irma.app/ld/request/disclosure/v2"
 	LDContextSignatureRequest  = "https://irma.app/ld/request/signature/v2"
@@ -23,6 +25,7 @@ const (
 
 // BaseRequest contains the context and nonce for an IRMA session.
 type BaseRequest struct {
+	//LDContext [2]string `json:"@context,omitempty"`
 	LDContext string `json:"@context,omitempty"`
 
 	// Chosen by the IRMA server during the session

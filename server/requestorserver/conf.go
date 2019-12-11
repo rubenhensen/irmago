@@ -30,6 +30,10 @@ type Configuration struct {
 	ListenAddress string `json:"listen_addr" mapstructure:"listen_addr"`
 	// Port to listen at
 	Port int `json:"port" mapstructure:"port"`
+
+	// Port to listen at for type server
+	TypePort int `json:"typeport" mapstructure:"typeport"`
+
 	// TLS configuration
 	TlsCertificate     string `json:"tls_cert" mapstructure:"tls_cert"`
 	TlsCertificateFile string `json:"tls_cert_file" mapstructure:"tls_cert_file"`

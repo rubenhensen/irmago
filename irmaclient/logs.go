@@ -12,6 +12,7 @@ import (
 // LogEntry is a log entry of a past event.
 type LogEntry struct {
 	// General info
+	ID   	uint64
 	Type    irma.Action
 	Time    irma.Timestamp        // Time at which the session was completed
 	Version *irma.ProtocolVersion `json:",omitempty"` // Protocol version that was used in the session
@@ -25,8 +26,10 @@ type LogEntry struct {
 	Timestamp              *atum.Timestamp                                           `json:",omitempty"` // In case of signature sessions
 	SignedMessageLDContext string                                                    `json:",omitempty"` // In case of signature sessions
 
-	IssueCommitment *irma.IssueCommitmentMessage `json:",omitempty"`
-	Disclosure      *irma.Disclosure             `json:",omitempty"`
+	IssueCommitment *irma.IssueCommitmentMessage 	`json:",omitempty"`
+	Disclosure      *irma.Disclosure             	`json:",omitempty"`
+	Presentation    irma.VerifiablePresentation	`json:",omitempty"`
+	Credential 		*irma.VerifiableCredential		`json:",omitempty"`
 }
 
 const actionRemoval = irma.Action("removal")
@@ -115,6 +118,8 @@ func (entry *LogEntry) GetSignedMessage() (abs *irma.SignedMessage, err error) {
 	}, nil
 }
 
+const ActionRemoval = irma.Action("removal")
+
 func (session *session) createLogEntry(response interface{}) (*LogEntry, error) {
 	entry := &LogEntry{
 		Type:    session.Action,
@@ -139,9 +144,17 @@ func (session *session) createLogEntry(response interface{}) (*LogEntry, error) 
 
 		fallthrough
 	case irma.ActionDisclosing:
-		entry.Disclosure = response.(*irma.Disclosure)
+		if session.IsExtern() {
+			entry.Presentation = response.(irma.VerifiablePresentation)
+		} else {
+			entry.Disclosure = response.(*irma.Disclosure)
+		}
 	case irma.ActionIssuing:
-		entry.IssueCommitment = response.(*irma.IssueCommitmentMessage)
+		if session.IsExtern() {
+			entry.Credential = response.(*irma.VerifiableCredential)
+		} else {
+			entry.IssueCommitment = response.(*irma.IssueCommitmentMessage)
+		}
 	default:
 		return nil, errors.New("Invalid log type")
 	}

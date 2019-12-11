@@ -23,6 +23,7 @@ var ForceHttps bool = false
 const (
 	MinVersionHeader = "X-IRMA-MinProtocolVersion"
 	MaxVersionHeader = "X-IRMA-MaxProtocolVersion"
+	VCHeader		 = "X-IRMA-VC"
 )
 
 // ProtocolVersion encodes the IRMA protocol version of an IRMA session.
@@ -146,6 +147,14 @@ type Qr struct {
 	URL string `json:"u"`
 	// Session type (disclosing, signing, issuing)
 	Type Action `json:"irmaqr"`
+}
+
+type QrSovrin struct {
+	// Server with which to perform the session
+	URL string `json:"url"`
+	// Session type (disclosing, signing, issuing)
+	Type Action `json:"action"`
+	System string `json:"system"`
 }
 
 type SchemeManagerRequest Qr

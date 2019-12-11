@@ -56,6 +56,8 @@ func TestIssuanceSession(t *testing.T) {
 	sessionHelper(t, request, "issue", nil)
 }
 
+
+
 func TestMultipleIssuanceSession(t *testing.T) {
 	request := getMultipleIssuanceRequest()
 	sessionHelper(t, request, "issue", nil)

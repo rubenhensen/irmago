@@ -29,6 +29,7 @@ const (
 	logsFile        = "logs"
 	preferencesFile = "preferences"
 	signaturesDir   = "sigs"
+	vcFile			= "vc"
 )
 
 func (s *storage) path(p string) string {

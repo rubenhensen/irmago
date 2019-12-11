@@ -62,6 +62,10 @@
   branch = "master"
   name = "github.com/timshannon/bolthold"
 
+[[override]]
+  branch = "master"
+  name = "github.com/hyperledger/aries-framework-go"
+
 [prune]
   go-tests = true
   unused-packages = true

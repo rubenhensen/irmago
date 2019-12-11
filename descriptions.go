@@ -18,6 +18,7 @@ type SchemeManager struct {
 	Name              TranslatedString `xml:"Name"`
 	URL               string           `xml:"Url"`
 	Contact           string           `xml:"contact"`
+	TypeServerURL     string           `xml:"TypeServerUrl"`
 	Description       TranslatedString
 	MinimumAppVersion SchemeAppVersion
 	KeyshareServer    string
@@ -75,6 +76,7 @@ type AttributeType struct {
 	Optional    string `xml:"optional,attr"  json:",omitempty"`
 	Name        TranslatedString
 	Description TranslatedString
+	DataType    string `xml:"type,attr"`
 
 	Index        int  `xml:"-"`
 	DisplayIndex *int `xml:"displayIndex,attr" json:",omitempty"`

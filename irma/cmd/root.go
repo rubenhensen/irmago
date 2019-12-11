@@ -12,8 +12,8 @@ import (
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
 	Use:   "irma",
-	Short: "IRMA toolkit",
-	Long:  "IRMA toolkit\nDocumentation: https://irma.app/docs",
+	Short: "IRMA toolkit (Dan version)",
+	Long:  "IRMA toolkit (Dan version)\nDocumentation: https://irma.app/docs",
 }
 
 func Execute() {

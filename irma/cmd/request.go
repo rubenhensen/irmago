@@ -276,6 +276,7 @@ func printQr(qr *irma.Qr, noqr bool) error {
 	return nil
 }
 
+// TODO: Daniel check how this can be extended with VC
 func printSessionResult(result *server.SessionResult) {
 	fmt.Println("Session result:")
 	fmt.Println(prettyprint(result))
