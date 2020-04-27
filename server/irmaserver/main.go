@@ -18,6 +18,8 @@ import (
 	"github.com/privacybydesign/irmago/server"
 )
 
+import _ "net/http/pprof"
+
 // Server is an irmaserver instance.
 type Server struct {
 	*servercore.Server

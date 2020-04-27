@@ -384,8 +384,6 @@ func (session *session) getVerifiablePresentation() (interface{}, error) {
 	var attrValues [][]*irma.DisclosedAttribute
 	index := 0
 
-	irmaVCServerURL := "https://irma.app"
-
 	// initialize verifiable presentation object
 	vcPres := irma.VerifiablePresentation{}
 	vcPres.LDContext = [2]string{LDVerifiableCredential, LDContextDisclosureRequest}
@@ -438,17 +436,17 @@ func (session *session) getVerifiablePresentation() (interface{}, error) {
 		vc.Type = append(vc.Type, credType.Name())
 
 		// Credential schema information
-		vc.Schema = append(vc.Schema, irma.VCSchema{Identifier: irmaVCServerURL + "/schema/" + strings.Replace(credType.String(), ".", "/", -1), Type: credType.Name()})
+		vc.Schema = append(vc.Schema, irma.VCSchema{Identifier: irma.VCServerURL + "schema/" + strings.Replace(credType.String(), ".", "/", -1), Type: credType.Name()})
 
 		// Proof information
-		vc.Proof.Type = "AnonCredDerivedCredentialv1"
-		vc.Proof.Created = metadata.SigningDate().Format(time.RFC3339) // credType SigningDate().Format(time.RFC3339)
-		vc.Proof.ProofMsg = proofList[index].(*gabi.ProofD).A          // randomized signature
+		//vc.Proof.Type = "AnonCredDerivedCredentialv1"
+		//vc.Proof.Created = metadata.SigningDate().Format(time.RFC3339) // credType SigningDate().Format(time.RFC3339)
+		//vc.Proof.ProofMsg = proofList[index].(*gabi.ProofD).A          // randomized signature
 
 		// Issuer information
 		issuerID := credType.IssuerIdentifier().Name()
 		metadataPk, _ := metadata.PublicKey()
-		vc.Issuer = irmaVCServerURL + "/issuer/" + strings.Replace(issuerID, ".", "/", -1) + "/" + fmt.Sprint(metadataPk.Counter)
+		vc.Issuer = irma.VCServerURL + "issuer/" + strings.Replace(issuerID, ".", "/", -1) + "/" + fmt.Sprint(metadataPk.Counter)
 
 		// Expiration date
 		vc.ExpirationDate = metadata.Expiry().Format(time.RFC3339)
@@ -598,7 +596,7 @@ func (session *session) logVC(interr interface{}) {
 	session.Handler.Success(string(messageJson))
 }
 
-// ConstructVerifiableCredentials is able to store VCs if proof object conforms to []gabi.IssueSignatureMessage
+// ConstructVerifiableCredentials is able to handle VCs, by marshalling []gabi.IssueSignatureMessage
 // Reusing IRMA computation to extract credentials from signature to store them as IRMA credentials
 func (client *Client) ConstructVerifiableCredentials(msg irma.VerifiableCredential, request *irma.IssuanceRequest, builders gabi.ProofBuilderList) error {
 	if len(msg.Proof.ProofMsg.([]interface{})) > len(builders) {

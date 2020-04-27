@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"github.com/privacybydesign/gabi"
 	ariesvc "github.com/hyperledger/aries-framework-go/pkg/doc/verifiable"
+	"net"
+	"errors"
 )
 
 type VCType map[string]interface{}
@@ -32,7 +34,7 @@ type VerifiableCredential struct {
 	IssuanceDate       string                   `json:"issuanceDate,omitempty"`
 	ExpirationDate	   string					`json:"expirationDate,omitempty"`
 	CredentialSubjects []map[string]interface{} `json:"credentialSubject"`
-	Proof              VCProof                  `json:"proof"`
+	Proof              VCProof                  `json:"proof,omitempty"`
 }
 
 type VerifiablePresentation struct {
@@ -80,7 +82,49 @@ func (vp *VerifiablePresentation) Validate() error {
 	return nil
 }
 
-// Boolean to tell IRMA app to request VC (via VC header set to "yes" to indicate to server to return a VC), and process it via ConstructVerifiableCredential
-var IssueVC = false
+// Boolean to tell IRMA app to compute a VC commitment (and server detects type of commitment to decide if to compute IRMA credential, or VC)
+// Process it via ConstructVerifiableCredential
+var IssueVC = true
+var VCServerURL = "http://192.168.2.100:8089/"
+
+func ExternalIP() (string, error) {
+	ifaces, err := net.Interfaces()
+	if err != nil {
+		return "", err
+	}
+	for _, iface := range ifaces {
+		if iface.Flags&net.FlagUp == 0 {
+			continue // interface down
+		}
+		if iface.Flags&net.FlagLoopback != 0 {
+			continue // loopback interface
+		}
+		addrs, err := iface.Addrs()
+		if err != nil {
+			return "", err
+		}
+		for _, addr := range addrs {
+			var ip net.IP
+			switch v := addr.(type) {
+			case *net.IPNet:
+				ip = v.IP
+			case *net.IPAddr:
+				ip = v.IP
+			}
+			if ip == nil || ip.IsLoopback() {
+				continue
+			}
+			ip = ip.To4()
+			if ip == nil {
+				continue // not an ipv4 address
+			}
+			return ip.String(), nil
+		}
+	}
+	return "", errors.New("are you connected to the network?")
+}
+
+
+
 
 

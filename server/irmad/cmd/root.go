@@ -111,7 +111,7 @@ func setFlags(cmd *cobra.Command, production bool) error {
 	flags.Bool("sse", false, "Enable server sent for status updates (experimental)")
 
 	flags.IntP("port", "p", 8088, "port at which to listen")
-	flags.IntP("typeport", "t", 8089, "port at which to listen to retrieve type info")
+	flags.IntP("metadataport", "m", 8089, "port at which to listen to retrieve metadata")
 	flags.StringP("listen-addr", "l", "", "address at which to listen (default 0.0.0.0)")
 	flags.Int("client-port", 0, "if specified, start a separate server for the IRMA app at this port")
 	flags.String("client-listen-addr", "", "address at which server for IRMA app listens")
@@ -232,7 +232,7 @@ func configure(cmd *cobra.Command) error {
 		},
 		ListenAddress:                  viper.GetString("listen-addr"),
 		Port:                           viper.GetInt("port"),
-		TypePort:						viper.GetInt("typeport"),
+		MetadataPort:					viper.GetInt("metadataport"),
 		ClientListenAddress:            viper.GetString("client-listen-addr"),
 		ClientPort:                     viper.GetInt("client-port"),
 		DisableRequestorAuthentication: viper.GetBool("no-auth"),

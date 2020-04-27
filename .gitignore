@@ -4,3 +4,7 @@ testdata/storage/*
 !testdata/storage/cardemu.xml
 errors_*.go
 vendor/
+irma-demo/
+*.der
+Gopkg.lock
+testdata/*

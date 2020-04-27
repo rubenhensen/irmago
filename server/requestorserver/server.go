@@ -36,7 +36,7 @@ type Server struct {
 }
 
 // Start the server. If successful then it will not return until Stop() is called.
-func (s *Server) Start(config *Configuration, isTypeServer bool) error {
+func (s *Server) Start(config *Configuration, isMetadataServer bool) error {
 	if s.conf.LogJSON {
 		s.conf.Logger.WithField("configuration", s.conf).Debug("Configuration")
 	} else {
@@ -60,10 +60,10 @@ func (s *Server) Start(config *Configuration, isTypeServer bool) error {
 	s.stop = make(chan struct{})
 	s.stopped = make(chan struct{}, count)
 
-	if isTypeServer {
+	if isMetadataServer {
 
 		go func() {
-			done <- s.startVCServer()
+			done <- s.startMetadataServer()
 		}()
 
 	} else {
@@ -99,9 +99,9 @@ func (s *Server) startRequestorServer() error {
 	return s.startServer(s.Handler(), "Server", s.conf.ListenAddress, s.conf.Port, tlsConf)
 }
 
-func (s *Server) startVCServer() error {
+func (s *Server) startMetadataServer() error {
 	tlsConf, _ := s.conf.tlsConfig()
-	return s.startServer(s.VCHandler(), "Type server", s.conf.ListenAddress, s.conf.TypePort, tlsConf)
+	return s.startServer(s.VCHandler(), "Metadata server", s.conf.ListenAddress, s.conf.MetadataPort, tlsConf)
 }
 
 func (s *Server) startClientServer() error {
@@ -236,10 +236,8 @@ func (s *Server) VCHandler() http.Handler {
 
 	router.Use(s.logHandler("VC", true, true, true))
 
-	router.Mount("/type/", s.irmaserv.VCHandler("type"))
 	router.Mount("/schema/", s.irmaserv.VCHandler("schema"))
 	router.Mount("/issuer/", s.irmaserv.VCHandler("issuer"))
-	router.Mount("/proof", s.irmaserv.VCHandler("proof"))
 	if s.conf.StaticPath != "" {
 		router.Mount(s.conf.StaticPrefix, s.StaticFilesHandler())
 	}

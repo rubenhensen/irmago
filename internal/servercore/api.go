@@ -325,6 +325,7 @@ func (s *Server) handleProtocolMessage(
 		}
 	}
 
+
 	h := http.Header(headers)
 	min := &irma.ProtocolVersion{}
 	if err := json.Unmarshal([]byte(h.Get(irma.MinVersionHeader)), min); err != nil {
@@ -409,35 +410,33 @@ func (s *Server) handleProtocolMessage(
 			vc := &irma.VerifiableCredential{}
 
 			// if message conforms to VC format, map ProofMsg to commitments object
-			if vcHeader == "yes" {
+			// TODO: Refactor to just check if commitment is VC message or not
+			//if vcHeader == "yes" {
 					if err := irma.UnmarshalValidate(message, vc); err != nil {
-						s.conf.Logger.WithField("clientToken", token).Warn(err)
-						status, output = server.JsonResponse(nil, session.fail(server.ErrorMalformedInput, ""))
-						return
+
+						// if message is no VC message, use legacy IRMA processing
+						if err := irma.UnmarshalValidate(message, commitments); err != nil {
+							status, output = server.JsonResponse(nil, session.fail(server.ErrorMalformedInput, ""))
+							return
+						} else {
+							status, output = server.JsonResponse(session.handlePostCommitments(commitments))
+							return
+						}
+
+					} else {
+
+						s.conf.Logger.WithField("clientToken", token).Info("Valid VC detected")
+
+						vcProof, _ := json.Marshal(vc.Proof.ProofMsg)
+						if err := irma.UnmarshalValidate(vcProof, commitments); err != nil {
+							status, output = server.JsonResponse(nil, session.fail(server.ErrorMalformedInput, ""))
+							return
+						} else {
+							status, output = server.JsonResponse(session.handlePostCommitmentsVC(commitments))
+							return
+						}
+
 					}
-
-					s.conf.Logger.WithField("clientToken", token).Info("Valid VC detected")
-
-					vcProof, _ := json.Marshal(vc.Proof.ProofMsg)
-					if err := irma.UnmarshalValidate(vcProof, commitments); err != nil {
-						status, output = server.JsonResponse(nil, session.fail(server.ErrorMalformedInput, ""))
-						return
-					}
-
-					status, output = server.JsonResponse(session.handlePostCommitments(commitments, "yes"))
-					return
-
-			} else {
-
-				if err := irma.UnmarshalValidate(message, commitments); err != nil {
-					status, output = server.JsonResponse(nil, session.fail(server.ErrorMalformedInput, ""))
-					return
-				} else {
-					status, output = server.JsonResponse(session.handlePostCommitments(commitments, "no"))
-					return
-				}
-
-			}
 		}
 		if noun == "proofs" && vcHeader != "yes" && session.action == irma.ActionDisclosing {
 			disclosure := irma.Disclosure{}
@@ -456,6 +455,8 @@ func (s *Server) handleProtocolMessage(
 				status, output = server.JsonResponse(nil, session.fail(server.ErrorMalformedInput, ""))
 				return
 			}
+
+			s.conf.Logger.WithField("clientToken", token).Info("Valid verifiable presentation detected")
 
 			proofByte, err := json.Marshal(verifiablePresentation.Proof.ProofMsg)
 			err = json.Unmarshal(proofByte, &disclosure)

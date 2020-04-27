@@ -32,7 +32,7 @@ type Configuration struct {
 	Port int `json:"port" mapstructure:"port"`
 
 	// Port to listen at for type server
-	TypePort int `json:"typeport" mapstructure:"typeport"`
+	MetadataPort int `json:"metadataport" mapstructure:"metadataport"`
 
 	// TLS configuration
 	TlsCertificate     string `json:"tls_cert" mapstructure:"tls_cert"`
