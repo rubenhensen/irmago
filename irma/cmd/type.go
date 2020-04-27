@@ -9,10 +9,10 @@ import (
 	"syscall"
 )
 
-var TypeCommand = &cobra.Command{
-	Use:   "vc",
-	Short: "Starts a server to return type or issuer information",
-	Long:  `irma server vc`,
+var MetadataCommand = &cobra.Command{
+	Use:   "metadata",
+	Short: "Starts a server to return metadata needed in VC sessions",
+	Long:  `Starts a server to return metadata needed in VC sessions`,
 	Run: func(command *cobra.Command, args []string) {
 		if err := configure(command); err != nil {
 			die(errors.WrapPrefix(err, "Failed to read configuration from file, args, or env vars", 0))
@@ -27,9 +27,6 @@ var TypeCommand = &cobra.Command{
 		}
 
 		conf.DisableSchemesUpdate = enabled // restore previous value before printing configuration
-
-		// here the server needs to be started
-		conf.Logger.Debug("TEST type")
 
 		serv, err := requestorserver.New(conf)
 		if err != nil {
@@ -65,9 +62,9 @@ var TypeCommand = &cobra.Command{
 }
 
 func init() {
-	RootCommand.AddCommand(TypeCommand)
+	RootCommand.AddCommand(MetadataCommand)
 
-	if err := setFlags(TypeCommand, productionMode()); err != nil {
-		die(errors.WrapPrefix(err, "Failed to attach flags to "+TypeCommand.Name()+" command", 0))
+	if err := setFlags(MetadataCommand, productionMode()); err != nil {
+		die(errors.WrapPrefix(err, "Failed to attach flags to "+MetadataCommand.Name()+" command", 0))
 	}
 }
