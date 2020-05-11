@@ -565,7 +565,7 @@ func (session *session) getVerifiablePresentation() (interface{}, error) {
 
 	vcPres.Proof.ProofMsg = disclosure
 	vcPres.Proof.Created = time.Now().Format(time.RFC3339)
-	vcPres.Proof.Type = "AnonCredPresentationProofv1"
+	vcPres.Proof.Type = "IRMAZKPPresentationProofv1"
 
 	_, attrValues, err = disclosure.DisclosedAttributes(session.client.Configuration, disjunctions.Disclose)
 
@@ -595,7 +595,7 @@ func (session *session) getVerifiablePresentation() (interface{}, error) {
 		vc.Type = append(vc.Type, credType.Name())
 
 		// Credential schema information
-		vc.Schema = append(vc.Schema, irma.VCSchema{Identifier: irma.VCServerURL + "schema/" + strings.Replace(credType.String(), ".", "/", -1), Type: credType.Name()})
+		vc.Schema = append(vc.Schema, irma.VCSchema{Identifier: irma.VCServerURL + "schema/" + strings.Replace(credType.String(), ".", "/", -1), Type: "JsonSchemaValidator2018"})
 
 		// Proof information
 		//vc.Proof.Type = "AnonCredDerivedCredentialv1"
