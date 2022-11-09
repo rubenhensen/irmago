@@ -246,8 +246,8 @@ func (s *Server) VCHandler() http.Handler {
 	router := chi.NewRouter()
 	router.Use(cors.New(corsOptions).Handler)
 
-	router.Use(s.logHandler("VC", true, true, true))
-
+	// router.Use(s.LogMiddleware("VC", true, true, true))
+	// router.NotFound(server.LogMiddleware("requestor", log)(router.NotFoundHandler()).ServeHTTP)
 	router.Mount("/schema/", s.irmaserv.VCHandler("schema"))
 	router.Mount("/issuer/", s.irmaserv.VCHandler("issuer"))
 	if s.conf.StaticPath != "" {

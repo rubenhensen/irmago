@@ -35,7 +35,7 @@ var serverCmd = &cobra.Command{
 		signal.Notify(interrupt, os.Interrupt, syscall.SIGTERM)
 
 		go func() {
-			if err := serv.Start(conf); err != nil {
+			if err := serv.Start(conf, false); err != nil {
 				die("", errors.WrapPrefix(err, "Failed to start server", 0))
 			}
 			conf.Logger.Debug("Server stopped")
