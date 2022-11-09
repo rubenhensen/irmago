@@ -105,7 +105,7 @@ func (session *session) handleGetClientRequest(min, max *irma.ProtocolVersion, c
 	} else {
 		return session.request, nil
 	}
-		
+
 	info, err := session.getClientRequest()
 	if err != nil {
 		return nil, session.fail(server.ErrorRevocation, err.Error())
@@ -638,7 +638,6 @@ const (
 	LDContextIssuanceRequest = "https://irma.app/ld/request/issuance/v2"
 )
 
-
 func (session *session) handlePostCommitmentsVC(commitments *irma.IssueCommitmentMessage) (interface{}, *irma.RemoteError) {
 	if session.status != server.StatusConnected {
 		return nil, server.RemoteError(server.ErrorUnexpectedRequest, "Session not yet started or already finished")
@@ -724,7 +723,7 @@ func (session *session) handlePostCommitmentsVC(commitments *irma.IssueCommitmen
 	irmaVCServerURL := session.conf.IrmaConfiguration.SchemeManagers[request.Credentials[0].CredentialTypeID.IssuerIdentifier().SchemeManagerIdentifier()].TypeServerURL
 	externalIP, _ := irma.ExternalIP()
 	if len(irmaVCServerURL) == 0 {
-		irmaVCServerURL =  "http://" + externalIP + ":8089/"
+		irmaVCServerURL = "http://" + externalIP + ":8089/"
 	}
 
 	vcObj := irma.VerifiableCredential{}
@@ -791,7 +790,7 @@ func (session *session) handlePostCommitmentsVC(commitments *irma.IssueCommitmen
 		server.Logger.Errorf("=> VC marshalling issue")
 	}
 
-	unused, _, err := ariesvc.NewCredential(byteArray)
+	unused, err := ariesvc.ParseCredential(byteArray)
 	if err != nil {
 		fields["message"] = err.Error()
 		server.Logger.WithFields(fields).Tracef("=> Invalid Aries VC")

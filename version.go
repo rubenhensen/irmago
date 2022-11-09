@@ -5,17 +5,4 @@
 package irma
 
 // Version of the IRMA command line and libraries
-<<<<<<< HEAD
 const Version = "0.10.0"
-=======
-const Version = "0.4.99"
-
-// go-atum requires a version of bolthold newer than the latest release v1.1, but go-atum does not
-// use dep, so by default dep fetches v1.1 which breaks the build. We make bolthold an explicit
-// dependency here, so that we can require its version to be sufficiently new in a [[constraint]] in
-// Gopkg.toml: an [[override]] would not propagate to the users of irmago. This is ok, as we will
-// have bolthold as actual dependency soon anyway. go-atum uses go mod files which does properly
-// lock its bolthold dependency, so:
-// TODO: remove this line after we switch to go modules
-var _ = bolthold.Key
->>>>>>> c192a852568f04e80d93a0a60d2687fd203de33a

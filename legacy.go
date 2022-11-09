@@ -100,8 +100,6 @@ func convertDisjunctions(disjunctions []LegacyLabeledDisjunction) (
 	return
 }
 
-<<<<<<< HEAD
-=======
 func parseLDContext(bts []byte) (string, error) {
 	var v struct {
 		LDContext string `json:"@context"`
@@ -112,7 +110,6 @@ func parseLDContext(bts []byte) (string, error) {
 	return v.LDContext, nil
 }
 
->>>>>>> c192a852568f04e80d93a0a60d2687fd203de33a
 func checkType(typ, expected Action) error {
 	if typ != expected {
 		return errors.New("not a " + expected + " session request")

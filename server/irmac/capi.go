@@ -25,7 +25,6 @@ import (
 	"unsafe"
 
 	"github.com/go-errors/errors"
-	"github.com/privacybydesign/irmago/internal/servercore"
 	"github.com/privacybydesign/irmago/server"
 )
 

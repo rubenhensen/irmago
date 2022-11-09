@@ -86,49 +86,7 @@ func (r *SessionResult) Legacy() *LegacySessionResult {
 	for _, l := range r.Disclosed {
 		disclosed = append(disclosed, l[0])
 	}
-<<<<<<< HEAD
 	return &LegacySessionResult{r.Token, r.Status, r.Type, r.ProofStatus, disclosed, r.Signature, r.Err}
-=======
-	return json.Marshal(struct {
-		Token       string                     `json:"token"`
-		Status      Status                     `json:"status"`
-		Type        irma.Action                `json:"type"'`
-		ProofStatus irma.ProofStatus           `json:"proofStatus,omitempty"`
-		Disclosed   []*irma.DisclosedAttribute `json:"disclosed,omitempty"`
-		Signature   *irma.SignedMessage        `json:"signature,omitempty"`
-		Err         *irma.RemoteError          `json:"error,omitempty"`
-	}{r.Token, r.Status, r.Type, r.ProofStatus, disclosed, r.Signature, r.Err})
-
-}
-
-func (conf *Configuration) PrivateKey(id irma.IssuerIdentifier) (sk *gabi.PrivateKey, err error) {
-	sk = conf.IssuerPrivateKeys[id]
-	if sk == nil {
-		if sk, err = conf.IrmaConfiguration.PrivateKey(id); err != nil {
-			return nil, err
-		}
-	}
-	return sk, nil
-}
-
-func (conf *Configuration) HavePrivateKeys() (bool, error) {
-	var err error
-	var sk *gabi.PrivateKey
-	for id := range conf.IrmaConfiguration.Issuers {
-		sk, err = conf.PrivateKey(id)
-		if err != nil {
-			return false, err
-		}
-		if sk != nil {
-			return true, nil
-		}
-	}
-	return false, nil
-}
-
-func (status Status) Finished() bool {
-	return status == StatusDone || status == StatusCancelled || status == StatusTimeout
->>>>>>> c192a852568f04e80d93a0a60d2687fd203de33a
 }
 
 // RemoteError converts an error and an explaining message to an *irma.RemoteError.

@@ -21,16 +21,15 @@ require (
 	github.com/hashicorp/go-hclog v1.2.1 // indirect
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/hashicorp/go-retryablehttp v0.7.1
+	github.com/hyperledger/aries-framework-go v0.1.8
 	github.com/jackc/fake v0.0.0-20150926172116-812a484cc733 // indirect
 	github.com/jackc/pgx v3.6.2+incompatible
 	github.com/jinzhu/gorm v1.9.16
-	github.com/klauspost/cpuid/v2 v2.1.2 // indirect
 	github.com/lib/pq v1.10.6 // indirect
 	github.com/mattn/go-sqlite3 v2.0.1+incompatible // indirect
 	github.com/mdp/qrterminal v1.0.1
 	github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d // indirect
 	github.com/mitchellh/mapstructure v1.5.0
-	github.com/multiformats/go-multihash v0.0.11 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.2 // indirect
 	github.com/privacybydesign/gabi v0.0.0-20221012093643-8e978bfbb252
 	github.com/shopspring/decimal v1.2.0 // indirect
@@ -49,5 +48,4 @@ require (
 	golang.org/x/sys v0.0.0-20221010170243-090e33056c14 // indirect
 	golang.org/x/term v0.0.0-20220526004731-065cf7ba2467 // indirect
 	gopkg.in/ini.v1 v1.66.6 // indirect
-	lukechampine.com/blake3 v1.1.7 // indirect
 )
