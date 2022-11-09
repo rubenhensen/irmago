@@ -634,7 +634,378 @@ func (conf *Configuration) checkIssuers(set *IrmaIdentifierSet, missing *IrmaIde
 	return nil
 }
 
+<<<<<<< HEAD
 func (conf *Configuration) validateIssuer(scheme *SchemeManager, issuer *Issuer, dir string) error {
+=======
+func (i SchemeManagerIndex) String() string {
+	var paths []string
+	var b bytes.Buffer
+
+	for path := range i {
+		paths = append(paths, path)
+	}
+	sort.Strings(paths)
+
+	for _, path := range paths {
+		b.WriteString(hex.EncodeToString(i[path]))
+		b.WriteString(" ")
+		b.WriteString(path)
+		b.WriteString("\n")
+	}
+
+	return b.String()
+}
+
+// FromString populates this index by parsing the specified string.
+func (i SchemeManagerIndex) FromString(s string) error {
+	for j, line := range strings.Split(s, "\n") {
+		if len(line) == 0 {
+			continue
+		}
+		parts := strings.Split(line, " ")
+		if len(parts) != 2 {
+			return errors.Errorf("Scheme manager index line %d has incorrect amount of parts", j)
+		}
+		hash, err := hex.DecodeString(parts[0])
+		if err != nil {
+			return err
+		}
+		i[parts[1]] = hash
+	}
+
+	return nil
+}
+
+func (i SchemeManagerIndex) Scheme() SchemeManagerIdentifier {
+	for p := range i {
+		return NewSchemeManagerIdentifier(p[0:strings.Index(p, "/")])
+	}
+	return NewSchemeManagerIdentifier("")
+}
+
+// parseIndex parses the index file of the specified manager.
+func (conf *Configuration) parseIndex(name string, manager *SchemeManager) (SchemeManagerIndex, error) {
+	path := filepath.Join(conf.Path, name, "index")
+	if err := fs.AssertPathExists(path); err != nil {
+		return nil, fmt.Errorf("Missing scheme manager index file; tried %s", path)
+	}
+	indexbts, err := ioutil.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+	index := SchemeManagerIndex(make(map[string]ConfigurationFileHash))
+	if err = index.FromString(string(indexbts)); err != nil {
+		return nil, err
+	}
+
+	return index, conf.checkUnsignedFiles(name, index)
+}
+
+func (conf *Configuration) checkUnsignedFiles(name string, index SchemeManagerIndex) error {
+	return filepath.Walk(filepath.Join(conf.Path, name), func(path string, info os.FileInfo, err error) error {
+		relpath, err := filepath.Rel(conf.Path, path)
+		if err != nil {
+			return err
+		}
+		for _, ex := range sigExceptions {
+			if ex.MatchString(filepath.ToSlash(relpath)) {
+				return nil
+			}
+		}
+
+		if info.IsDir() {
+			if !dirInScheme(index, relpath) {
+				conf.Warnings = append(conf.Warnings, "Ignored dir: "+relpath)
+			}
+		} else {
+			if _, ok := index[relpath]; !ok {
+				conf.Warnings = append(conf.Warnings, "Ignored file: "+relpath)
+			}
+		}
+
+		return nil
+	})
+}
+
+func dirInScheme(index SchemeManagerIndex, dir string) bool {
+	for indexpath := range index {
+		if strings.HasPrefix(indexpath, dir) {
+			return true
+		}
+	}
+	return false
+}
+
+// These files never occur in a scheme's index
+var sigExceptions = []*regexp.Regexp{
+	regexp.MustCompile(`/.git(/.*)?`),
+	regexp.MustCompile(`^.*?/pk\.pem$`),
+	regexp.MustCompile(`^.*?/sk\.pem$`),
+	regexp.MustCompile(`^.*?/index`),
+	regexp.MustCompile(`^.*?/index\.sig`),
+	regexp.MustCompile(`^.*?/AUTHORS$`),
+	regexp.MustCompile(`^.*?/LICENSE$`),
+	regexp.MustCompile(`^.*?/README\.md$`),
+	regexp.MustCompile(`^.*?/.*?/PrivateKeys$`),
+	regexp.MustCompile(`^.*?/.*?/PrivateKeys/\d+.xml$`),
+	regexp.MustCompile(`\.DS_Store$`),
+}
+
+func (conf *Configuration) VerifySchemeManager(manager *SchemeManager) error {
+	err := conf.VerifySignature(manager.Identifier())
+	if err != nil {
+		return err
+	}
+
+	var exists bool
+	for file := range manager.index {
+		exists, err = fs.PathExists(filepath.Join(conf.Path, file))
+		if err != nil {
+			return err
+		}
+		if !exists {
+			continue
+		}
+		// Don't care about the actual bytes
+		if _, _, err = conf.ReadAuthenticatedFile(manager, file); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ReadAuthenticatedFile reads the file at the specified path
+// and verifies its authenticity by checking that the file hash
+// is present in the (signed) scheme manager index file.
+func (conf *Configuration) ReadAuthenticatedFile(manager *SchemeManager, path string) ([]byte, bool, error) {
+	//signedHash, ok := manager.index[filepath.ToSlash(path)]
+	//if !ok {
+	//	return nil, false, nil
+	//}
+
+	bts, err := ioutil.ReadFile(filepath.Join(conf.Path, path))
+	if err != nil {
+		return nil, true, err
+	}
+	//computedHash := sha256.Sum256(bts)
+
+	//if !bytes.Equal(computedHash[:], signedHash) {
+	//	return nil, true, errors.Errorf("Hash of %s does not match scheme manager index", path)
+	//}
+	return bts, true, nil
+}
+
+// VerifySignature verifies the signature on the scheme manager index file
+// (which contains the SHA256 hashes of all files under this scheme manager,
+// which are used for verifying file authenticity).
+func (conf *Configuration) VerifySignature(id SchemeManagerIdentifier) (err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			if e, ok := r.(error); ok {
+				err = errors.Errorf("Scheme manager index signature failed to verify: %s", e.Error())
+			} else {
+				err = errors.New("Scheme manager index signature failed to verify")
+			}
+		}
+	}()
+
+	dir := filepath.Join(conf.Path, id.String())
+	if err := fs.AssertPathExists(filepath.Join(dir, "index"), filepath.Join(dir, "index.sig"), filepath.Join(dir, "pk.pem")); err != nil {
+		return errors.New("Missing scheme manager index file, signature, or public key")
+	}
+
+	// Read and hash index file
+	indexbts, err := ioutil.ReadFile(filepath.Join(dir, "index"))
+	if err != nil {
+		return err
+	}
+	indexhash := sha256.Sum256(indexbts)
+
+	// Read and parse scheme manager public key
+	pkbts, err := ioutil.ReadFile(filepath.Join(dir, "pk.pem"))
+	if err != nil {
+		return err
+	}
+	pk, err := ParsePemEcdsaPublicKey(pkbts)
+	if err != nil {
+		return err
+	}
+
+	// Read and parse signature
+	sig, err := ioutil.ReadFile(filepath.Join(dir, "index.sig"))
+	if err != nil {
+		return err
+	}
+	ints := make([]*gobig.Int, 0, 2)
+	_, err = asn1.Unmarshal(sig, &ints)
+
+	// Verify signature
+	if !ecdsa.Verify(pk, indexhash[:], ints[0], ints[1]) {
+		return errors.New("Scheme manager signature was invalid")
+	}
+	return nil
+}
+
+func ParsePemEcdsaPublicKey(pkbts []byte) (*ecdsa.PublicKey, error) {
+	pkblk, _ := pem.Decode(pkbts)
+	genericPk, err := x509.ParsePKIXPublicKey(pkblk.Bytes)
+	if err != nil {
+		return nil, err
+	}
+	pk, ok := genericPk.(*ecdsa.PublicKey)
+	if !ok {
+		return nil, errors.New("Invalid scheme manager public key")
+	}
+	return pk, nil
+}
+
+func (hash ConfigurationFileHash) String() string {
+	return hex.EncodeToString(hash)
+}
+
+func (hash ConfigurationFileHash) Equal(other ConfigurationFileHash) bool {
+	return bytes.Equal(hash, other)
+}
+
+// UpdateSchemeManager syncs the stored version within the irma_configuration directory
+// with the remote version at the scheme manager's URL, downloading and storing
+// new and modified files, according to the index files of both versions.
+// It stores the identifiers of new or updated credential types or issuers in the second parameter.
+// Note: any newly downloaded files are not yet parsed and inserted into conf.
+func (conf *Configuration) UpdateSchemeManager(id SchemeManagerIdentifier, downloaded *IrmaIdentifierSet) (err error) {
+	if conf.readOnly {
+		return errors.New("cannot update a read-only configuration")
+	}
+	manager, contains := conf.SchemeManagers[id]
+	if !contains {
+		return errors.Errorf("Cannot update unknown scheme manager %s", id)
+	}
+
+	// Check remote timestamp and see if we have to do anything
+	transport := NewHTTPTransport(manager.URL + "/")
+	timestampBts, err := transport.GetBytes("timestamp")
+	if err != nil {
+		return err
+	}
+	timestamp, err := parseTimestamp(timestampBts)
+	if err != nil {
+		return err
+	}
+	if !manager.Timestamp.Before(*timestamp) {
+		return nil
+	}
+
+	// Download the new index and its signature, and check that the new index
+	// is validly signed by the new signature
+	// By aborting immediately in case of error, and restoring backup versions
+	// of the index and signature, we leave our stored copy of the scheme manager
+	// intact.
+	if err = conf.DownloadSchemeManagerSignature(manager); err != nil {
+		return
+	}
+	newIndex, err := conf.parseIndex(manager.ID, manager)
+	if err != nil {
+		return
+	}
+
+	issPattern := regexp.MustCompile("^([^/]+)/([^/]+)/description\\.xml")
+	credPattern := regexp.MustCompile("^([^/]+)/([^/]+)/Issues/([^/]+)/description\\.xml")
+
+	// TODO: how to recover/fix local copy if err != nil below?
+	for filename, newHash := range newIndex {
+		path := filepath.Join(conf.Path, filename)
+		oldHash, known := manager.index[filename]
+		var have bool
+		have, err = fs.PathExists(path)
+		if err != nil {
+			return err
+		}
+		if known && have && oldHash.Equal(newHash) {
+			continue // nothing to do, we already have this file
+		}
+		// Ensure that the folder in which to write the file exists
+		if err = os.MkdirAll(filepath.Dir(path), 0700); err != nil {
+			return err
+		}
+		stripped := filename[len(manager.ID)+1:] // Scheme manager URL already ends with its name
+		// Download the new file, store it in our own irma_configuration folder
+		if err = transport.GetSignedFile(stripped, path, newHash); err != nil {
+			return
+		}
+		// See if the file is a credential type or issuer, and add it to the downloaded set if so
+		if downloaded == nil {
+			continue
+		}
+		var matches []string
+		matches = issPattern.FindStringSubmatch(filepath.ToSlash(filename))
+		if len(matches) == 3 {
+			issid := NewIssuerIdentifier(fmt.Sprintf("%s.%s", matches[1], matches[2]))
+			downloaded.Issuers[issid] = struct{}{}
+		}
+		matches = credPattern.FindStringSubmatch(filepath.ToSlash(filename))
+		if len(matches) == 4 {
+			credid := NewCredentialTypeIdentifier(fmt.Sprintf("%s.%s.%s", matches[1], matches[2], matches[3]))
+			downloaded.CredentialTypes[credid] = struct{}{}
+		}
+	}
+
+	manager.index = newIndex
+	return
+}
+
+func (conf *Configuration) UpdateSchemes() error {
+	updated := IrmaIdentifierSet{
+		SchemeManagers:  map[SchemeManagerIdentifier]struct{}{},
+		Issuers:         map[IssuerIdentifier]struct{}{},
+		CredentialTypes: map[CredentialTypeIdentifier]struct{}{},
+	}
+	for id := range conf.SchemeManagers {
+		Logger.WithField("scheme", id).Info("Auto-updating scheme")
+		if err := conf.UpdateSchemeManager(id, &updated); err != nil {
+			return err
+		}
+	}
+	if !updated.Empty() {
+		return conf.ParseFolder()
+	}
+	return nil
+}
+
+func (conf *Configuration) AutoUpdateSchemes(interval uint) {
+	Logger.Infof("Updating schemes every %d minutes", interval)
+
+	conf.scheduler = gocron.NewScheduler()
+	conf.scheduler.Every(uint64(interval)).Minutes().Do(func() {
+		if err := conf.UpdateSchemes(); err != nil {
+			Logger.Error("Scheme autoupdater failed: ")
+			if e, ok := err.(*errors.Error); ok {
+				Logger.Error(e.ErrorStack())
+			} else {
+				Logger.Errorf("%s %s", reflect.TypeOf(err).String(), err.Error())
+			}
+		}
+	})
+
+	conf.cronchan = conf.scheduler.Start() // Schedule updates (first one in interval minutes from now)
+	go func() {                            // Run first update after a small delay
+		<-time.NewTimer(200 * time.Millisecond).C
+		conf.scheduler.RunAll()
+	}()
+
+}
+
+func (conf *Configuration) StopAutoUpdateSchemes() {
+	if conf.cronchan != nil {
+		Logger.Info("Stopped scheme autoupdater")
+		conf.cronchan <- true
+	}
+}
+
+// Validation methods containing consistency checks on irma_configuration
+
+func (conf *Configuration) validateIssuer(manager *SchemeManager, issuer *Issuer, dir string) error {
+>>>>>>> c192a852568f04e80d93a0a60d2687fd203de33a
 	issuerid := issuer.Identifier()
 	conf.validateTranslations(fmt.Sprintf("Issuer %s", issuerid.String()), issuer, issuer.Languages)
 	// Check that the issuer has public keys

@@ -35,7 +35,7 @@ type Server struct {
 }
 
 // Start the server. If successful then it will not return until Stop() is called.
-func (s *Server) Start(config *Configuration) error {
+func (s *Server) Start(config *Configuration, isMetadataServer bool) error {
 	if s.conf.LogJSON {
 		s.conf.Logger.WithField("configuration", s.conf).Debug("Configuration")
 	} else {
@@ -59,14 +59,24 @@ func (s *Server) Start(config *Configuration) error {
 	s.stop = make(chan struct{})
 	s.stopped = make(chan struct{}, count)
 
-	if s.conf.separateClientServer() {
+	if isMetadataServer {
+
 		go func() {
-			done <- s.startClientServer()
+			done <- s.startMetadataServer()
 		}()
+
+	} else {
+
+		if s.conf.separateClientServer() {
+			go func() {
+				done <- s.startClientServer()
+			}()
+		}
+		go func() {
+			done <- s.startRequestorServer()
+		}()
+
 	}
-	go func() {
-		done <- s.startRequestorServer()
-	}()
 
 	var stopped bool
 	var err error
@@ -86,6 +96,11 @@ func (s *Server) Start(config *Configuration) error {
 func (s *Server) startRequestorServer() error {
 	tlsConf, _ := s.conf.tlsConfig()
 	return s.startServer(s.Handler(), "Server", s.conf.ListenAddress, s.conf.Port, tlsConf)
+}
+
+func (s *Server) startMetadataServer() error {
+	tlsConf, _ := s.conf.tlsConfig()
+	return s.startServer(s.VCHandler(), "Metadata server", s.conf.ListenAddress, s.conf.MetadataPort, tlsConf)
 }
 
 func (s *Server) startClientServer() error {
@@ -223,7 +238,73 @@ func (s *Server) Handler() http.Handler {
 		r.Post("/revocation", s.handleRevocation)
 	})
 
+<<<<<<< HEAD
 	return s.prefixRouter(router)
+=======
+// Handler returns a http.Handler that handles all IRMA metadata requests
+func (s *Server) VCHandler() http.Handler {
+	router := chi.NewRouter()
+	router.Use(cors.New(corsOptions).Handler)
+
+	router.Use(s.logHandler("VC", true, true, true))
+
+	router.Mount("/schema/", s.irmaserv.VCHandler("schema"))
+	router.Mount("/issuer/", s.irmaserv.VCHandler("issuer"))
+	if s.conf.StaticPath != "" {
+		router.Mount(s.conf.StaticPrefix, s.StaticFilesHandler())
+	}
+
+	return router
+}
+
+// logHandler is middleware for logging HTTP requests and responses.
+func (s *Server) logHandler(typ string, logResponse, logHeaders, logFrom bool) func(next http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			var message []byte
+			var err error
+
+			// Read r.Body, and then replace with a fresh ReadCloser for the next handler
+			if message, err = ioutil.ReadAll(r.Body); err != nil {
+				message = []byte("<failed to read body: " + err.Error() + ">")
+			}
+			_ = r.Body.Close()
+			r.Body = ioutil.NopCloser(bytes.NewBuffer(message))
+
+			var headers http.Header
+			var from string
+			if logHeaders {
+				headers = r.Header
+			}
+			if logFrom {
+				from = r.RemoteAddr
+			}
+			server.LogRequest(typ, r.Method, r.URL.String(), from, headers, message)
+
+			// copy output of HTTP handler to our buffer for later logging
+			ww := middleware.NewWrapResponseWriter(w, r.ProtoMajor)
+			var buf *bytes.Buffer
+			if logResponse {
+				buf = new(bytes.Buffer)
+				ww.Tee(buf)
+			}
+
+			// print response afterwards
+			var resp []byte
+			var start time.Time
+			defer func() {
+				if logResponse && ww.BytesWritten() > 0 {
+					resp = buf.Bytes()
+				}
+				server.LogResponse(ww.Status(), time.Since(start), resp)
+			}()
+
+			// start timer and preform request
+			start = time.Now()
+			next.ServeHTTP(ww, r)
+		})
+	}
+>>>>>>> c192a852568f04e80d93a0a60d2687fd203de33a
 }
 
 func (s *Server) StaticFilesHandler() http.Handler {

@@ -21,7 +21,11 @@ type SchemeManager struct {
 	Name              TranslatedString `xml:"Name"`
 	URL               string           `xml:"Url"`
 	Contact           string           `xml:"contact"`
+<<<<<<< HEAD
 	Demo              bool             `xml:"Demo"` // Decides whether to download private keys
+=======
+	TypeServerURL     string           `xml:"TypeServerUrl"`
+>>>>>>> c192a852568f04e80d93a0a60d2687fd203de33a
 	Description       TranslatedString
 	MinimumAppVersion SchemeAppVersion
 	KeyshareServer    string
@@ -100,6 +104,7 @@ type AttributeType struct {
 	Optional    string `xml:"optional,attr"  json:",omitempty"`
 	Name        TranslatedString
 	Description TranslatedString
+	DataType    string `xml:"type,attr"`
 
 	RandomBlind bool `xml:"randomblind,attr,optional" json:",omitempty"`
 

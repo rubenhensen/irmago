@@ -48,6 +48,7 @@ const (
 	attributesBucket = "attrs" // Key: []byte, value: []*irma.AttributeList
 	logsBucket       = "logs"  // Key: (auto-increment index), value: *LogEntry
 	signaturesBucket = "sigs"  // Key: credential.attrs.Hash, value: *gabi.CLSignature
+	vcFile           = "vc"
 )
 
 func (s *storage) path(p string) string {

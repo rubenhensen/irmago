@@ -25,9 +25,15 @@ type ClientStatus string
 type ServerStatus string
 
 const (
+<<<<<<< HEAD
 	MinVersionHeader    = "X-IRMA-MinProtocolVersion"
 	MaxVersionHeader    = "X-IRMA-MaxProtocolVersion"
 	AuthorizationHeader = "Authorization"
+=======
+	MinVersionHeader = "X-IRMA-MinProtocolVersion"
+	MaxVersionHeader = "X-IRMA-MaxProtocolVersion"
+	VCHeader		 = "X-IRMA-VC"
+>>>>>>> c192a852568f04e80d93a0a60d2687fd203de33a
 )
 
 // ProtocolVersion encodes the IRMA protocol version of an IRMA session.
@@ -171,9 +177,21 @@ type Qr struct {
 	Type Action `json:"irmaqr"`
 }
 
+<<<<<<< HEAD
 // Tokens to identify a session from the perspective of the different agents
 type RequestorToken string
 type ClientToken string
+=======
+type QrSovrin struct {
+	// Server with which to perform the session
+	URL string `json:"url"`
+	// Session type (disclosing, signing, issuing)
+	Type Action `json:"action"`
+	System string `json:"system"`
+}
+
+type SchemeManagerRequest Qr
+>>>>>>> c192a852568f04e80d93a0a60d2687fd203de33a
 
 // ParseClientToken parses a string to a ClientToken after validating the input.
 func ParseClientToken(input string) (ClientToken, error) {

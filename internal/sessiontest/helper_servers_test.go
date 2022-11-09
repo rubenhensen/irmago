@@ -90,7 +90,7 @@ func StartRequestorServer(t *testing.T, configuration *requestorserver.Configura
 	requestorServer, err := requestorserver.New(configuration)
 	require.NoError(t, err)
 	go func() {
-		err := requestorServer.Start(configuration)
+		err := requestorServer.Start(configuration, false)
 		require.NoError(t, err)
 	}()
 	time.Sleep(200 * time.Millisecond) // Give server time to start

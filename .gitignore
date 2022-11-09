@@ -5,4 +5,11 @@ testdata/tmp/*
 !testdata/tmp/cardemu.xml
 errors_*.go
 vendor/
+<<<<<<< HEAD
 irma/irma
+=======
+irma-demo/
+*.der
+Gopkg.lock
+testdata/*
+>>>>>>> c192a852568f04e80d93a0a60d2687fd203de33a

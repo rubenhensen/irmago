@@ -518,3 +518,7 @@ func updateAndUnlock(ses *session, err error) error {
 	}
 	return e
 }
+
+func (s *Server) GetConfig() *server.Configuration {
+	return s.conf
+}

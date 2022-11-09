@@ -30,6 +30,10 @@ type Configuration struct {
 	// Route requests via this path, so instead of POST /session, it will
 	// be POST {ApiPrefix}/session.  Should start with a "/".
 	ApiPrefix string `json:"api_prefix" mapstructure:"api_prefix"`
+
+	// Port to listen at for type server
+	MetadataPort int `json:"metadataport" mapstructure:"metadataport"`
+
 	// TLS configuration
 	TlsCertificate     string `json:"tls_cert" mapstructure:"tls_cert"`
 	TlsCertificateFile string `json:"tls_cert_file" mapstructure:"tls_cert_file"`

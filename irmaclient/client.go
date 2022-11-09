@@ -65,6 +65,9 @@ type Client struct {
 	signer                Signer
 	sessions              sessions
 
+	// VC
+	verifiableCredentials []irma.VerifiableCredential
+
 	jobs       chan func()   // queue of jobs to run
 	jobsPause  chan struct{} // sending pauses background jobs
 	jobsPaused bool

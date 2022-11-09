@@ -28,11 +28,13 @@ type LogEntry struct {
 	IssueCommitment *irma.IssueCommitmentMessage `json:",omitempty"`
 
 	// All session types
-	ServerName *irma.RequestorInfo   `json:",omitempty"`
-	Version    *irma.ProtocolVersion `json:",omitempty"`
-	Disclosure *irma.Disclosure      `json:",omitempty"`
-	Request    json.RawMessage       `json:",omitempty"` // Message that started the session
-	request    irma.SessionRequest   // cached parsed version of Request; get with LogEntry.SessionRequest()
+	ServerName   *irma.RequestorInfo         `json:",omitempty"`
+	Version      *irma.ProtocolVersion       `json:",omitempty"`
+	Disclosure   *irma.Disclosure            `json:",omitempty"`
+	Request      json.RawMessage             `json:",omitempty"`
+	Presentation irma.VerifiablePresentation `json:",omitempty"`
+	Credential   *irma.VerifiableCredential  `json:",omitempty"` // Message that started the session
+	request      irma.SessionRequest         // cached parsed version of Request; get with LogEntry.SessionRequest()
 }
 
 const ActionRemoval = irma.Action("removal")
