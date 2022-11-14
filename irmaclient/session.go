@@ -205,7 +205,7 @@ func (client *Client) newQrSession(qr *irma.Qr, handler Handler, extern bool) *s
 			handler.Failure(&irma.SessionError{ErrorType: irma.ErrorInvalidRequest, Err: errors.New("infinite static QR recursion")})
 			return nil
 		}
-		return client.newQrSession(newqr, handler)
+		return client.newQrSession(newqr, handler, false)
 	}
 
 	client.PauseJobs()
@@ -554,7 +554,10 @@ func (session *session) getVerifiablePresentation() (interface{}, error) {
 		return nil, err
 	}
 
-	proofList := builders.BuildProofList(session.request.Base().GetContext(), session.request.GetNonce(timestamp), false)
+	proofList, err := builders.BuildProofList(session.request.Base().GetContext(), session.request.GetNonce(timestamp), false)
+	if err != nil {
+		return nil, err
+	}
 
 	disjunctions := session.request.Disclosure()
 
@@ -567,7 +570,7 @@ func (session *session) getVerifiablePresentation() (interface{}, error) {
 	vcPres.Proof.Created = time.Now().Format(time.RFC3339)
 	vcPres.Proof.Type = "IRMAZKPPresentationProofv1"
 
-	_, attrValues, err = disclosure.DisclosedAttributes(session.client.Configuration, disjunctions.Disclose)
+	_, attrValues, err = disclosure.DisclosedAttributes(session.client.Configuration, disjunctions.Disclose, nil)
 
 	// iterate over each attribute to determine cred types in disclosure request
 	credTypes := make(map[irma.CredentialTypeIdentifier]bool)
@@ -703,7 +706,9 @@ func (session *session) sendResponse(message interface{}) {
 			}
 		}
 		if session.Action == irma.ActionIssuing && irma.IssueVC {
-			if err = session.client.ConstructVerifiableCredentials(serverResponse.IssueSignatures, session.request.(*irma.IssuanceRequest), session.builders); err != nil {
+			// TODO: Add to messages.go ServerSessionResponse
+			response := irma.VerifiableCredential{}
+			if err = session.client.ConstructVerifiableCredentials(response, session.request.(*irma.IssuanceRequest), session.builders); err != nil {
 				session.fail(&irma.SessionError{ErrorType: irma.ErrorCrypto, Err: err})
 				return
 			}
@@ -724,7 +729,7 @@ func (session *session) sendResponse(message interface{}) {
 	session.finish(false)
 
 	if serverResponse != nil && serverResponse.NextSession != nil {
-		session.next = session.client.newQrSession(serverResponse.NextSession, session.Handler)
+		session.next = session.client.newQrSession(serverResponse.NextSession, session.Handler, false)
 		session.next.implicitDisclosure = session.choice.Attributes
 	} else {
 		session.Handler.Success(string(messageJson))
@@ -764,10 +769,28 @@ func (client *Client) ConstructVerifiableCredentials(msg irma.VerifiableCredenti
 
 		sig := sigs[i-offset]
 
-		attrs, err := request.Credentials[i-offset].AttributeList(client.Configuration, irma.GetMetadataVersion(request.Base().ProtocolVersion))
+		var nonrevAttr *big.Int
+		if sig.NonRevocationWitness != nil {
+			nonrevAttr = sig.NonRevocationWitness.E
+		}
+		issuedAt := time.Now()
+		req := request.Credentials[i-offset]
+		if !req.RevocationSupported && (nonrevAttr != nil) {
+			return errors.New("credential signature unexpectedly containend nonrevocation witness")
+		}
+		if req.RevocationSupported && (nonrevAttr == nil) {
+			return errors.New("credential signature did not contain nonrevocation witness")
+		}
+		attrs, err := req.AttributeList(
+			client.Configuration,
+			irma.GetMetadataVersion(request.Base().ProtocolVersion),
+			nonrevAttr,
+			issuedAt,
+		)
 		if err != nil {
 			return err
 		}
+
 		cred, err := credbuilder.ConstructCredential(&sig, attrs.Ints)
 		if err != nil {
 			return err
@@ -776,11 +799,12 @@ func (client *Client) ConstructVerifiableCredentials(msg irma.VerifiableCredenti
 	}
 
 	for _, gabicred := range gabicreds {
-		newcred, err := newCredential(gabicred, client.Configuration)
+		attrs := irma.NewAttributeListFromInts(gabicred.Attributes[1:], client.Configuration)
+		newcred, err := newCredential(gabicred, attrs, client.Configuration)
 		if err != nil {
 			return err
 		}
-		if err = client.addCredential(newcred, true); err != nil {
+		if err = client.addCredential(newcred); err != nil {
 			return err
 		}
 	}
@@ -887,9 +911,14 @@ func (client *Client) IssueCommitmentsVC(request *irma.IssuanceRequest, choice *
 
 	vc.Proof.Type = "IRMACommitment"
 	vc.Proof.Created = time.Now().Format(time.RFC3339)
+
+	proofs, err := builders.BuildProofList(request.GetContext(), request.GetNonce(nil), false)
+	if err != nil {
+		return nil, nil, err
+	}
 	vc.Proof.ProofMsg = &irma.IssueCommitmentMessage{
 		IssueCommitmentMessage: &gabi.IssueCommitmentMessage{
-			Proofs: builders.BuildProofList(request.GetContext(), request.GetNonce(nil), false),
+			Proofs: proofs,
 			Nonce2: issuerProofNonce,
 		},
 		Indices: choices,

@@ -125,8 +125,6 @@ func (entry *LogEntry) GetSignedMessage() (abs *irma.SignedMessage, err error) {
 	}, nil
 }
 
-const ActionRemoval = irma.Action("removal")
-
 func (session *session) createLogEntry(response interface{}) (*LogEntry, error) {
 	entry := &LogEntry{
 		Type:       session.Action,

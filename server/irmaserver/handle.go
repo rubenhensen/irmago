@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/privacybydesign/gabi"
@@ -17,6 +18,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-errors/errors"
+	ariesvc "github.com/hyperledger/aries-framework-go/pkg/doc/verifiable"
 	"github.com/sirupsen/logrus"
 )
 
@@ -238,6 +240,181 @@ func (session *session) handlePostCommitments(commitments *irma.IssueCommitmentM
 	}, nil
 }
 
+const (
+	LDVerifiableCredential          = "https://www.w3.org/2018/credentials/v1"
+	LDContextDisclosureRequest      = "https://irma.app/ld/request/disclosure/v2"
+	LDContextSignatureRequest       = "https://irma.app/ld/request/signature/v2"
+	LDContextIssuanceRequest        = "https://irma.app/ld/request/issuance/v2"
+	LDContextRevocationRequest      = "https://irma.app/ld/request/revocation/v1"
+	LDContextFrontendOptionsRequest = "https://irma.app/ld/request/frontendoptions/v1"
+	LDContextClientSessionRequest   = "https://irma.app/ld/request/client/v1"
+	LDContextSessionOptions         = "https://irma.app/ld/options/v1"
+	DefaultJwtValidity              = 120
+)
+
+// TODO: Refactor, handlePostCommitments() overlap DRY
+func (session *session) handlePostCommitmentsVC(commitments *irma.IssueCommitmentMessage) (*irma.VerifiableCredential, *irma.RemoteError) {
+	session.markAlive()
+	request := session.request.(*irma.IssuanceRequest)
+
+	discloseCount := len(commitments.Proofs) - len(request.Credentials)
+	if discloseCount < 0 {
+		return nil, session.fail(server.ErrorMalformedInput, "Received insufficient proofs")
+	}
+
+	// Compute list of public keys against which to verify the received proofs
+	disclosureproofs := irma.ProofList(commitments.Proofs[:discloseCount])
+	pubkeys, err := disclosureproofs.ExtractPublicKeys(session.conf.IrmaConfiguration)
+	if err != nil {
+		return nil, session.fail(server.ErrorMalformedInput, err.Error())
+	}
+	for _, cred := range request.Credentials {
+		iss := cred.CredentialTypeID.IssuerIdentifier()
+		pubkey, _ := session.conf.IrmaConfiguration.PublicKey(iss, cred.KeyCounter) // No error, already checked earlier
+		pubkeys = append(pubkeys, pubkey)
+	}
+
+	// Verify and merge keyshare server proofs, if any
+	for i, proof := range commitments.Proofs {
+		pubkey := pubkeys[i]
+		schemeid := irma.NewIssuerIdentifier(pubkey.Issuer).SchemeManagerIdentifier()
+		if session.conf.IrmaConfiguration.SchemeManagers[schemeid].Distributed() {
+			proofP, err := session.getProofP(commitments, schemeid)
+			if err != nil {
+				return nil, session.fail(server.ErrorKeyshareProofMissing, err.Error())
+			}
+			proof.MergeProofP(proofP, pubkey)
+		}
+	}
+
+	// Verify all proofs and check disclosed attributes, if any, against request
+	now := time.Now()
+	request.Disclose = append(request.Disclose, session.ImplicitDisclosure...)
+	session.Result.Disclosed, session.Result.ProofStatus, err = commitments.Disclosure().VerifyAgainstRequest(
+		session.conf.IrmaConfiguration, request, request.GetContext(), request.GetNonce(nil), pubkeys, &now, false,
+	)
+	if err != nil {
+		if err == irma.ErrMissingPublicKey {
+			return nil, session.fail(server.ErrorUnknownPublicKey, "")
+		} else {
+			return nil, session.fail(server.ErrorUnknown, "")
+		}
+	}
+	if session.Result.ProofStatus == irma.ProofStatusExpired {
+		return nil, session.fail(server.ErrorAttributesExpired, "")
+	}
+	if session.Result.ProofStatus != irma.ProofStatusValid {
+		return nil, session.fail(server.ErrorInvalidProofs, "")
+	}
+
+	// Compute CL signatures
+	var sigs []*gabi.IssueSignatureMessage
+	for i, cred := range request.Credentials {
+		id := cred.CredentialTypeID.IssuerIdentifier()
+		pk, _ := session.conf.IrmaConfiguration.PublicKey(id, cred.KeyCounter)
+		sk, _ := session.conf.IrmaConfiguration.PrivateKeys.Latest(id)
+		issuer := gabi.NewIssuer(sk, pk, one)
+		proof, ok := commitments.Proofs[i+discloseCount].(*gabi.ProofU)
+		if !ok {
+			return nil, session.fail(server.ErrorMalformedInput, "Received invalid issuance commitment")
+		}
+		attrs, witness, err := session.computeAttributes(sk, cred)
+		if err != nil {
+			return nil, session.fail(server.ErrorIssuanceFailed, err.Error())
+		}
+		rb := session.conf.IrmaConfiguration.CredentialTypes[cred.CredentialTypeID].RandomBlindAttributeIndices()
+		sig, err := issuer.IssueSignature(proof.U, attrs, witness, commitments.Nonce2, rb)
+		if err != nil {
+			return nil, session.fail(server.ErrorIssuanceFailed, err.Error())
+		}
+		sigs = append(sigs, sig)
+	}
+
+	irmaVCServerURL := session.conf.IrmaConfiguration.SchemeManagers[request.Credentials[0].CredentialTypeID.IssuerIdentifier().SchemeManagerIdentifier()].TypeServerURL
+	externalIP, _ := irma.ExternalIP()
+	if len(irmaVCServerURL) == 0 {
+		irmaVCServerURL = "http://" + externalIP + ":8089/"
+	}
+
+	vcObj := irma.VerifiableCredential{}
+
+	// context
+	vcObj.LDContext = [2]string{LDVerifiableCredential, LDContextIssuanceRequest}
+
+	// type
+	vcObj.Type = make([]string, 1)
+	vcObj.Type[0] = "VerifiableCredential"
+
+	// issuer
+	issuerID := request.Credentials[0].CredentialTypeID.IssuerIdentifier()
+	vcObj.Issuer = issuerID.String()
+
+	// public key counter
+	pkIndices, _ := session.conf.IrmaConfiguration.PublicKeyIndices(issuerID)
+	highest := -1
+	for current := range pkIndices {
+		if current > highest {
+			highest = current
+		}
+	}
+	highestStr := strconv.Itoa(highest)
+
+	// issuer URI
+	vcObj.Issuer = irmaVCServerURL + "issuer/" + strings.Replace(vcObj.Issuer, ".", "/", -1) + "/" + highestStr
+
+	// issuance date
+	layout := "2006-01-02T15:04:05Z"
+	vcObj.IssuanceDate = time.Now().Format(layout)
+
+	// The value of the credentialSubject property is defined as a set of objects
+	// that contain one or more properties that are each related to a subject of the VC.
+	for _, cred := range request.Credentials {
+		// for each credential type one schema
+		vcObj.Schema = append(vcObj.Schema, irma.VCSchema{Identifier: irmaVCServerURL + "schema/" + strings.Replace(cred.CredentialTypeID.String(), ".", "/", -1), Type: "JsonSchemaValidator2018"})
+
+		// types
+		vcObj.Type = append(vcObj.Type, cred.CredentialTypeID.Name())
+		vcSubject := irma.VCSubject{}
+
+		// create new translated string that has a rawValue, en and nl key
+		vcSubject.Attributes = make(map[string]irma.TranslatedString)
+		for key, value := range cred.Attributes {
+			vcSubject.Attributes[key] = irma.NewVCTranslatedString(value)
+		}
+
+		// convert attributes tag to name of credential type id
+		byteSubject, _ := json.Marshal(vcSubject)
+		obj := map[string]interface{}{}
+		_ = json.Unmarshal([]byte(byteSubject), &obj)
+		obj[cred.CredentialTypeID.Name()] = obj["attributes"]
+		delete(obj, "attributes")
+		vcObj.CredentialSubjects = append(vcObj.CredentialSubjects, obj)
+	}
+
+	vcObj.Proof.Type = "IdemixZKP"
+	vcObj.Proof.Created = time.Now().Format(time.RFC3339)
+	vcObj.Proof.ProofMsg = sigs
+
+	byteArray, err := json.Marshal(vcObj)
+	if err != nil {
+		server.Logger.Errorf("=> VC marshalling issue")
+	}
+
+	_, err = ariesvc.ParseCredential(byteArray)
+	if err != nil {
+		return nil, session.fail(server.ErrorMalformedInput, "Invalid Aries VC")
+	}
+
+	session.setStatus(irma.ServerStatusDone)
+	// return &irma.ServerSessionResponse{
+	// 	SessionType:     irma.ActionIssuing,
+	// 	ProtocolVersion: session.Version,
+	// 	ProofStatus:     session.Result.ProofStatus,
+	// 	IssueSignatures: sigs,
+	// }, nil
+	return &vcObj, nil
+}
+
 func (session *session) nextSession() (irma.RequestorRequest, irma.AttributeConDisCon, error) {
 	base := session.Rrequest.Base()
 	if base.NextSession == nil {
@@ -323,32 +500,101 @@ func (s *Server) startNext(session *session, res *irma.ServerSessionResponse) er
 	return nil
 }
 
+func (s *Server) startNextVC(session *session, res *irma.VerifiableCredential) error {
+	next, disclosed, err := session.nextSession()
+	if err != nil {
+		return err
+	}
+	if next == nil {
+		return nil
+	}
+	// All attributes that were disclosed in the previous session, as well as any attributes
+	// from sessions before that, need to be disclosed in the new session as well.
+	// Therefore pass them as parameters to startNextSession
+	qr, token, _, err := s.startNextSession(next, nil, disclosed, session.FrontendAuth)
+	if err != nil {
+		return err
+	}
+	session.Result.NextSession = token
+	session.Next = qr
+
+	// res.NextSession = qr
+
+	return nil
+}
+
 func (s *Server) handleSessionCommitments(w http.ResponseWriter, r *http.Request) {
+	s.conf.Logger.Warn("###################")
+	var headers http.Header
+	headers = r.Header
+	fmt.Println(headers)
+	vcHeader := r.Header.Get(irma.VCHeader)
 	commitments := &irma.IssueCommitmentMessage{}
+
 	bts, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		server.WriteError(w, server.ErrorMalformedInput, err.Error())
 		return
 	}
-	if err := irma.UnmarshalValidate(bts, commitments); err != nil {
-		server.WriteError(w, server.ErrorMalformedInput, err.Error())
-		return
+
+	// if message conforms to VC format, map ProofMsg to commitments object
+	// TODO: Refactor to just check if commitment is VC message or not
+	if vcHeader == "yes" {
+		s.conf.Logger.Println("VC #################")
+		vc := &irma.VerifiableCredential{}
+		// VC processing
+		if err := irma.UnmarshalValidate(bts, vc); err != nil {
+			server.WriteError(w, server.ErrorMalformedInput, err.Error())
+			return
+		}
+		// s.conf.Logger.WithField("clientToken", token).Info("Valid VC detected")
+
+		// vcProof, _ := json.Marshal(vc.Proof.ProofMsg)
+		// if err := irma.UnmarshalValidate(vcProof, commitments); err != nil {
+		// 	status, output = server.JsonResponse(nil, session.fail(server.ErrorMalformedInput, ""))
+		// 	return
+		// } else {
+		// 	status, output = server.JsonResponse(session.handlePostCommitmentsVC(commitments))
+		// 	return
+		// }
+		// fmt.Println("Test VC")
+		session := r.Context().Value("session").(*session)
+		res, rerr := session.handlePostCommitmentsVC(commitments)
+		if rerr != nil {
+			server.WriteResponse(w, nil, rerr)
+			return
+		}
+		if err = s.startNextVC(session, res); err != nil {
+			server.WriteError(w, server.ErrorNextSession, err.Error())
+			return
+		}
+		session.setStatus(irma.ServerStatusDone)
+		server.WriteResponse(w, res, nil)
+	} else {
+		s.conf.Logger.Println("IRMA #################")
+		// Irma processing
+		if err := irma.UnmarshalValidate(bts, commitments); err != nil {
+			server.WriteError(w, server.ErrorMalformedInput, err.Error())
+			return
+		}
+
+		session := r.Context().Value("session").(*session)
+		res, rerr := session.handlePostCommitments(commitments)
+		if rerr != nil {
+			server.WriteResponse(w, nil, rerr)
+			return
+		}
+		if err = s.startNext(session, res); err != nil {
+			server.WriteError(w, server.ErrorNextSession, err.Error())
+			return
+		}
+		session.setStatus(irma.ServerStatusDone)
+		server.WriteResponse(w, res, nil)
 	}
-	session := r.Context().Value("session").(*session)
-	res, rerr := session.handlePostCommitments(commitments)
-	if rerr != nil {
-		server.WriteResponse(w, nil, rerr)
-		return
-	}
-	if err = s.startNext(session, res); err != nil {
-		server.WriteError(w, server.ErrorNextSession, err.Error())
-		return
-	}
-	session.setStatus(irma.ServerStatusDone)
-	server.WriteResponse(w, res, nil)
 }
 
 func (s *Server) handleSessionProofs(w http.ResponseWriter, r *http.Request) {
+	s.conf.Logger.Warn("###################")
 	bts, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		server.WriteError(w, server.ErrorMalformedInput, err.Error())
@@ -415,6 +661,7 @@ func (s *Server) handleSessionDelete(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) handleSessionGet(w http.ResponseWriter, r *http.Request) {
 	var min, max irma.ProtocolVersion
+	// var vc string
 	if err := json.Unmarshal([]byte(r.Header.Get(irma.MinVersionHeader)), &min); err != nil {
 		server.WriteError(w, server.ErrorMalformedInput, err.Error())
 		return
@@ -423,13 +670,30 @@ func (s *Server) handleSessionGet(w http.ResponseWriter, r *http.Request) {
 		server.WriteError(w, server.ErrorMalformedInput, err.Error())
 		return
 	}
+	// if err := json.Unmarshal([]byte(r.Header.Get(irma.VCHeader)), &vc); err != nil {
+	// 	server.WriteError(w, server.ErrorMalformedInput, err.Error())
+	// 	return
+	// }
+	s.conf.Logger.Warn("###################")
 	session := r.Context().Value("session").(*session)
 	clientAuth := irma.ClientAuthorization(r.Header.Get(irma.AuthorizationHeader))
 	res, err := session.handleGetClientRequest(&min, &max, clientAuth)
 	server.WriteResponse(w, res, err)
+
+	// TODO: intergrate this code from servercore/handle.go
+	// // in case of VC and issuing session, return
+	// ldcont := session.request.Disclosure().LDContext
+	// if vc == "yes" && ldcont == LDContextIssuanceRequest {
+	// 	// create VC session request
+	// 	session.request.Disclosure().LDContext = "TEST"
+	// 	return session.request, nil
+	// } else {
+	// 	return session.request, nil
+	// }
 }
 
 func (s *Server) handleSessionGetRequest(w http.ResponseWriter, r *http.Request) {
+	s.conf.Logger.Warn("###################")
 	session := r.Context().Value("session").(*session)
 	if session.Version.Below(2, 8) {
 		server.WriteError(w, server.ErrorUnexpectedRequest, "Endpoint is not support in used protocol version")

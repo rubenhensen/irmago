@@ -17,11 +17,13 @@ import (
 
 // SchemeManager describes an issuer scheme and is the issuer equivalent to the RequestorScheme. The naming is legacy.
 type SchemeManager struct {
-	ID                string           `xml:"Id"`
-	Name              TranslatedString `xml:"Name"`
-	URL               string           `xml:"Url"`
-	Contact           string           `xml:"contact"`
-	Demo              bool             `xml:"Demo"` // Decides whether to download private keys
+	ID      string           `xml:"Id"`
+	Name    TranslatedString `xml:"Name"`
+	URL     string           `xml:"Url"`
+	Contact string           `xml:"contact"`
+	Demo    bool             `xml:"Demo"` // Decides whether to download private keys
+
+	TypeServerURL     string `xml:"TypeServerUrl"`
 	Description       TranslatedString
 	MinimumAppVersion SchemeAppVersion
 	KeyshareServer    string
