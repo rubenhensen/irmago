@@ -6,9 +6,16 @@ FROM golang:1 as build
 # Set build environment
 ENV CGO_ENABLED=0
 
+# Leverage docker cache for faster build times
+# graph command is a workaround because go cmd 
+# does not support installing the dependencies 
+# isolated from the source code see: https://github.com/golang/go/issues/27719
+COPY ./go.mod /irmago/
+WORKDIR /irmago
+RUN go mod graph | awk '$1 !~ /@/ { print $2 }' | xargs -r go get
+
 # Build irma CLI tool
 COPY . /irmago
-WORKDIR /irmago
 RUN go build -a -ldflags '-extldflags "-static"' -o "/bin/irma" ./irma
 
 FROM $BASE_IMAGE

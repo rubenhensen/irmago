@@ -524,7 +524,6 @@ func (s *Server) startNextVC(session *session, res *irma.VerifiableCredential) e
 }
 
 func (s *Server) handleSessionCommitments(w http.ResponseWriter, r *http.Request) {
-	s.conf.Logger.Warn("###################")
 	var headers http.Header
 	headers = r.Header
 	fmt.Println(headers)
@@ -540,14 +539,13 @@ func (s *Server) handleSessionCommitments(w http.ResponseWriter, r *http.Request
 	// if message conforms to VC format, map ProofMsg to commitments object
 	// TODO: Refactor to just check if commitment is VC message or not
 	if vcHeader == "yes" {
-		s.conf.Logger.Println("VC #################")
 		vc := &irma.VerifiableCredential{}
 		// VC processing
 		if err := irma.UnmarshalValidate(bts, vc); err != nil {
 			server.WriteError(w, server.ErrorMalformedInput, err.Error())
 			return
 		}
-		// s.conf.Logger.WithField("clientToken", token).Info("Valid VC detected")
+		s.conf.Logger.Info("Valid VC detected")
 
 		// vcProof, _ := json.Marshal(vc.Proof.ProofMsg)
 		// if err := irma.UnmarshalValidate(vcProof, commitments); err != nil {
@@ -571,7 +569,6 @@ func (s *Server) handleSessionCommitments(w http.ResponseWriter, r *http.Request
 		session.setStatus(irma.ServerStatusDone)
 		server.WriteResponse(w, res, nil)
 	} else {
-		s.conf.Logger.Println("IRMA #################")
 		// Irma processing
 		if err := irma.UnmarshalValidate(bts, commitments); err != nil {
 			server.WriteError(w, server.ErrorMalformedInput, err.Error())
@@ -594,7 +591,6 @@ func (s *Server) handleSessionCommitments(w http.ResponseWriter, r *http.Request
 }
 
 func (s *Server) handleSessionProofs(w http.ResponseWriter, r *http.Request) {
-	s.conf.Logger.Warn("###################")
 	bts, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		server.WriteError(w, server.ErrorMalformedInput, err.Error())
@@ -661,7 +657,8 @@ func (s *Server) handleSessionDelete(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) handleSessionGet(w http.ResponseWriter, r *http.Request) {
 	var min, max irma.ProtocolVersion
-	// var vc string
+	var vc string
+	s.conf.Logger.Info("###### In handleSessionGet #######")
 	if err := json.Unmarshal([]byte(r.Header.Get(irma.MinVersionHeader)), &min); err != nil {
 		server.WriteError(w, server.ErrorMalformedInput, err.Error())
 		return
@@ -670,11 +667,11 @@ func (s *Server) handleSessionGet(w http.ResponseWriter, r *http.Request) {
 		server.WriteError(w, server.ErrorMalformedInput, err.Error())
 		return
 	}
-	// if err := json.Unmarshal([]byte(r.Header.Get(irma.VCHeader)), &vc); err != nil {
-	// 	server.WriteError(w, server.ErrorMalformedInput, err.Error())
-	// 	return
-	// }
-	s.conf.Logger.Warn("###################")
+	if err := json.Unmarshal([]byte(r.Header.Get(irma.VCHeader)), &vc); err != nil {
+		s.conf.Logger.Info("VC header detected!")
+		server.WriteError(w, server.ErrorMalformedInput, err.Error())
+		return
+	}
 	session := r.Context().Value("session").(*session)
 	clientAuth := irma.ClientAuthorization(r.Header.Get(irma.AuthorizationHeader))
 	res, err := session.handleGetClientRequest(&min, &max, clientAuth)
@@ -693,7 +690,6 @@ func (s *Server) handleSessionGet(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) handleSessionGetRequest(w http.ResponseWriter, r *http.Request) {
-	s.conf.Logger.Warn("###################")
 	session := r.Context().Value("session").(*session)
 	if session.Version.Below(2, 8) {
 		server.WriteError(w, server.ErrorUnexpectedRequest, "Endpoint is not support in used protocol version")

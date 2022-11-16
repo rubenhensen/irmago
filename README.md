@@ -141,6 +141,18 @@ For responsible disclosure mail to [our responsible disclosure mailbox](mailto:i
 
 <!-- vim: set ts=4 sw=4: -->
 
+# Documentation missing
+- private network with right firewall settings (mobile network)
+- use http with app dev mode (touch version number 5 times in app)
+- how to turn on VC 
+- `docker compose build irma`
+
+
+# general
+disclosing: Somebody asks for information you have on a card. You the DISCLOSE this informtion
+
+
+
 # VC
 new request `/presentation`
 /session/{clientToken}/presentation
@@ -220,4 +232,12 @@ if noun == "proofs" && vcHeader == "yes" && session.action == irma.ActionDisclos
 			status, output = server.JsonResponse(session.handlePostDisclosure(disclosure))
 			return
 		}
+```
+
+# invoke web request
+```powershell
+curl http://localhost:48680/session `
+ 	-Method 'POST' `
+	-H @{'Content-Type' = 'application/json'; 'vcHeader' = 'yes'} `
+	-Body '{"@context": "https://irma.app/ld/request/disclosure/v2","disclose": [[["irma-demo.MijnOverheid.ageLower.over18"]]]}'
 ```

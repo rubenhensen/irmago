@@ -271,6 +271,7 @@ func (s *Server) StaticFilesHandler() http.Handler {
 }
 
 func (s *Server) handleCreateSession(w http.ResponseWriter, r *http.Request) {
+	s.conf.Logger.Info("##### in handleCreateSession #####")
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		s.conf.Logger.Error("Could not read session request HTTP POST body")

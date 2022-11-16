@@ -4,13 +4,14 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"github.com/spf13/pflag"
 	"net/http"
 	"os"
 	"regexp"
 	"strconv"
 	"strings"
 	"sync"
+
+	"github.com/spf13/pflag"
 
 	"github.com/go-errors/errors"
 	irma "github.com/privacybydesign/irmago"
