@@ -81,7 +81,7 @@ require (
 	github.com/nightlyone/lockfile v1.0.0 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.2 // indirect
-	github.com/piprate/json-gold v0.4.1-0.20210813112359-33b90c4ca86c // indirect
+	github.com/piprate/json-gold v0.4.1-0.20210813112359-33b90c4ca86c
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/pquerna/cachecontrol v0.0.0-20180517163645-1555304b9b35 // indirect
