@@ -834,7 +834,7 @@ func (rs *RevocationStorage) SetRevocationUpdates(b *BaseRequest) error {
 			updated := settings.updated
 			if !updated.IsZero() {
 				Logger.Warnf("failed to fetch revocation updates for %s, nonrevocation is guaranteed only until %s ago:",
-					credid, time.Now().Sub(updated).String())
+					credid, time.Since(updated).String())
 				Logger.Warn(err)
 			} else {
 				Logger.Errorf("revocation is disabled for %s: failed to fetch revocation updates and none are known locally", credid)

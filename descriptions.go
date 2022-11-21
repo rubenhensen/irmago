@@ -97,11 +97,11 @@ type CredentialType struct {
 // AttributeType is a description of an attribute within a credential type.
 type AttributeType struct {
 	ID          string `xml:"id,attr"`
-	Optional    string `xml:"optional,attr"  json:",omitempty"`
+	Optional    string `xml:"attr"  json:",omitempty"`
 	Name        TranslatedString
 	Description TranslatedString
 
-	RandomBlind bool `xml:"randomblind,attr,optional" json:",omitempty"`
+	RandomBlind bool `xml:"randomblind,attr" json:",omitempty"`
 
 	Index        int    `xml:"-"`
 	DisplayIndex *int   `xml:"displayIndex,attr" json:",omitempty"`

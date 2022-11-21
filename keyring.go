@@ -3,7 +3,6 @@ package irma
 import (
 	goerrors "errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -56,7 +55,7 @@ var (
 )
 
 func NewPrivateKeyRingFolder(path string, conf *Configuration) (*PrivateKeyRingFolder, error) {
-	files, err := ioutil.ReadDir(path)
+	files, err := os.ReadDir(path)
 	if err != nil {
 		return nil, err
 	}
@@ -82,7 +81,7 @@ func NewPrivateKeyRingFolder(path string, conf *Configuration) (*PrivateKeyRingF
 	return ring, nil
 }
 
-func (_ *PrivateKeyRingFolder) parseFilename(filename string) (*IssuerIdentifier, *uint, error) {
+func (*PrivateKeyRingFolder) parseFilename(filename string) (*IssuerIdentifier, *uint, error) {
 	// This regexp returns one of the following:
 	// [ "foo.bar.xml", "foo.bar", "", "" ] in case of "foo.bar.xml"
 	// [ "foo.bar.xml", "foo.bar", ".2", "2" ] in case of "foo.bar.2.xml"

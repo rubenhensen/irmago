@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
-	"io/ioutil"
+	"os"
 	"reflect"
 	"strconv"
 	"time"
@@ -674,7 +674,7 @@ func stringSliceEqual(a, b []string) bool {
 	if len(a) != len(b) {
 		return false
 	}
-	for i, _ := range a {
+	for i := range a {
 		if a[i] != b[i] {
 			return false
 		}
@@ -747,7 +747,7 @@ func (ir *IssuanceRequest) Identifiers() *IrmaIdentifierSet {
 			ir.ids.Issuers[issuer] = struct{}{}
 			credID := credreq.CredentialTypeID
 			ir.ids.CredentialTypes[credID] = struct{}{}
-			for attr, _ := range credreq.Attributes { // this is kind of ugly
+			for attr := range credreq.Attributes { // this is kind of ugly
 				ir.ids.AttributeTypes[NewAttributeTypeIdentifier(credID.String()+"."+attr)] = struct{}{}
 			}
 			if ir.ids.PublicKeys[issuer] == nil {
@@ -921,7 +921,7 @@ func readTimestamp(path string) (*Timestamp, bool, error) {
 	if !exists {
 		return nil, false, nil
 	}
-	bts, err := ioutil.ReadFile(path)
+	bts, err := os.ReadFile(path)
 	if err != nil {
 		return nil, true, errors.New("Could not read scheme manager timestamp")
 	}

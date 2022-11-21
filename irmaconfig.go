@@ -7,7 +7,6 @@ import (
 	"encoding/base64"
 	"encoding/pem"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -404,7 +403,7 @@ func (conf *Configuration) KeyshareServerPublicKey(schemeid SchemeManagerIdentif
 	}
 	if _, contains := conf.kssPublicKeys[schemeid][i]; !contains {
 		scheme := conf.SchemeManagers[schemeid]
-		pkbts, err := ioutil.ReadFile(filepath.Join(scheme.path(), fmt.Sprintf("kss-%d.pem", i)))
+		pkbts, err := os.ReadFile(filepath.Join(scheme.path(), fmt.Sprintf("kss-%d.pem", i)))
 		if err != nil {
 			return nil, err
 		}
@@ -582,8 +581,6 @@ func (conf *Configuration) checkCredentialTypes(session SessionRequest, missing 
 		}
 		return nil
 	})
-
-	return
 }
 
 func (conf *Configuration) checkIdentifiers(session SessionRequest) (*IrmaIdentifierSet, *IrmaIdentifierSet, error) {

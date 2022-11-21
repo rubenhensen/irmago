@@ -183,7 +183,7 @@ func TestProofFunctionality(t *testing.T) {
 		require.NoError(t, err)
 
 		// Get keyshare commitment
-		W, commitID, err := c.GenerateCommitments(secrets, jwtt, []irma.PublicKeyIdentifier{irma.PublicKeyIdentifier{Issuer: irma.NewIssuerIdentifier("test"), Counter: 1}})
+		W, commitID, err := c.GenerateCommitments(secrets, jwtt, []irma.PublicKeyIdentifier{{Issuer: irma.NewIssuerIdentifier("test"), Counter: 1}})
 		require.NoError(t, err)
 
 		// Get keyshare response
@@ -230,7 +230,7 @@ func TestCorruptedUserSecrets(t *testing.T) {
 		jwtt, err := validateAuth(t, c, signer, secrets, pin)
 		require.NoError(t, err)
 
-		_, commitID, err := c.GenerateCommitments(secrets, jwtt, []irma.PublicKeyIdentifier{irma.PublicKeyIdentifier{Issuer: irma.NewIssuerIdentifier("test"), Counter: 1}})
+		_, commitID, err := c.GenerateCommitments(secrets, jwtt, []irma.PublicKeyIdentifier{{Issuer: irma.NewIssuerIdentifier("test"), Counter: 1}})
 		require.NoError(t, err)
 
 		// Corrupt user secrets
@@ -247,7 +247,7 @@ func TestCorruptedUserSecrets(t *testing.T) {
 		assert.Error(t, err, "ChangePin accepts corrupted keyshare user secrets")
 
 		// GenerateCommitments
-		_, _, err = c.GenerateCommitments(secrets, jwtt, []irma.PublicKeyIdentifier{irma.PublicKeyIdentifier{Issuer: irma.NewIssuerIdentifier("test"), Counter: 1}})
+		_, _, err = c.GenerateCommitments(secrets, jwtt, []irma.PublicKeyIdentifier{{Issuer: irma.NewIssuerIdentifier("test"), Counter: 1}})
 		assert.Error(t, err, "GenerateCommitments accepts corrupted keyshare user secrets")
 
 		// GetResponse
@@ -286,7 +286,7 @@ func TestIncorrectPin(t *testing.T) {
 		assert.Error(t, err, "ChangePin accepts incorrect pin")
 
 		// GetResponse
-		_, commitID, err := c.GenerateCommitments(secrets, jwtt, []irma.PublicKeyIdentifier{irma.PublicKeyIdentifier{Issuer: irma.NewIssuerIdentifier("test"), Counter: 1}})
+		_, commitID, err := c.GenerateCommitments(secrets, jwtt, []irma.PublicKeyIdentifier{{Issuer: irma.NewIssuerIdentifier("test"), Counter: 1}})
 		require.NoError(t, err)
 		_, err = c.GenerateResponse(secrets, "pin", commitID, big.NewInt(12345), irma.PublicKeyIdentifier{Issuer: irma.NewIssuerIdentifier("test"), Counter: 1})
 		assert.Error(t, err, "GenerateResponse accepts incorrect pin")
@@ -314,11 +314,11 @@ func TestMissingKey(t *testing.T) {
 		require.NoError(t, err)
 
 		// GenerateCommitments
-		_, _, err = c.GenerateCommitments(secrets, jwtt, []irma.PublicKeyIdentifier{irma.PublicKeyIdentifier{Issuer: irma.NewIssuerIdentifier("DNE"), Counter: 1}})
+		_, _, err = c.GenerateCommitments(secrets, jwtt, []irma.PublicKeyIdentifier{{Issuer: irma.NewIssuerIdentifier("DNE"), Counter: 1}})
 		assert.Error(t, err, "Missing key not detected by generateCommitments")
 
 		// GenerateResponse
-		_, commitID, err := c.GenerateCommitments(secrets, jwtt, []irma.PublicKeyIdentifier{irma.PublicKeyIdentifier{Issuer: irma.NewIssuerIdentifier("test"), Counter: 1}})
+		_, commitID, err := c.GenerateCommitments(secrets, jwtt, []irma.PublicKeyIdentifier{{Issuer: irma.NewIssuerIdentifier("test"), Counter: 1}})
 		require.NoError(t, err)
 		_, err = c.GenerateResponse(secrets, jwtt, commitID, big.NewInt(12345), irma.PublicKeyIdentifier{Issuer: irma.NewIssuerIdentifier("DNE"), Counter: 1})
 		assert.Error(t, err, "Missing key not detected by generateresponse")
@@ -346,19 +346,19 @@ func TestInvalidChallenge(t *testing.T) {
 		require.NoError(t, err)
 
 		// Test negative challenge
-		_, commitID, err := c.GenerateCommitments(secrets, jwtt, []irma.PublicKeyIdentifier{irma.PublicKeyIdentifier{Issuer: irma.NewIssuerIdentifier("test"), Counter: 1}})
+		_, commitID, err := c.GenerateCommitments(secrets, jwtt, []irma.PublicKeyIdentifier{{Issuer: irma.NewIssuerIdentifier("test"), Counter: 1}})
 		require.NoError(t, err)
 		_, err = c.GenerateResponse(secrets, jwtt, commitID, big.NewInt(-1), irma.PublicKeyIdentifier{Issuer: irma.NewIssuerIdentifier("test"), Counter: 1})
 		assert.Error(t, err, "GenerateResponse incorrectly accepts negative challenge")
 
 		// Test too large challenge
-		_, commitID, err = c.GenerateCommitments(secrets, jwtt, []irma.PublicKeyIdentifier{irma.PublicKeyIdentifier{Issuer: irma.NewIssuerIdentifier("test"), Counter: 1}})
+		_, commitID, err = c.GenerateCommitments(secrets, jwtt, []irma.PublicKeyIdentifier{{Issuer: irma.NewIssuerIdentifier("test"), Counter: 1}})
 		require.NoError(t, err)
 		_, err = c.GenerateResponse(secrets, jwtt, commitID, new(big.Int).Lsh(big.NewInt(1), 256), irma.PublicKeyIdentifier{Issuer: irma.NewIssuerIdentifier("test"), Counter: 1})
 		assert.Error(t, err, "GenerateResponse accepts challenge that is too small")
 
 		// Test just-right challenge
-		_, commitID, err = c.GenerateCommitments(secrets, jwtt, []irma.PublicKeyIdentifier{irma.PublicKeyIdentifier{Issuer: irma.NewIssuerIdentifier("test"), Counter: 1}})
+		_, commitID, err = c.GenerateCommitments(secrets, jwtt, []irma.PublicKeyIdentifier{{Issuer: irma.NewIssuerIdentifier("test"), Counter: 1}})
 		require.NoError(t, err)
 		_, err = c.GenerateResponse(secrets, jwtt, commitID, new(big.Int).Lsh(big.NewInt(1), 255), irma.PublicKeyIdentifier{Issuer: irma.NewIssuerIdentifier("test"), Counter: 1})
 		assert.NoError(t, err, "GenerateResponse does not accept challenge of 256 bits")
@@ -386,7 +386,7 @@ func TestDoubleCommitUse(t *testing.T) {
 		require.NoError(t, err)
 
 		// Use commit double
-		_, commitID, err := c.GenerateCommitments(secrets, jwtt, []irma.PublicKeyIdentifier{irma.PublicKeyIdentifier{Issuer: irma.NewIssuerIdentifier("test"), Counter: 1}})
+		_, commitID, err := c.GenerateCommitments(secrets, jwtt, []irma.PublicKeyIdentifier{{Issuer: irma.NewIssuerIdentifier("test"), Counter: 1}})
 		require.NoError(t, err)
 		_, err = c.GenerateResponse(secrets, jwtt, commitID, big.NewInt(12345), irma.PublicKeyIdentifier{Issuer: irma.NewIssuerIdentifier("test"), Counter: 1})
 		require.NoError(t, err)

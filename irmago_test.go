@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -236,7 +235,7 @@ func TestInstallScheme(t *testing.T) {
 	defer test.StopSchemeManagerHttpServer()
 
 	// setup a new empty Configuration
-	storage, err := ioutil.TempDir("", "scheme")
+	storage, err := os.MkdirTemp("", "scheme")
 	require.NoError(t, err)
 	defer test.ClearTestStorage(t, nil, storage)
 	conf, err := NewConfiguration(storage, ConfigurationOptions{})
@@ -828,14 +827,18 @@ func credidptr(s string) *CredentialTypeIdentifier {
 	id := credid(s)
 	return &id
 }
-func credinfo(id string) *CredentialInfo {
-	i := credid(id)
-	return &CredentialInfo{
-		SchemeManagerID: i.Root(),
-		IssuerID:        i.IssuerIdentifier().Name(),
-		ID:              i.Name(),
-	}
-}
+
+// unused function
+//
+//	func credinfo(id string) *CredentialInfo {
+//		i := credid(id)
+//		return &CredentialInfo{
+//			SchemeManagerID: i.Root(),
+//			IssuerID:        i.IssuerIdentifier().Name(),
+//			ID:              i.Name(),
+//		}
+//	}
+
 func credtype(id string, deps ...string) *CredentialType {
 	i := credid(id)
 	d := CredentialDependencies{{{}}}
@@ -1483,7 +1486,7 @@ func TestDeleteScheme(t *testing.T) {
 	}
 
 	schemeToInstall := NewSchemeManagerIdentifier("test2")
-	pkBytes, err := ioutil.ReadFile(fmt.Sprintf("testdata/irma_configuration/%s/pk.pem", schemeToInstall))
+	pkBytes, err := os.ReadFile(fmt.Sprintf("testdata/irma_configuration/%s/pk.pem", schemeToInstall))
 	require.NoError(t, err)
 
 	err = conf.InstallScheme("http://localhost:48681/irma_configuration/"+schemeToInstall.String(), pkBytes)

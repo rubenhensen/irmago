@@ -7,7 +7,6 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -63,7 +62,7 @@ type (
 		path() string
 		setPath(path string)
 		parseContents(conf *Configuration) error
-		validate(conf *Configuration) (error, SchemeManagerStatus)
+		validate(conf *Configuration) (SchemeManagerStatus, error)
 		update() error
 		handleUpdateFile(conf *Configuration, path, filename string, bts []byte, transport *HTTPTransport, _ *IrmaIdentifierSet) error
 		delete(conf *Configuration) error
@@ -286,7 +285,7 @@ func (conf *Configuration) ParseSchemeFolder(dir string) (scheme Scheme, serr er
 	}()
 
 	// validate scheme contents
-	if err, status := scheme.validate(conf); err != nil {
+	if status, err := scheme.validate(conf); err != nil {
 		serr = &SchemeManagerError{Scheme: id, Status: status, Err: err}
 		return
 	}
@@ -350,7 +349,7 @@ func (conf *Configuration) parseSchemeDescription(dir string) (Scheme, SchemeMan
 		return nil, SchemeManagerStatusParsingError, err
 	}
 
-	index, err, _ := conf.parseIndex(dir)
+	index, _, err := conf.parseIndex(dir)
 	if err != nil {
 		return nil, SchemeManagerStatusParsingError, err
 	}
@@ -442,7 +441,7 @@ func (conf *Configuration) reinstallSchemeFromRemote(scheme Scheme) error {
 	if conf.readOnly {
 		return errors.New("cannot install scheme into a read-only configuration")
 	}
-	pkbts, err := ioutil.ReadFile(filepath.Join(scheme.path(), "pk.pem"))
+	pkbts, err := os.ReadFile(filepath.Join(scheme.path(), "pk.pem"))
 	if err != nil {
 		return err
 	}
@@ -650,7 +649,7 @@ func (conf *Configuration) verifySignature(dir string) (err error) {
 	}
 
 	// Read and hash index file
-	indexbts, err := ioutil.ReadFile(filepath.Join(dir, "index"))
+	indexbts, err := os.ReadFile(filepath.Join(dir, "index"))
 	if err != nil {
 		return err
 	}
@@ -662,7 +661,7 @@ func (conf *Configuration) verifySignature(dir string) (err error) {
 	}
 
 	// Read and parse signature
-	sig, err := ioutil.ReadFile(filepath.Join(dir, "index.sig"))
+	sig, err := os.ReadFile(filepath.Join(dir, "index.sig"))
 	if err != nil {
 		return err
 	}
@@ -671,7 +670,7 @@ func (conf *Configuration) verifySignature(dir string) (err error) {
 }
 
 func (conf *Configuration) schemePublicKey(dir string) (*ecdsa.PublicKey, error) {
-	pkbts, err := ioutil.ReadFile(filepath.Join(dir, "pk.pem"))
+	pkbts, err := os.ReadFile(filepath.Join(dir, "pk.pem"))
 	if err != nil {
 		return nil, err
 	}
@@ -692,7 +691,7 @@ func (conf *Configuration) readSignedFile(index SchemeManagerIndex, base string,
 }
 
 func (conf *Configuration) readHashedFile(path string, hash SchemeFileHash) ([]byte, error) {
-	bts, err := ioutil.ReadFile(path)
+	bts, err := os.ReadFile(path)
 	if err != nil {
 		return nil, err
 	}
@@ -705,26 +704,26 @@ func (conf *Configuration) readHashedFile(path string, hash SchemeFileHash) ([]b
 }
 
 // parseIndex parses the index file of the specified manager.
-func (conf *Configuration) parseIndex(dir string) (SchemeManagerIndex, error, SchemeManagerStatus) {
+func (conf *Configuration) parseIndex(dir string) (SchemeManagerIndex, SchemeManagerStatus, error) {
 	if err := conf.verifySignature(dir); err != nil {
-		return nil, err, SchemeManagerStatusInvalidSignature
+		return nil, SchemeManagerStatusInvalidSignature, err
 	}
 	path := filepath.Join(dir, "index")
 	if err := common.AssertPathExists(path); err != nil {
-		return nil, fmt.Errorf("missing scheme manager index file; tried %s", path), SchemeManagerStatusInvalidIndex
+		return nil, SchemeManagerStatusInvalidIndex, fmt.Errorf("missing scheme manager index file; tried %s", path)
 	}
-	indexbts, err := ioutil.ReadFile(path)
+	indexbts, err := os.ReadFile(path)
 	if err != nil {
-		return nil, err, SchemeManagerStatusInvalidIndex
+		return nil, SchemeManagerStatusInvalidIndex, err
 	}
 	index := SchemeManagerIndex(make(map[string]SchemeFileHash))
 	if err = index.FromString(string(indexbts)); err != nil {
-		return nil, err, SchemeManagerStatusInvalidIndex
+		return nil, SchemeManagerStatusInvalidIndex, err
 	}
 	if err = conf.checkUnsignedFiles(dir, index); err != nil {
-		return nil, err, SchemeManagerStatusContentParsingError
+		return nil, SchemeManagerStatusContentParsingError, err
 	}
-	return index, nil, SchemeManagerStatusValid
+	return index, SchemeManagerStatusValid, nil
 }
 
 func (conf *Configuration) checkUnsignedFiles(dir string, index SchemeManagerIndex) error {
@@ -823,7 +822,7 @@ func downloadScheme(url string) (Scheme, error) {
 }
 
 func (conf *Configuration) tempSchemeCopy(scheme Scheme) (string, string, error) {
-	dir, err := ioutil.TempDir(filepath.Dir(scheme.path()), "tempscheme")
+	dir, err := os.MkdirTemp(filepath.Dir(scheme.path()), "tempscheme")
 	if err != nil {
 		return "", "", err
 	}
@@ -844,7 +843,7 @@ func (conf *Configuration) tempSchemeCopy(scheme Scheme) (string, string, error)
 func (conf *Configuration) updateSchemeDir(scheme Scheme, oldscheme, newscheme string) error {
 	// Create a directory in the same directory as oldscheme,
 	// this is to make sure os.Rename does not fail with an "invalid cross-device link" error.
-	tmp, err := ioutil.TempDir(filepath.Dir(oldscheme), "oldscheme")
+	tmp, err := os.MkdirTemp(filepath.Dir(oldscheme), "oldscheme")
 	if err != nil {
 		return err
 	}
@@ -878,9 +877,9 @@ var (
 		regexp.MustCompile(`\.DS_Store$`),
 	}
 
-	issPattern  = regexp.MustCompile("^([^/]+)/description\\.xml")
-	credPattern = regexp.MustCompile("([^/]+)/Issues/([^/]+)/description\\.xml")
-	keyPattern  = regexp.MustCompile("([^/]+)/PublicKeys/(\\d+)\\.xml")
+	issPattern  = regexp.MustCompile(`^([^/]+)/description\.xml`)
+	credPattern = regexp.MustCompile(`([^/]+)/Issues/([^/]+)/description\.xml`)
+	keyPattern  = regexp.MustCompile(`([^/]+)/PublicKeys/(\d+)\.xml`)
 )
 
 func newScheme(typ SchemeType) Scheme {
@@ -1013,14 +1012,15 @@ func (ct CredentialType) validateDependencies(conf *Configuration, validatedDeps
 	return nil
 }
 
-func (d DependencyChain) contains(item CredentialTypeIdentifier) bool {
-	for _, dep := range d {
-		if dep == item {
-			return true
-		}
-	}
-	return false
-}
+// unused function
+// func (d DependencyChain) contains(item CredentialTypeIdentifier) bool {
+// 	for _, dep := range d {
+// 		if dep == item {
+// 			return true
+// 		}
+// 	}
+// 	return false
+// }
 
 func (d DependencyChain) String() string {
 	deps := make([]string, len(d))
@@ -1030,23 +1030,23 @@ func (d DependencyChain) String() string {
 	return strings.Join(deps, ", ")
 }
 
-func (scheme *SchemeManager) validate(conf *Configuration) (error, SchemeManagerStatus) {
+func (scheme *SchemeManager) validate(conf *Configuration) (SchemeManagerStatus, error) {
 	if scheme.XMLVersion < 7 {
-		return errors.New("Unsupported scheme manager description"), SchemeManagerStatusParsingError
+		return SchemeManagerStatusParsingError, errors.New("Unsupported scheme manager description")
 	}
 	if scheme.KeyshareServer != "" {
 		if err := common.AssertPathExists(filepath.Join(scheme.path(), "kss-0.pem")); err != nil {
-			return errors.Errorf("Scheme %s has keyshare URL but no keyshare public key kss-0.pem", scheme.ID), SchemeManagerStatusParsingError
+			return SchemeManagerStatusParsingError, errors.Errorf("Scheme %s has keyshare URL but no keyshare public key kss-0.pem", scheme.ID)
 		}
 	}
 	conf.validateTranslations(fmt.Sprintf("Scheme %s", scheme.ID), scheme, scheme.Languages)
 
 	// Verify that all other files are validly signed
 	if err := scheme.verifyFiles(conf); err != nil {
-		return err, SchemeManagerStatusInvalidSignature
+		return SchemeManagerStatusInvalidSignature, err
 	}
 
-	return nil, SchemeManagerStatusValid
+	return SchemeManagerStatusValid, nil
 }
 
 func (scheme *SchemeManager) update() error {
@@ -1139,7 +1139,7 @@ func (scheme *SchemeManager) present(id string, conf *Configuration) bool {
 	return conf.SchemeManagers[NewSchemeManagerIdentifier(id)] != nil
 }
 
-func (_ *SchemeManager) typ() SchemeType { return SchemeTypeIssuer }
+func (*SchemeManager) typ() SchemeType { return SchemeTypeIssuer }
 
 func (scheme *SchemeManager) purge(conf *Configuration) {
 	id := scheme.Identifier()
@@ -1322,7 +1322,7 @@ func (scheme *RequestorScheme) parseContents(conf *Configuration) error {
 	return nil
 }
 
-func (scheme *RequestorScheme) validate(conf *Configuration) (error, SchemeManagerStatus) {
+func (scheme *RequestorScheme) validate(conf *Configuration) (SchemeManagerStatus, error) {
 	// Verify all files in index, reading the RequestorChunks
 	var (
 		requestors []*RequestorInfo
@@ -1337,14 +1337,14 @@ func (scheme *RequestorScheme) validate(conf *Configuration) (error, SchemeManag
 		var currentChunk RequestorChunk
 		exists, err = conf.parseSchemeFile(scheme, file[len(scheme.id())+1:], &currentChunk)
 		if !exists {
-			return errors.Errorf("file %s of requestor scheme %s in index but not found on disk", file, scheme.ID), SchemeManagerStatusParsingError
+			return SchemeManagerStatusParsingError, errors.Errorf("file %s of requestor scheme %s in index but not found on disk", file, scheme.ID)
 		}
 		if err != nil {
-			return err, SchemeManagerStatusParsingError
+			return SchemeManagerStatusParsingError, err
 		}
 		for _, v := range currentChunk {
 			if v.Scheme != scheme.ID {
-				return errors.Errorf("Requestor %s has incorrect scheme %s", v.Name, v.Scheme), SchemeManagerStatusParsingError
+				return SchemeManagerStatusParsingError, errors.Errorf("Requestor %s has incorrect scheme %s", v.Name, v.Scheme)
 
 			}
 		}
@@ -1357,14 +1357,14 @@ func (scheme *RequestorScheme) validate(conf *Configuration) (error, SchemeManag
 			requestor.Languages = scheme.Languages
 		}
 		if scheme.Demo && len(requestor.Hostnames) > 0 {
-			return errors.New("Demo requestor has hostnames: only allowed for non-demo schemes"), SchemeManagerStatusParsingError
+			return SchemeManagerStatusParsingError, errors.New("Demo requestor has hostnames: only allowed for non-demo schemes")
 		}
 		if requestor.ID.RequestorSchemeIdentifier() != scheme.ID {
-			return errors.Errorf("requestor %s has incorrect ID", requestor.ID), SchemeManagerStatusParsingError
+			return SchemeManagerStatusParsingError, errors.Errorf("requestor %s has incorrect ID", requestor.ID)
 		}
 		if requestor.Logo != nil {
-			if err, status := scheme.checkLogo(conf, *requestor.Logo); err != nil {
-				return err, status
+			if status, err := scheme.checkLogo(conf, *requestor.Logo); err != nil {
+				return status, err
 			}
 		}
 		for id, wizard := range requestor.Wizards {
@@ -1372,14 +1372,14 @@ func (scheme *RequestorScheme) validate(conf *Configuration) (error, SchemeManag
 				wizard.Languages = requestor.Languages
 			}
 			if id != wizard.ID || id.RequestorIdentifier() != requestor.ID {
-				return errors.Errorf("issue wizard %s has incorrect ID", id), SchemeManagerStatusParsingError
+				return SchemeManagerStatusParsingError, errors.Errorf("issue wizard %s has incorrect ID", id)
 			}
 			if err = wizard.Validate(conf); err != nil {
-				return errors.Errorf("issue wizard %s: %w", id, err), SchemeManagerStatusParsingError
+				return SchemeManagerStatusParsingError, errors.Errorf("issue wizard %s: %w", id, err)
 			}
 			if wizard.Logo != nil {
-				if err, status := scheme.checkLogo(conf, *wizard.Logo); err != nil {
-					return err, status
+				if status, err := scheme.checkLogo(conf, *wizard.Logo); err != nil {
+					return status, err
 				}
 				path := filepath.Join(scheme.path(), "assets", *wizard.Logo+".png")
 				wizard.LogoPath = &path
@@ -1388,19 +1388,19 @@ func (scheme *RequestorScheme) validate(conf *Configuration) (error, SchemeManag
 	}
 	scheme.requestors = requestors
 
-	return nil, SchemeManagerStatusValid
+	return SchemeManagerStatusValid, nil
 }
 
-func (scheme *RequestorScheme) checkLogo(conf *Configuration, logo string) (error, SchemeManagerStatus) {
+func (scheme *RequestorScheme) checkLogo(conf *Configuration, logo string) (SchemeManagerStatus, error) {
 	var hash []byte
 	hash, err := hex.DecodeString(logo)
 	if err != nil {
-		return err, SchemeManagerStatusParsingError
+		return SchemeManagerStatusParsingError, err
 	}
 	if _, err = conf.readHashedFile(filepath.Join(scheme.path(), "assets", logo+".png"), hash); err != nil {
-		return err, SchemeManagerStatusInvalidSignature
+		return SchemeManagerStatusInvalidSignature, err
 	}
-	return nil, ""
+	return "", nil
 }
 
 func (scheme *RequestorScheme) update() error {
@@ -1490,7 +1490,7 @@ func (scheme *RequestorScheme) present(id string, conf *Configuration) bool {
 	return conf.RequestorSchemes[NewRequestorSchemeIdentifier(id)] != nil
 }
 
-func (_ *RequestorScheme) typ() SchemeType { return SchemeTypeRequestor }
+func (*RequestorScheme) typ() SchemeType { return SchemeTypeRequestor }
 
 // purge removes a requestor scheme and its requestors from the configuration
 func (scheme *RequestorScheme) purge(conf *Configuration) {

@@ -59,7 +59,10 @@ type AttributeList struct {
 func NewAttributeListFromInts(ints []*big.Int, conf *Configuration) *AttributeList {
 	metadata := MetadataFromInt(ints[0], conf)
 	credtype := metadata.CredentialType()
-	idx := credtype.RevocationIndex + 1
+	var idx int
+	if credtype != nil {
+		idx = credtype.RevocationIndex + 1
+	}
 	var rev bool
 	if credtype != nil {
 		rev = credtype.RevocationSupported() &&

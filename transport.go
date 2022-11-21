@@ -7,7 +7,6 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"io"
-	"io/ioutil"
 	"log"
 	"net"
 	"net/http"
@@ -74,7 +73,7 @@ func NewHTTPTransport(serverURL string, forceHTTPS bool) *HTTPTransport {
 	if Logger.IsLevelEnabled(logrus.TraceLevel) {
 		transportlogger = log.New(Logger.WriterLevel(logrus.TraceLevel), "transport: ", 0)
 	} else {
-		transportlogger = log.New(ioutil.Discard, "", 0)
+		transportlogger = log.New(io.Discard, "", 0)
 	}
 
 	if serverURL != "" && !strings.HasSuffix(serverURL, "/") {
@@ -250,7 +249,7 @@ func (transport *HTTPTransport) jsonRequest(url string, method string, result in
 		return nil
 	}
 
-	body, err := ioutil.ReadAll(res.Body)
+	body, err := io.ReadAll(res.Body)
 	if err != nil {
 		return &SessionError{ErrorType: ErrorServerResponse, Err: err, RemoteStatus: res.StatusCode}
 	}
@@ -297,7 +296,7 @@ func (transport *HTTPTransport) GetBytes(url string) ([]byte, error) {
 	if res.StatusCode != 200 {
 		return nil, &SessionError{ErrorType: ErrorServerResponse, RemoteStatus: res.StatusCode}
 	}
-	b, err := ioutil.ReadAll(res.Body)
+	b, err := io.ReadAll(res.Body)
 	if err != nil {
 		return nil, &SessionError{ErrorType: ErrorServerResponse, Err: err, RemoteStatus: res.StatusCode}
 	}
