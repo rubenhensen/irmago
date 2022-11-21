@@ -12,6 +12,17 @@
             ]
         },
         {
+            "name": "IRMA vc",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/irma/main.go",
+            "args": [
+                "vc",
+                "${workspaceFolder}/input/example-1-bad-cardinality.jsonld"
+            ]
+        },
+        {
             "name": "IRMA keyshare server",
             "type": "go",
             "request": "launch",
