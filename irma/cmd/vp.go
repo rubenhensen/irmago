@@ -11,16 +11,14 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var vcCmd = &cobra.Command{
-	Use:   "vc [file]",
-	Short: "Verifies verifiable credentials",
+var vpCmd = &cobra.Command{
+	Use:   "vp [file]",
+	Short: "Verifies verifiable presentations",
 	Long:  `This endpoint is used to run the vc-test-suite from w3c`,
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-
-		vc, err := fileToCredential(args[0])
+		vc, err := fileToPresentation(args[0])
 		if err != nil {
-
 			die("", err)
 		}
 		b, err := json.Marshal(vc)
@@ -32,26 +30,22 @@ var vcCmd = &cobra.Command{
 }
 
 func init() {
-	RootCmd.AddCommand(vcCmd)
+	RootCmd.AddCommand(vpCmd)
 }
 
-func fileToCredential(path string) (*ariesvc.Credential, error) {
+func fileToPresentation(path string) (*ariesvc.Presentation, error) {
 	// Open our jsonFile
 	jsonFile, err := os.ReadFile(path)
 	// if we os.Open returns an error then handle it
 	if err != nil {
 		die("", err)
 	}
-
 	// TODO: Check if there is a more efficient way
 	client := &http.Client{}
 	nl := ld.NewDefaultDocumentLoader(client)
-
-	vcParsed, err := ariesvc.ParseCredential(
-		jsonFile,
-		ariesvc.WithStrictValidation(),
-		ariesvc.WithDisabledProofCheck(),
-		ariesvc.WithJSONLDDocumentLoader(nl))
+	vcParsed, err := ariesvc.ParsePresentation(jsonFile,
+		ariesvc.WithPresDisabledProofCheck(),
+		ariesvc.WithPresJSONLDDocumentLoader(nl))
 
 	return vcParsed, err
 }

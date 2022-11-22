@@ -4,13 +4,14 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"github.com/spf13/pflag"
 	"net/http"
 	"os"
 	"regexp"
 	"strconv"
 	"strings"
 	"sync"
+
+	"github.com/spf13/pflag"
 
 	"github.com/go-errors/errors"
 	irma "github.com/privacybydesign/irmago"
@@ -445,6 +446,7 @@ func init() {
 	}
 
 	flags := sessionCmd.Flags()
+	// logger.WithField("flags", flags).Warn("Flags")
 	flags.SortFlags = false
 	flags.String("server", "", "External IRMA server to post request to (leave blank to use builtin library)")
 	flags.StringP("url", "u", defaulturl, "external URL to which IRMA app connects (when not using --server), \":port\" being replaced by --port value")
