@@ -44,6 +44,7 @@ func fileToPresentation(path string) (*ariesvc.Presentation, error) {
 	client := &http.Client{}
 	nl := ld.NewDefaultDocumentLoader(client)
 	vcParsed, err := ariesvc.ParsePresentation(jsonFile,
+		ariesvc.WithPresStrictValidation(),
 		ariesvc.WithPresDisabledProofCheck(),
 		ariesvc.WithPresJSONLDDocumentLoader(nl))
 

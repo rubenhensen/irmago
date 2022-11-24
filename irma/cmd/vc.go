@@ -51,7 +51,8 @@ func fileToCredential(path string) (*ariesvc.Credential, error) {
 		jsonFile,
 		ariesvc.WithStrictValidation(),
 		ariesvc.WithDisabledProofCheck(),
-		ariesvc.WithJSONLDDocumentLoader(nl))
+		ariesvc.WithJSONLDDocumentLoader(nl),
+		ariesvc.WithNoCustomSchemaCheck()) // makes sure no http request for schema
 
 	return vcParsed, err
 }
