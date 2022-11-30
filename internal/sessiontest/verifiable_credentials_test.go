@@ -8,9 +8,9 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestVerifiableCredentials(t *testing.T) {
-	t.Run("DisclosureSession", apply(testVcDisclosureSession, RequestorVCServerConfiguration()))
-}
+// func TestVerifiableCredentials(t *testing.T) {
+// 	t.Run("DisclosureSession", apply(testVcDisclosureSession, RequestorVCServerConfiguration()))
+// }
 
 func testVcDisclosureSession(t *testing.T, conf interface{}, opts ...option) {
 	id := irma.NewAttributeTypeIdentifier("irma-demo.RU.studentCard.studentID")
@@ -35,7 +35,7 @@ func RequestorVCServerConfiguration() *requestorserver.Configuration {
 		ListenAddress:                  "localhost",
 		Port:                           requestorServerPort,
 		MaxRequestAge:                  3,
-		VerifiableCredential:           true,
+		// VerifiableCredential:           true,
 		Permissions: requestorserver.Permissions{
 			Disclosing: []string{"*"},
 			Signing:    []string{"*"},

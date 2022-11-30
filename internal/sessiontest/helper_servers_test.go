@@ -63,7 +63,7 @@ type IrmaServer struct {
 func init() {
 	common.ForceHTTPS = false // globally disable https enforcement
 	irma.SetLogger(logger)
-	logger.Level = logrus.TraceLevel
+	logger.Level = logrus.DebugLevel
 	logger.Formatter = &prefixed.TextFormatter{
 		ForceFormatting: true,
 		ForceColors:     true,
