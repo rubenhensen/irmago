@@ -51,6 +51,7 @@ func fileToCredential(path string) (*ariesvc.Credential, error) {
 		jsonFile,
 		ariesvc.WithStrictValidation(),
 		ariesvc.WithDisabledProofCheck(),
+		// ariesvc.WithEmbeddedSignatureSuites(), // Could be used to add a idemix proof checker to ariesvc
 		ariesvc.WithJSONLDDocumentLoader(nl),
 		ariesvc.WithNoCustomSchemaCheck()) // makes sure no http request for schema
 
