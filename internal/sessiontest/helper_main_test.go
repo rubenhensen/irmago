@@ -85,6 +85,10 @@ func getDisclosureRequest(id irma.AttributeTypeIdentifier) *irma.DisclosureReque
 	return irma.NewDisclosureRequest(id)
 }
 
+func getVcDisclosureRequest(id irma.AttributeTypeIdentifier) *irma.DisclosureRequest {
+	return irma.NewVcDisclosureRequest(id)
+}
+
 func getSigningRequest(id irma.AttributeTypeIdentifier) *irma.SignatureRequest {
 	return irma.NewSignatureRequest("test", id)
 }

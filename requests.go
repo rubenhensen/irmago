@@ -20,6 +20,7 @@ import (
 
 const (
 	LDContextDisclosureRequest      = "https://irma.app/ld/request/disclosure/v2"
+	LDContextVcDisclosureRequest    = "https://irma.app/ld/request/vc-disclosure/v1"
 	LDContextSignatureRequest       = "https://irma.app/ld/request/signature/v2"
 	LDContextIssuanceRequest        = "https://irma.app/ld/request/issuance/v2"
 	LDContextRevocationRequest      = "https://irma.app/ld/request/revocation/v1"
@@ -538,6 +539,17 @@ func (dr *DisclosureRequest) AddSingle(attr AttributeTypeIdentifier, value *stri
 func NewDisclosureRequest(attrs ...AttributeTypeIdentifier) *DisclosureRequest {
 	request := &DisclosureRequest{
 		BaseRequest: BaseRequest{LDContext: LDContextDisclosureRequest},
+		Labels:      map[int]TranslatedString{},
+	}
+	for _, attr := range attrs {
+		request.AddSingle(attr, nil, nil)
+	}
+	return request
+}
+
+func NewVcDisclosureRequest(attrs ...AttributeTypeIdentifier) *DisclosureRequest {
+	request := &DisclosureRequest{
+		BaseRequest: BaseRequest{LDContext: LDContextVcDisclosureRequest},
 		Labels:      map[int]TranslatedString{},
 	}
 	for _, attr := range attrs {
