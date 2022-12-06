@@ -349,8 +349,6 @@ func (s *Server) handleSessionCommitments(w http.ResponseWriter, r *http.Request
 }
 
 func (s *Server) handleSessionProofs(w http.ResponseWriter, r *http.Request) {
-	vc := true // Ruben: TODO: TEMPORARY
-
 	bts, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		server.WriteError(w, server.ErrorMalformedInput, err.Error())
@@ -362,6 +360,8 @@ func (s *Server) handleSessionProofs(w http.ResponseWriter, r *http.Request) {
 
 	switch session.Action {
 	case irma.ActionDisclosing:
+		disclosure := &irma.Disclosure{}
+
 		if session.request.Base().LDContext == irma.LDContextVCDisclosureRequest {
 			verifiablePresentation := &irma.VerifiablePresentation{}
 			if err := irma.UnmarshalValidate(bts, verifiablePresentation); err != nil {
@@ -375,13 +375,11 @@ func (s *Server) handleSessionProofs(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			disclosure := &irma.Disclosure{}
 			if err := irma.UnmarshalValidate(proofByte, disclosure); err != nil {
 				server.WriteError(w, server.ErrorMalformedInput, err.Error())
 				return
 			}
 		} else {
-			disclosure := &irma.Disclosure{}
 			if err := irma.UnmarshalValidate(bts, disclosure); err != nil {
 				server.WriteError(w, server.ErrorMalformedInput, err.Error())
 				return
