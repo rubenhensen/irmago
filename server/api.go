@@ -237,6 +237,8 @@ func parseInput(request interface{}) (irma.RequestorRequest, error) {
 			switch context {
 			case irma.LDContextDisclosureRequest:
 				msg = &irma.DisclosureRequest{}
+			case irma.LDContextVCDisclosureRequest:
+				msg = &irma.DisclosureRequest{}
 			case irma.LDContextSignatureRequest:
 				msg = &irma.SignatureRequest{}
 			case irma.LDContextIssuanceRequest:

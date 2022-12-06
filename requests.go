@@ -20,7 +20,7 @@ import (
 
 const (
 	LDContextDisclosureRequest      = "https://irma.app/ld/request/disclosure/v2"
-	LDContextVcDisclosureRequest    = "https://irma.app/ld/request/vc-disclosure/v1"
+	LDContextVCDisclosureRequest    = "https://irma.app/ld/request/vc-disclosure/v1"
 	LDContextSignatureRequest       = "https://irma.app/ld/request/signature/v2"
 	LDContextIssuanceRequest        = "https://irma.app/ld/request/issuance/v2"
 	LDContextRevocationRequest      = "https://irma.app/ld/request/revocation/v1"
@@ -547,9 +547,9 @@ func NewDisclosureRequest(attrs ...AttributeTypeIdentifier) *DisclosureRequest {
 	return request
 }
 
-func NewVcDisclosureRequest(attrs ...AttributeTypeIdentifier) *DisclosureRequest {
+func NewVCDisclosureRequest(attrs ...AttributeTypeIdentifier) *DisclosureRequest {
 	request := &DisclosureRequest{
-		BaseRequest: BaseRequest{LDContext: LDContextVcDisclosureRequest},
+		BaseRequest: BaseRequest{LDContext: LDContextVCDisclosureRequest},
 		Labels:      map[int]TranslatedString{},
 	}
 	for _, attr := range attrs {
@@ -608,7 +608,7 @@ func (dr *DisclosureRequest) Base() *BaseRequest {
 func (dr *DisclosureRequest) Action() Action { return ActionDisclosing }
 
 func (dr *DisclosureRequest) IsDisclosureRequest() bool {
-	return dr.LDContext == LDContextDisclosureRequest
+	return dr.LDContext == LDContextDisclosureRequest || dr.LDContext == LDContextVCDisclosureRequest
 }
 
 func (dr *DisclosureRequest) Validate() error {

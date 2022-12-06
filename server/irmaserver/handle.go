@@ -349,6 +349,8 @@ func (s *Server) handleSessionCommitments(w http.ResponseWriter, r *http.Request
 }
 
 func (s *Server) handleSessionProofs(w http.ResponseWriter, r *http.Request) {
+	vc := true // Ruben: TODO: TEMPORARY
+
 	bts, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		server.WriteError(w, server.ErrorMalformedInput, err.Error())
@@ -357,14 +359,36 @@ func (s *Server) handleSessionProofs(w http.ResponseWriter, r *http.Request) {
 	session := r.Context().Value("session").(*session)
 	var res *irma.ServerSessionResponse
 	var rerr *irma.RemoteError
+
 	switch session.Action {
 	case irma.ActionDisclosing:
-		disclosure := &irma.Disclosure{}
-		if err := irma.UnmarshalValidate(bts, disclosure); err != nil {
-			server.WriteError(w, server.ErrorMalformedInput, err.Error())
-			return
+		if session.request.Base().LDContext == irma.LDContextVCDisclosureRequest {
+			verifiablePresentation := &irma.VerifiablePresentation{}
+			if err := irma.UnmarshalValidate(bts, verifiablePresentation); err != nil {
+				server.WriteError(w, server.ErrorMalformedInput, err.Error())
+				return
+			}
+
+			proofByte, err := json.Marshal(verifiablePresentation.Proof.ProofMsg)
+			if err != nil {
+				server.WriteError(w, server.ErrorMalformedInput, err.Error())
+				return
+			}
+
+			disclosure := &irma.Disclosure{}
+			if err := irma.UnmarshalValidate(proofByte, disclosure); err != nil {
+				server.WriteError(w, server.ErrorMalformedInput, err.Error())
+				return
+			}
+		} else {
+			disclosure := &irma.Disclosure{}
+			if err := irma.UnmarshalValidate(bts, disclosure); err != nil {
+				server.WriteError(w, server.ErrorMalformedInput, err.Error())
+				return
+			}
 		}
 		res, rerr = session.handlePostDisclosure(disclosure)
+
 	case irma.ActionSigning:
 		signature := &irma.SignedMessage{}
 		if err := irma.UnmarshalValidate(bts, signature); err != nil {
