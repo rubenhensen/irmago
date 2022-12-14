@@ -360,8 +360,6 @@ func (s *Server) handleSessionProofs(w http.ResponseWriter, r *http.Request) {
 
 	switch session.Action {
 	case irma.ActionDisclosing:
-		disclosure := &irma.Disclosure{}
-
 		if session.request.Base().LDContext == irma.LDContextVCDisclosureRequest {
 			verifiablePresentation := &irma.VerifiablePresentation{}
 			if err := irma.UnmarshalValidate(bts, verifiablePresentation); err != nil {
@@ -375,17 +373,20 @@ func (s *Server) handleSessionProofs(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
+			disclosure := &irma.Disclosure{}
 			if err := irma.UnmarshalValidate(proofByte, disclosure); err != nil {
 				server.WriteError(w, server.ErrorMalformedInput, err.Error())
 				return
 			}
+			res, rerr = session.handlePostDisclosure(disclosure)
 		} else {
+			disclosure := &irma.Disclosure{}
 			if err := irma.UnmarshalValidate(bts, disclosure); err != nil {
 				server.WriteError(w, server.ErrorMalformedInput, err.Error())
 				return
 			}
+			res, rerr = session.handlePostDisclosure(disclosure)
 		}
-		res, rerr = session.handlePostDisclosure(disclosure)
 
 	case irma.ActionSigning:
 		signature := &irma.SignedMessage{}

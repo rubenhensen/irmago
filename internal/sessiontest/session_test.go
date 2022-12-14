@@ -39,8 +39,8 @@ import (
 //   *testing.T, using the apply() function.
 
 func TestRequestorServer(t *testing.T) {
-	// t.Run("DisclosureSessionVC", apply(testVcDisclosureSession, RequestorServerConfiguration))
-	t.Run("DisclosureSession", apply(testDisclosureSession, RequestorServerConfiguration))
+	t.Run("DisclosureSessionVC", apply(testVcDisclosureSession, RequestorServerConfiguration))
+	// t.Run("DisclosureSession", apply(testDisclosureSession, RequestorServerConfiguration))
 	// t.Run("NoAttributeDisclosureSession", apply(testNoAttributeDisclosureSession, RequestorServerConfiguration))
 	// t.Run("EmptyDisclosure", apply(testEmptyDisclosure, RequestorServerConfiguration))
 	// t.Run("SigningSession", apply(testSigningSession, RequestorServerConfiguration))

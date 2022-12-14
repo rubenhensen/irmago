@@ -478,7 +478,16 @@ func (session *session) doSession(proceed bool, choice *irma.DisclosureChoice) {
 		return
 	}
 
-	if !session.Distributed() {
+	// Ruben TODO: no keyshare when using vc?
+	if session.request.Base().LDContext == irma.LDContextVCDisclosureRequest {
+		message, err := session.getVerifiablePresentation()
+		if err != nil {
+			session.fail(&irma.SessionError{ErrorType: irma.ErrorCrypto, Err: err})
+			return
+		}
+		session.sendResponse(message)
+		session.finish(false)
+	} else if !session.Distributed() {
 		message, err := session.getProof()
 		if err != nil {
 			session.fail(&irma.SessionError{ErrorType: irma.ErrorCrypto, Err: err})
@@ -508,7 +517,7 @@ func (session *session) doSession(proceed bool, choice *irma.DisclosureChoice) {
 // sendResponse sends the proofs of knowledge of the hidden attributes and/or the secret key, or the constructed
 // attribute-based signature, to the API server.
 func (session *session) sendResponse(message interface{}) {
-	var log *LogEntry
+	// var log *LogEntry
 	var err error
 	var messageJson []byte
 	var path string
@@ -559,14 +568,14 @@ func (session *session) sendResponse(message interface{}) {
 		}
 	}
 
-	log, err = session.createLogEntry(message)
+	// log, err = session.createLogEntry(message)
 	if err != nil {
 		irma.Logger.Warn(errors.WrapPrefix(err, "Failed to create log entry", 0).ErrorStack())
 		session.client.reportError(err)
 	}
-	if err = session.client.storage.AddLogEntry(log); err != nil {
-		irma.Logger.Warn(errors.WrapPrefix(err, "Failed to write log entry", 0).ErrorStack())
-	}
+	// if err = session.client.storage.AddLogEntry(log); err != nil {
+	// 	irma.Logger.Warn(errors.WrapPrefix(err, "Failed to write log entry", 0).ErrorStack())
+	// }
 	if session.Action == irma.ActionIssuing {
 		session.client.handler.UpdateAttributes()
 	}
@@ -843,4 +852,128 @@ func (s sessions) remove(token string) {
 func (s sessions) add(session *session) {
 	session.token = common.NewSessionToken()
 	s.sessions[session.token] = session
+}
+
+// var message interface{}
+// var err error
+
+// switch session.Action {
+// case irma.ActionSigning, irma.ActionDisclosing:
+// 	message, session.timestamp, err = session.client.Proofs(session.choice, session.request)
+// case irma.ActionIssuing:
+// 	message, session.builders, err = session.client.IssueCommitments(session.request.(*irma.IssuanceRequest), session.choice)
+// }
+
+// return message, err
+
+func (session *session) getVerifiablePresentation() (interface{}, error) {
+	var err error
+	var attrValues [][]*irma.DisclosedAttribute
+	index := 0
+
+	// initialize verifiable presentation object
+	vcPres := irma.VerifiablePresentation{}
+	vcPres.LDContext = [2]string{irma.LDVerifiableCredential, irma.LDContextVCDisclosureRequest}
+	vcPres.Type = append(vcPres.Type, "VerifiablePresentation")
+
+	// get ProofList of disclosed credentials
+	builders, choices, timestamp, err := session.client.ProofBuilders(session.choice, session.request)
+	if err != nil {
+		return nil, err
+	}
+
+	proofList, err := builders.BuildProofList(session.request.Base().GetContext(), session.request.GetNonce(timestamp), false)
+	if err != nil {
+		return nil, err
+	}
+
+	disjunctions := session.request.Disclosure()
+
+	disclosure := &irma.Disclosure{
+		Proofs:  proofList,
+		Indices: choices,
+	}
+
+	vcPres.Proof.ProofMsg = disclosure
+	vcPres.Proof.Created = time.Now().Format(time.RFC3339)
+	vcPres.Proof.Type = irma.ProofType
+
+	_, attrValues, err = disclosure.DisclosedAttributes(session.client.Configuration, disjunctions.Disclose, nil)
+
+	// iterate over each attribute to determine cred types in disclosure request
+	credTypes := make(map[irma.CredentialTypeIdentifier]bool)
+	_ = disjunctions.Disclose.Iterate(func(attr *irma.AttributeRequest) error {
+		credid := attr.Type.CredentialTypeIdentifier()
+		credTypes[credid] = true
+		return nil
+	})
+
+	// For each credential type within a disclosing session, a derived VC needs to be created
+	for credType, _ := range credTypes {
+
+		// Metadata attribute from related ProofD object
+		metadata := irma.MetadataFromInt(proofList[index].(*gabi.ProofD).ADisclosed[1], session.client.Configuration) // index 1 is metadata attribute
+
+		// Create derived credential
+		vc := irma.VerifiableCredential{}
+
+		// Context information
+		vc.LDContext = [2]string{irma.LDVerifiableCredential, irma.LDContextDisclosureRequest}
+
+		// Type information
+		vc.Type = make([]string, 1)
+		vc.Type[0] = "VerifiableCredential"
+		vc.Type = append(vc.Type, credType.Name())
+
+		// Credential schema information
+		vc.Schema = append(vc.Schema, irma.VCSchema{Identifier: irma.VCServerURL + "schema/" + strings.Replace(credType.String(), ".", "/", -1), Type: "JsonSchemaValidator2018"})
+
+		// Proof information
+		//vc.Proof.Type = "AnonCredDerivedCredentialv1"
+		//vc.Proof.Created = metadata.SigningDate().Format(time.RFC3339) // credType SigningDate().Format(time.RFC3339)
+		//vc.Proof.ProofMsg = proofList[index].(*gabi.ProofD).A          // randomized signature
+
+		// Issuer information
+		issuerID := credType.IssuerIdentifier().Name()
+		metadataPk, _ := metadata.PublicKey()
+		vc.Issuer = irma.VCServerURL + "issuer/" + strings.Replace(issuerID, ".", "/", -1) + "/" + fmt.Sprint(metadataPk.Counter)
+
+		// Expiration date
+		vc.ExpirationDate = metadata.Expiry().Format(time.RFC3339)
+
+		// For each disclosed credential create one subject
+		vcSubject := irma.VCSubject{}
+		vcSubject.Attributes = make(map[string]irma.TranslatedString)
+
+		// Filter attributes belonging to this credentialType
+		var disclosed []*irma.DisclosedAttribute
+		for _, l := range attrValues {
+			for _, ll := range l {
+				s1 := ll.Identifier.CredentialTypeIdentifier().String()
+				s2 := metadata.CredentialType().Identifier().String()
+				if strings.Compare(s1, s2) == 0 {
+					disclosed = append(disclosed, ll)
+				}
+			}
+		}
+
+		// Map IRMA attributes to VC attributes
+		for _, value := range disclosed {
+			vcSubject.Attributes[value.Identifier.Name()] = irma.NewVCTranslatedString(value.Value["en"])
+		}
+
+		// Convert attributes tag to name of credential type id
+		byteSubject, _ := json.Marshal(vcSubject)
+		obj := map[string]interface{}{}
+		_ = json.Unmarshal([]byte(byteSubject), &obj)
+		obj[credType.Name()] = obj["attributes"]
+		delete(obj, "attributes")
+		vc.CredentialSubjects = append(vc.CredentialSubjects, obj)
+
+		vcPres.DerivedCredentials = append(vcPres.DerivedCredentials, vc)
+
+		index++
+	}
+
+	return vcPres, err
 }

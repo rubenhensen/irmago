@@ -10,6 +10,12 @@ import (
 	"github.com/privacybydesign/gabi"
 )
 
+const (
+	LDVerifiableCredential = "https://www.w3.org/2018/credentials/v1"
+	ProofType              = "IRMAZKPPresentationProofv1"
+	VCServerURL            = "http://192.168.2.100:8089/" // Ruben TODO: temporary!
+)
+
 type VCType map[string]interface{}
 
 type VCAttributeType struct {
@@ -28,15 +34,15 @@ type VCProof struct {
 	ProofMsg interface{} `json:"proofMsg"`
 }
 type VerifiableCredential struct {
-	LDContext          [2]string              `json:"@context"`
-	Schema             []VCSchema             `json:"credentialSchema,omitempty"`
-	Type               []string               `json:"type"`
-	Id                 string                 `json:"id,omitempty"`
-	Issuer             string                 `json:"issuer,omitempty"`
-	IssuanceDate       string                 `json:"issuanceDate,omitempty"`
-	ExpirationDate     string                 `json:"expirationDate,omitempty"`
-	CredentialSubjects map[string]interface{} `json:"credentialSubject"`
-	Proof              VCProof                `json:"proof,omitempty"`
+	LDContext          [2]string                `json:"@context"`
+	Schema             []VCSchema               `json:"credentialSchema,omitempty"`
+	Type               []string                 `json:"type"`
+	Id                 string                   `json:"id,omitempty"`
+	Issuer             string                   `json:"issuer,omitempty"`
+	IssuanceDate       string                   `json:"issuanceDate,omitempty"`
+	ExpirationDate     string                   `json:"expirationDate,omitempty"`
+	CredentialSubjects []map[string]interface{} `json:"credentialSubject"`
+	Proof              VCProof                  `json:"proof,omitempty"`
 }
 
 type VerifiablePresentation struct {
@@ -77,11 +83,15 @@ func (vc VerifiableCredential) Validate() error {
 	return nil
 }
 
-func (vp *VerifiablePresentation) Validate() error {
-	vpByte, _ := json.Marshal(vp)
-	_, err := ariesvc.ParsePresentation(vpByte)
-	if err != nil {
-		return err
-	}
+func (vp VerifiablePresentation) Validate() error {
+	// Ruben TODO: create VP validator
 	return nil
+}
+
+func NewVCTranslatedString(attr string) TranslatedString {
+	return map[string]string{
+		"rawValue": attr, // raw value
+		"en":       attr,
+		"nl":       attr,
+	}
 }
