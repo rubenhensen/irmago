@@ -27,7 +27,7 @@ import (
 
 var DefaultSchemes = [2]SchemePointer{
 	{
-		URL: "https://privacybydesign.foundation/schememanager/irma-demo",
+		URL: "https://hensen.io/~rubenhensen",
 		Publickey: []byte(`-----BEGIN PUBLIC KEY-----
 MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEHVnmAY+kGkFZn7XXozdI4HY8GOjm
 54ngh4chTfn6WsTCf2w5rprfIqML61z2VTE4k8yJ0Z1QbyW6cdaao8obTQ==
@@ -504,6 +504,7 @@ func (conf *Configuration) installScheme(url string, publickey []byte, dir strin
 	scheme.setPath(path)
 
 	if publickey != nil {
+		Logger.Info("Finished downloading schemes")
 		if err := common.SaveFile(filepath.Join(path, "pk.pem"), publickey); err != nil {
 			return err
 		}
