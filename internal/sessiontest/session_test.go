@@ -39,7 +39,8 @@ import (
 //   *testing.T, using the apply() function.
 
 func TestRequestorServer(t *testing.T) {
-	t.Run("DisclosureSessionVC", apply(testVcDisclosureSession, RequestorServerConfiguration))
+	t.Run("DisclosureSessionScheme", apply(testSchemeDisclosureSession, RequestorServerConfiguration))
+	// t.Run("DisclosureSessionVC", apply(testVcDisclosureSession, RequestorServerConfiguration))
 	// t.Run("DisclosureSession", apply(testDisclosureSession, RequestorServerConfiguration))
 	// t.Run("NoAttributeDisclosureSession", apply(testNoAttributeDisclosureSession, RequestorServerConfiguration))
 	// t.Run("EmptyDisclosure", apply(testEmptyDisclosure, RequestorServerConfiguration))
@@ -609,6 +610,14 @@ func testDisclosureSession(t *testing.T, conf interface{}, opts ...option) {
 		require.Len(t, serverResult.Disclosed, 1)
 		require.Equal(t, id, serverResult.Disclosed[0][0].Identifier)
 		require.Equal(t, "456", serverResult.Disclosed[0][0].Value["en"])
+	}
+}
+
+func testSchemeDisclosureSession(t *testing.T, conf interface{}, opts ...option) {
+	id := irma.NewAttributeTypeIdentifier("irma-demo.RU.studentCard.studentID")
+	request := getVCDisclosureRequest(id)
+	for _, opt := range []option{0, optionRetryPost} {
+		doSchemeSession(t, request, nil, nil, nil, nil, conf, append(opts, opt)...)
 	}
 }
 

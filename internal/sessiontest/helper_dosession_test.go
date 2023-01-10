@@ -2,6 +2,7 @@ package sessiontest
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"path/filepath"
 	"testing"
@@ -229,6 +230,34 @@ func waitSessionFinished(t *testing.T, serv interface{}, token irma.RequestorTok
 			return
 		}
 		time.Sleep(100 * time.Millisecond)
+	}
+}
+
+func doSchemeSession(
+	t *testing.T,
+	request interface{},
+	client *irmaclient.Client,
+	irmaServer *IrmaServer,
+	frontendOptionsHandler func(handler *TestHandler),
+	pairingHandler func(handler *TestHandler),
+	config interface{},
+	options ...option,
+) {
+	if client == nil {
+		var handler *TestClientHandler
+		client, handler = parseStorage(t, options...)
+		defer test.ClearTestStorage(t, client, handler.storage)
+	}
+
+	opts := processOptions(options...)
+	serv, _, _ := startServer(t, opts, irmaServer, config)
+	switch s := serv.(type) {
+	case *IrmaServer:
+		json, err := s.irma.HandleSchemaRequest([]string{"irma-demo", "RU", "studentCard", "studentID"})
+		fmt.Printf(json)
+		if err != nil {
+			fmt.Printf(string(err.Message))
+		}
 	}
 }
 
