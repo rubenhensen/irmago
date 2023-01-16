@@ -20,8 +20,8 @@ import (
 // signCmd represents the sign command
 var convertCmd = &cobra.Command{
 	Use:   "convert [<src>] [<dest>]",
-	Short: "Convert a scheme directory to JSON(LD)",
-	Long: `Convert a scheme directory to JSON(LD). Both arguments are optional; the working directory is the default. Recursively converts every XML file to JSON(LD) files. Additionally moves the public and private keys, and makes seperate files for all the types.
+	Short: "Convert a scheme directory to JSON-LD",
+	Long: `Convert a scheme directory to JSON-LD. Both arguments are optional; the working directory is the default. Recursively converts every XML file to JSON(LD) files. Additionally moves the public and private keys, and makes seperate files for all the types.
 
 Careful: this command could fail and invalidate or destroy your scheme directory! Use this only if you can restore it from git or backups.`,
 	Args: cobra.MaximumNArgs(2),
