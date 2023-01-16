@@ -3,7 +3,6 @@ package cmd
 import (
 	"bytes"
 	"encoding/json"
-	"encoding/xml"
 	"fmt"
 	"io"
 	"os"
@@ -173,6 +172,12 @@ func issuerKeys(src, dest, foldername string, demo bool) ([]*xj.Node, error) {
 func convertIssuer(src, dest string, demo bool) error {
 	var err error
 
+	if err = common.AssertPathExists(dest); err != nil {
+		if err := os.Mkdir(dest, os.ModePerm); err != nil {
+			return errors.WrapPrefix(err, "Error creating directory", 0)
+		}
+	}
+
 	// Get all file names root dir
 	files, err := os.ReadDir(src)
 	if err != nil {
@@ -195,6 +200,18 @@ func convertIssuer(src, dest string, demo bool) error {
 			}
 			continue
 		}
+
+		if file.IsDir() && file.Name() == "Issues" {
+			// Create credential folder
+			if err = common.AssertPathExists(filepath.Join(dest, "Issues")); err != nil {
+				if err := os.Mkdir(filepath.Join(dest, "Issues"), os.ModePerm); err != nil {
+					return errors.WrapPrefix(err, "Error creating directory", 0)
+				}
+			}
+			convertCredentials(filepath.Join(src, "Issues"), filepath.Join(dest, "Issues"), demo)
+			continue
+		}
+
 		if file.Name() != "description.xml" {
 			copyFile(filepath.Join(src, file.Name()), filepath.Join(dest, file.Name()))
 		}
@@ -202,6 +219,57 @@ func convertIssuer(src, dest string, demo bool) error {
 
 	// Convert desription.xml and embed pk/sk
 	convertIssuerDesc(src, dest, demo, skeys, pkeys)
+
+	return nil
+}
+
+func convertCredentials(src, dest string, demo bool) error {
+	var err error
+
+	// Get all file names root dir
+	files, err := os.ReadDir(src)
+	if err != nil {
+		return errors.WrapPrefix(err, "Error reading files in src directory", 0)
+	}
+
+	for _, file := range files {
+		srcFolder := filepath.Join(src, file.Name())
+		destFolder := filepath.Join(dest, file.Name())
+
+		// Create credential folder
+		if err = common.AssertPathExists(destFolder); err != nil {
+			if err := os.Mkdir(destFolder, os.ModePerm); err != nil {
+				return errors.WrapPrefix(err, "Error creating directory", 0)
+			}
+		}
+
+		// convert description.xml
+		xmlFilePath := filepath.Join(srcFolder, "description.xml")
+
+		xmlFile, err := os.Open(xmlFilePath)
+		if err != nil {
+			return errors.WrapPrefix(err, "Error opening file", 0)
+		}
+
+		buf, err := xj.Convert(xmlFile)
+		if err != nil {
+			return errors.WrapPrefix(err, "Error converting to json", 0)
+		}
+
+		// Pretty format JSON
+		prettyJson, err := PrettyString(buf.String())
+		if err != nil {
+			return errors.WrapPrefix(err, "Error pretty printing json", 0)
+		}
+
+		// Write to file
+		bts := []byte(prettyJson)
+		if err := os.WriteFile(filepath.Join(destFolder, "description.jsonld"), bts, 0644); err != nil {
+			return errors.WrapPrefix(err, "Failed to write description", 0)
+		}
+
+		copyFile(filepath.Join(srcFolder, "logo.png"), filepath.Join(destFolder, "logo.png"))
+	}
 
 	return nil
 }
@@ -387,130 +455,4 @@ func copyFile(src, dst string) (int64, error) {
 	defer destination.Close()
 	nBytes, err := io.Copy(destination, source)
 	return nBytes, err
-}
-
-type SchemeManagerJSON struct {
-	SchemeManager struct {
-		Description struct {
-			En string `json:"en"`
-			Nl string `json:"nl"`
-		} `json:"Description"`
-		TimestampServer string `json:"TimestampServer"`
-		Contact         string `json:"Contact"`
-		Version         string `json:"-version"`
-		ID              string `json:"Id"`
-		URL             string `json:"Url"`
-		Demo            string `json:"Demo,omitempty"`
-		PublicKey       string `json:"PublicKey"`
-		PrivateKey      string `json:"PrivateKey,omitempty"`
-		Name            struct {
-			En string `json:"en"`
-			Nl string `json:"nl"`
-		} `json:"Name"`
-	} `json:"SchemeManager"`
-}
-
-type SchemeManagerXML struct {
-	XMLName xml.Name `xml:"SchemeManager"`
-	Text    string   `xml:",chardata"`
-	Version string   `xml:"version,attr"`
-	ID      string   `xml:"Id"`
-	URL     string   `xml:"Url"`
-	Demo    string   `xml:"Demo"`
-	Name    struct {
-		Text string `xml:",chardata"`
-		En   string `xml:"en"`
-		Nl   string `xml:"nl"`
-	} `xml:"Name"`
-	Description struct {
-		Text string `xml:",chardata"`
-		En   string `xml:"en"`
-		Nl   string `xml:"nl"`
-	} `xml:"Description"`
-	TimestampServer string `xml:"TimestampServer"`
-	Contact         string `xml:"Contact"`
-}
-
-type IssuerPublicKeyXML struct {
-	XMLName    xml.Name `xml:"IssuerPublicKey"`
-	Text       string   `xml:",chardata"`
-	Xmlns      string   `xml:"xmlns,attr"`
-	Counter    string   `xml:"Counter"`
-	ExpiryDate string   `xml:"ExpiryDate"`
-	Elements   struct {
-		Text  string `xml:",chardata"`
-		N     string `xml:"n"`
-		Z     string `xml:"Z"`
-		S     string `xml:"S"`
-		Bases struct {
-			Text  string `xml:",chardata"`
-			Num   string `xml:"num,attr"`
-			Base0 string `xml:"Base_0"`
-			Base1 string `xml:"Base_1"`
-			Base2 string `xml:"Base_2"`
-			Base3 string `xml:"Base_3"`
-			Base4 string `xml:"Base_4"`
-			Base5 string `xml:"Base_5"`
-			Base6 string `xml:"Base_6"`
-			Base7 string `xml:"Base_7"`
-		} `xml:"Bases"`
-	} `xml:"Elements"`
-	Features struct {
-		Text  string `xml:",chardata"`
-		Epoch struct {
-			Text   string `xml:",chardata"`
-			Length string `xml:"length,attr"`
-		} `xml:"Epoch"`
-	} `xml:"Features"`
-}
-
-type IssuerPublicKeyJSON struct {
-	IssuerPublicKey struct {
-		Xmlns      string `json:"-xmlns"`
-		Counter    string `json:"Counter"`
-		ExpiryDate string `json:"ExpiryDate"`
-		Elements   struct {
-			S     string `json:"S"`
-			G     string `json:"G"`
-			H     string `json:"H"`
-			Bases struct {
-				Num    string `json:"-num"`
-				Base0  string `json:"Base_0"`
-				Base1  string `json:"Base_1"`
-				Base2  string `json:"Base_2"`
-				Base3  string `json:"Base_3"`
-				Base4  string `json:"Base_4"`
-				Base5  string `json:"Base_5"`
-				Base6  string `json:"Base_6"`
-				Base7  string `json:"Base_7"`
-				Base8  string `json:"Base_8"`
-				Base9  string `json:"Base_9"`
-				Base10 string `json:"Base_10"`
-				Base11 string `json:"Base_11"`
-			} `json:"Bases"`
-			N string `json:"n"`
-			Z string `json:"Z"`
-		} `json:"Elements"`
-		Features struct {
-			Epoch struct {
-				Length string `json:"-length"`
-			} `json:"Epoch"`
-		} `json:"Features"`
-		ECDSA string `json:"ECDSA"`
-	} `json:"IssuerPublicKey"`
-}
-
-type IssuerPrivateKeyJSON struct {
-	IssuerPrivateKey struct {
-		Xmlns      string `json:"-xmlns"`
-		Counter    string `json:"Counter"`
-		ExpiryDate string `json:"ExpiryDate"`
-		Elements   struct {
-			P      string `json:"p"`
-			Q      string `json:"q"`
-			PPrime string `json:"pPrime"`
-			QPrime string `json:"qPrime"`
-		} `json:"Elements"`
-		ECDSA string `json:"ECDSA"`
-	} `json:"IssuerPrivateKey"`
 }
