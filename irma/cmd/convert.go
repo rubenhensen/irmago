@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
-	"strings"
+	"strconv"
 
 	"github.com/go-errors/errors"
 	"github.com/privacybydesign/irmago/internal/common"
@@ -71,7 +71,6 @@ Careful: this command could fail and invalidate or destroy your scheme directory
 			if err := os.Mkdir(destpath, os.ModePerm); err != nil {
 				return errors.WrapPrefix(err, "Error creating directory", 0)
 			}
-			return err
 		}
 
 		if err := convertScheme(srcpath, destpath); err != nil {
@@ -116,131 +115,145 @@ func convertScheme(src, dest string) error {
 }
 
 func isDemo(src string) (bool, error) {
-	smStruct := &SchemeManagerJSON{}
-
 	xmlFilePath := filepath.Join(src, "description.xml")
 	xmlFile, err := os.ReadFile(xmlFilePath)
 	if err != nil {
 		return false, errors.WrapPrefix(err, "Error opening file", 0)
 	}
-
-	xml.Unmarshal(xmlFile, smStruct)
-	if smStruct.SchemeManager.Demo == "true" {
+	re, err := regexp.Compile(`<Demo>true</Demo>`)
+	if err != nil {
+		return false, errors.WrapPrefix(err, "Error creating regex", 0)
+	}
+	result := re.Find(xmlFile)
+	if result == nil {
+		return false, nil
+	} else {
 		return true, nil
 	}
+}
 
-	return false, nil
+func issuerKeys(src, dest, foldername string, demo bool) ([]*xj.Node, error) {
+	var ks []*xj.Node
+	var err error
+	// Create issuer folder
+	if err = common.AssertPathExists(dest); err != nil {
+		if err := os.Mkdir(dest, os.ModePerm); err != nil {
+			return ks, errors.WrapPrefix(err, "Error creating directory", 0)
+		}
+	}
+
+	// Get all pks
+	folderPath := filepath.Join(src, foldername)
+	files, err := os.ReadDir(folderPath)
+	if err != nil {
+		return ks, errors.WrapPrefix(err, "Error reading files in src directory", 0)
+	}
+
+	for _, file := range files {
+		// Convert to json
+		path := filepath.Join(folderPath, file.Name())
+		xmlFile, err := os.Open(path)
+		if err != nil {
+			return ks, errors.WrapPrefix(err, "Error converting to json", 0)
+		}
+
+		// Decode XML document
+		root := &xj.Node{}
+		err = xj.NewDecoder(xmlFile).Decode(root)
+		if err != nil {
+			return nil, err
+		}
+
+		ks = append(ks, root)
+
+	}
+	return ks, nil
 }
 
 func convertIssuer(src, dest string, demo bool) error {
 	var err error
 
-	// Create issuer folder
-	if err = common.AssertPathExists(dest); err != nil {
-		if err := os.Mkdir(dest, os.ModePerm); err != nil {
-			return errors.WrapPrefix(err, "Error creating directory", 0)
-		}
-		return err
-	}
-
-	// Create issuer publickey folder
-	pkFolderPathDest := filepath.Join(dest, "PublicKeys")
-	if err = common.AssertPathExists(pkFolderPathDest); err != nil {
-		if err := os.Mkdir(pkFolderPathDest, os.ModePerm); err != nil {
-			return errors.WrapPrefix(err, "Error creating directory", 0)
-		}
-		return err
-	}
-
-	// Get all pks
-	pkFolderPath := filepath.Join(src, "PublicKeys")
-	files, err := os.ReadDir(pkFolderPath)
+	// Get all file names root dir
+	files, err := os.ReadDir(src)
 	if err != nil {
 		return errors.WrapPrefix(err, "Error reading files in src directory", 0)
 	}
-
+	var skeys, pkeys []*xj.Node
 	for _, file := range files {
-		// Convert to json
-		path := filepath.Join(pkFolderPath, file.Name())
-		xmlFile, err := os.Open(path)
-		if err != nil {
-			return errors.WrapPrefix(err, "Error converting to json", 0)
+		if file.IsDir() && file.Name() == "PublicKeys" {
+			pkeys, err = issuerKeys(src, dest, "PublicKeys", demo)
+			if err != nil {
+				return errors.WrapPrefix(err, "Error reading public keys", 0)
+			}
+			continue
 		}
 
-		jsonFile, err := xj.Convert(xmlFile)
-		if err != nil {
-			return errors.WrapPrefix(err, "Error converting to json", 0)
+		if file.IsDir() && file.Name() == "PrivateKeys" {
+			skeys, err = issuerKeys(src, dest, "PrivateKeys", demo)
+			if err != nil {
+				return errors.WrapPrefix(err, "Error reading private keys", 0)
+			}
+			continue
 		}
-		b := jsonFile.String()
-		// Pretty format JSON
-		prettyJson, err := PrettyString(string(b))
-		if err != nil {
-			return errors.WrapPrefix(err, "Error pretty printing json", 0)
+		if file.Name() != "description.xml" {
+			copyFile(filepath.Join(src, file.Name()), filepath.Join(dest, file.Name()))
 		}
-
-		// Write to file
-		bts := []byte(prettyJson)
-		filename := strings.Trim(file.Name(), ".xml") + ".json"
-		if err := os.WriteFile(filepath.Join(pkFolderPathDest, filename), bts, 0644); err != nil {
-			return errors.WrapPrefix(err, "Failed to write description", 0)
-		}
-
 	}
 
-	// pkFile, err := os.ReadFile(pkFilePath)
-	// if err != nil {
-	// 	return errors.WrapPrefix(err, "Error opening file", 0)
-	// }
-	// pkFileStr := string(pkFile)
-	// if err != nil {
-	// 	return errors.WrapPrefix(err, "Error regex", 0)
-	// }
+	// Convert desription.xml and embed pk/sk
+	convertIssuerDesc(src, dest, demo, skeys, pkeys)
 
-	// // Get sk
-	// var skFileStr string
-	// if demo {
-	// 	skFilePath := filepath.Join(src, "sk.pem")
-	// 	skFile, err := os.ReadFile(skFilePath)
-	// 	skFileStr := string(skFile)
-	// 	if err != nil {
-	// 		return errors.WrapPrefix(err, "Error opening file", 0)
-	// 	}
-	// 	skFileStr = re.ReplaceAllString(skFileStr, "")
-	// }
+	return nil
+}
 
-	// // Get description.xml
-	// xmlFilePath := filepath.Join(src, "description.xml")
-	// xmlFile, err := os.Open(xmlFilePath)
-	// if err != nil {
-	// 	return errors.WrapPrefix(err, "Error opening file", 0)
-	// }
+func convertIssuerDesc(src, dest string, demo bool, skeys, pkeys []*xj.Node) error {
+	// Get description.xml
+	xmlFilePath := filepath.Join(src, "description.xml")
+	xmlFile, err := os.Open(xmlFilePath)
+	if err != nil {
+		return errors.WrapPrefix(err, "Error opening file", 0)
+	}
 
-	// // Convert to json
-	// jsonFile, err := xj.Convert(xmlFile)
-	// if err != nil {
-	// 	return errors.WrapPrefix(err, "Error converting to json", 0)
-	// }
+	// Decode XML document
+	root := &xj.Node{}
+	err = xj.NewDecoder(xmlFile).Decode(root)
+	if err != nil {
+		return err
+	}
 
-	// // Add pk and sk to json
-	// smStruct := &SchemeManagerJSON{}
-	// toObject(jsonFile.String(), &smStruct)
-	// smStruct.SchemeManager.PublicKey = pkFileStr
-	// if demo {
-	// 	smStruct.SchemeManager.PrivateKey = skFileStr
-	// }
-	// b, _ := json.Marshal(smStruct)
+	// Add pk and sk
+	AddAttr(root, "Issuer", "PublicKeys", "")
+	if demo {
+		AddAttr(root, "Issuer", "PrivateKeys", "")
+	}
 
-	// // Pretty format JSON
-	// prettyJson, err := PrettyString(string(b))
-	// if err != nil {
-	// 	return errors.WrapPrefix(err, "Error pretty printing json", 0)
-	// }
+	for i, v := range pkeys {
+		AddNode(root, "PublicKeys", strconv.Itoa(i), v)
+	}
 
-	// // Write to file
-	// bts := []byte(prettyJson)
-	// if err := os.WriteFile(filepath.Join(dest, "description.jsonld"), bts, 0644); err != nil {
-	// 	return errors.WrapPrefix(err, "Failed to write description", 0)
-	// }
+	for i, v := range skeys {
+		AddNode(root, "PrivateKeys", strconv.Itoa(i), v)
+	}
+
+	// Then encode it in JSON
+	buf := new(bytes.Buffer)
+	e := xj.NewEncoder(buf)
+	err = e.Encode(root)
+	if err != nil {
+		return err
+	}
+
+	// Pretty format JSON
+	prettyJson, err := PrettyString(buf.String())
+	if err != nil {
+		return errors.WrapPrefix(err, "Error pretty printing json", 0)
+	}
+
+	// Write to file
+	bts := []byte(prettyJson)
+	if err := os.WriteFile(filepath.Join(dest, "description.jsonld"), bts, 0644); err != nil {
+		return errors.WrapPrefix(err, "Failed to write description", 0)
+	}
 
 	return nil
 }
@@ -264,7 +277,7 @@ func convertSchemeManager(src, dest string, demo bool) error {
 	if demo {
 		skFilePath := filepath.Join(src, "sk.pem")
 		skFile, err := os.ReadFile(skFilePath)
-		skFileStr := string(skFile)
+		skFileStr = string(skFile)
 		if err != nil {
 			return errors.WrapPrefix(err, "Error opening file", 0)
 		}
@@ -278,23 +291,29 @@ func convertSchemeManager(src, dest string, demo bool) error {
 		return errors.WrapPrefix(err, "Error opening file", 0)
 	}
 
-	// Convert to json
-	jsonFile, err := xj.Convert(xmlFile)
+	// Decode XML document
+	root := &xj.Node{}
+	err = xj.NewDecoder(xmlFile).Decode(root)
 	if err != nil {
-		return errors.WrapPrefix(err, "Error converting to json", 0)
+		return err
 	}
 
-	// Add pk and sk to json
-	smStruct := &SchemeManagerJSON{}
-	toObject(jsonFile.String(), &smStruct)
-	smStruct.SchemeManager.PublicKey = pkFileStr
+	// Add pk and sk
+	AddAttr(root, "SchemeManager", "PublicKey", pkFileStr)
 	if demo {
-		smStruct.SchemeManager.PrivateKey = skFileStr
+		AddAttr(root, "SchemeManager", "PrivateKey", skFileStr)
 	}
-	b, _ := json.Marshal(smStruct)
+
+	// Then encode it in JSON
+	buf := new(bytes.Buffer)
+	e := xj.NewEncoder(buf)
+	err = e.Encode(root)
+	if err != nil {
+		return err
+	}
 
 	// Pretty format JSON
-	prettyJson, err := PrettyString(string(b))
+	prettyJson, err := PrettyString(buf.String())
 	if err != nil {
 		return errors.WrapPrefix(err, "Error pretty printing json", 0)
 	}
@@ -308,21 +327,40 @@ func convertSchemeManager(src, dest string, demo bool) error {
 	return nil
 }
 
+func AddAttr(n *xj.Node, searchKey, key, value string) {
+	for k, v := range n.Children {
+		if k == searchKey {
+			v[0].AddChild(key, &xj.Node{Data: value})
+		} else if len(v) != 0 {
+			for _, v2 := range v {
+				AddAttr(v2, searchKey, key, value)
+			}
+		} else {
+			panic("could not find key")
+		}
+	}
+}
+
+func AddNode(n *xj.Node, searchKey, key string, node *xj.Node) {
+	for k, v := range n.Children {
+		if k == searchKey {
+			v[0].AddChild(key, node)
+		} else if len(v) != 0 {
+			for _, v2 := range v {
+				AddNode(v2, searchKey, key, node)
+			}
+		} else {
+			panic("could not find key")
+		}
+	}
+}
+
 func PrettyString(str string) (string, error) {
 	var prettyJSON bytes.Buffer
 	if err := json.Indent(&prettyJSON, []byte(str), "", "    "); err != nil {
 		return "", err
 	}
 	return prettyJSON.String(), nil
-}
-
-// toObject - convert string to any given struct
-func toObject(value string, object interface{}) error {
-	err := json.Unmarshal([]byte(value), &object)
-	if err != nil {
-		return err
-	}
-	return nil
 }
 
 // from https://github.com/mactsouk/opensource.com/blob/master/cp1.go
@@ -437,18 +475,18 @@ type IssuerPublicKeyJSON struct {
 			H     string `json:"H"`
 			Bases struct {
 				Num    string `json:"-num"`
-				Base3  string `json:"Base_3"`
-				Base4  string `json:"Base_4"`
-				Base6  string `json:"Base_6"`
-				Base8  string `json:"Base_8"`
-				Base10 string `json:"Base_10"`
-				Base11 string `json:"Base_11"`
 				Base0  string `json:"Base_0"`
 				Base1  string `json:"Base_1"`
 				Base2  string `json:"Base_2"`
+				Base3  string `json:"Base_3"`
+				Base4  string `json:"Base_4"`
 				Base5  string `json:"Base_5"`
+				Base6  string `json:"Base_6"`
 				Base7  string `json:"Base_7"`
+				Base8  string `json:"Base_8"`
 				Base9  string `json:"Base_9"`
+				Base10 string `json:"Base_10"`
+				Base11 string `json:"Base_11"`
 			} `json:"Bases"`
 			N string `json:"n"`
 			Z string `json:"Z"`
@@ -460,4 +498,19 @@ type IssuerPublicKeyJSON struct {
 		} `json:"Features"`
 		ECDSA string `json:"ECDSA"`
 	} `json:"IssuerPublicKey"`
+}
+
+type IssuerPrivateKeyJSON struct {
+	IssuerPrivateKey struct {
+		Xmlns      string `json:"-xmlns"`
+		Counter    string `json:"Counter"`
+		ExpiryDate string `json:"ExpiryDate"`
+		Elements   struct {
+			P      string `json:"p"`
+			Q      string `json:"q"`
+			PPrime string `json:"pPrime"`
+			QPrime string `json:"qPrime"`
+		} `json:"Elements"`
+		ECDSA string `json:"ECDSA"`
+	} `json:"IssuerPrivateKey"`
 }

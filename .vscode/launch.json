@@ -16,6 +16,19 @@
             ]
         },
         {
+            "name": "IRMA convert linux",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/irma/main.go",
+            "args": [
+                "scheme",
+                "convert", 
+                "/home/rubenhensen/sidn/irma-demo-schememanager",
+                "/home/rubenhensen/sidn/irma-demo-schememanager-json",
+            ]
+        },
+        {
             "name": "IRMA keyshare server",
             "type": "go",
             "request": "launch",
