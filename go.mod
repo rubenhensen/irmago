@@ -35,7 +35,7 @@ require (
 )
 
 require (
-	github.com/basgys/goxml2json v1.1.0 // indirect
+	github.com/basgys/goxml2json v1.1.1-0.20181031222924-996d9fc8d313 // indirect
 	golang.org/x/net v0.5.0 // indirect
 )
 
@@ -55,6 +55,7 @@ require (
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/edsrzf/mmap-go v1.1.0 // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
+	github.com/go-ap/jsonld v0.0.0-20221030091449-f2a191312c73
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/gofrs/uuid v4.0.0+incompatible // indirect
 	github.com/golang/protobuf v1.5.2 // indirect

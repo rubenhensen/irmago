@@ -184,6 +184,7 @@ func skipSigning(path string, info os.FileInfo, typ irma.SchemeType) bool {
 			return true
 		}
 		if !strings.HasSuffix(path, ".xml") &&
+			!strings.HasSuffix(path, ".jsonld") &&
 			!strings.HasSuffix(path, ".png") &&
 			!regexp.MustCompile("kss-\\d+\\.pem$").Match([]byte(filepath.Base(path))) &&
 			filepath.Base(path) != "timestamp" {

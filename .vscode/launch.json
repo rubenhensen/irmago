@@ -16,6 +16,32 @@
             ]
         },
         {
+            "name": "IRMA sign",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/irma/main.go",
+            "args": [
+                "scheme",
+                "sign", 
+                "C:\\Users\\Ruben\\sidn\\irma-scheme-test-json\\sk.pem",
+                "C:\\Users\\Ruben\\sidn\\irma-scheme-test-json",
+            ]
+        },
+        {
+            "name": "IRMA sign normal",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/irma/main.go",
+            "args": [
+                "scheme",
+                "sign", 
+                "C:\\Users\\Ruben\\sidn\\irma-scheme-test\\sk.pem",
+                "C:\\Users\\Ruben\\sidn\\irma-scheme-test",
+            ]
+        },
+        {
             "name": "IRMA convert linux",
             "type": "go",
             "request": "launch",

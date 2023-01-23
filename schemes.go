@@ -405,8 +405,48 @@ func (conf *Configuration) parseSchemeFile(
 	if err != nil {
 		return true, err
 	}
-
+	if filepath.Ext(path) == ".jsonld" {
+		return true, convertJSONSchemeToXML(path, bts, description)
+	}
 	return true, common.Unmarshal(filepath.Base(path), bts, description)
+}
+
+func convertJSONSchemeToXML(path string, bts []byte, description interface{}) error {
+	temp := struct {
+		SchemeManager struct {
+			Version         int              `json:"-version"`
+			ID              string           `json:"Id"`
+			Name            TranslatedString `json:"Name"`
+			Contact         string           `json:"Contact"`
+			URL             string           `json:"Url"`
+			Demo            bool             `json:"Demo"`
+			Description     TranslatedString `json:"Description"`
+			TimestampServer string           `json:"TimestampServer"`
+			PublicKey       string           `json:"PublicKey"`
+			PrivateKey      string           `json:"PrivateKey"`
+		} `json:"SchemeManager"`
+	}{}
+
+	err := common.Unmarshal(filepath.Base(path), bts, &temp)
+	// if reflect.TypeOf(description) == SchemeManager.Type() {
+
+	// }
+	switch v := description.(type) {
+	case *SchemeManager:
+		v.ID = temp.SchemeManager.ID
+		v.Name = temp.SchemeManager.Name
+		v.Contact = temp.SchemeManager.Contact
+		v.URL = temp.SchemeManager.URL
+		v.Demo = temp.SchemeManager.Demo
+		v.Description = temp.SchemeManager.Description
+		v.TimestampServer = temp.SchemeManager.TimestampServer
+		v.XMLVersion = temp.SchemeManager.Version
+
+	default:
+		fmt.Println("No matching type")
+	}
+
+	return err
 }
 
 func (conf *Configuration) reinstallScheme(scheme Scheme) (err error) {
@@ -729,6 +769,7 @@ func (conf *Configuration) parseIndex(dir string) (SchemeManagerIndex, SchemeMan
 func (conf *Configuration) checkUnsignedFiles(dir string, index SchemeManagerIndex) error {
 	return common.WalkDir(dir, func(path string, info os.FileInfo) error {
 		relpath, err := filepath.Rel(dir, path)
+		// fmt.Println(relpath)
 		if err != nil {
 			return err
 		}

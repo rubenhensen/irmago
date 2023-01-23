@@ -7,14 +7,16 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
-	"github.com/go-errors/errors"
-	"github.com/privacybydesign/gabi/big"
-	"github.com/sirupsen/logrus"
 	"io"
 	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
+
+	"github.com/go-ap/jsonld"
+	"github.com/go-errors/errors"
+	"github.com/privacybydesign/gabi/big"
+	"github.com/sirupsen/logrus"
 )
 
 var Logger *logrus.Logger
@@ -355,21 +357,44 @@ func containsSchemes(dir string) (bool, error) {
 }
 
 func SchemeInfo(filename string, bts []byte) (string, string, error) {
-	temp := struct {
-		Type string `json:"schemetype" xml:"SchemeType"`
-		ID   string `json:"id" xml:"Id"`
-	}{}
-	if err := Unmarshal(filename, bts, &temp); err != nil {
-		return "", "", err
-	}
-	if temp.Type == "" {
-		temp.Type = "issuer"
-	}
+	if filepath.Ext(filename) == ".xml" {
+		temp := struct {
+			Type string `xml:"SchemeType"`
+			ID   string `xml:"Id"`
+		}{}
+		if err := Unmarshal(filename, bts, &temp); err != nil {
+			return "", "", err
+		}
 
-	if temp.Type != "issuer" && temp.Type != "requestor" {
-		return "", "", errors.New("unsupported scheme type")
+		if temp.Type == "" {
+			temp.Type = "issuer"
+		}
+
+		if temp.Type != "issuer" && temp.Type != "requestor" {
+			return "", "", errors.New("unsupported scheme type")
+		}
+		return temp.ID, temp.Type, nil
+	} else if filepath.Ext(filename) == ".json" || filepath.Ext(filename) == ".jsonld" {
+		temp := struct {
+			SchemeManager struct {
+				ID   string `json:"id"`
+				Type string `json:"schemetype"`
+			} `json:"SchemeManager"`
+		}{}
+		if err := Unmarshal(filename, bts, &temp); err != nil {
+			return "", "", err
+		}
+		if temp.SchemeManager.Type == "" {
+			temp.SchemeManager.Type = "issuer"
+		}
+
+		if temp.SchemeManager.Type != "issuer" && temp.SchemeManager.Type != "requestor" {
+			return "", "", errors.New("unsupported scheme type")
+		}
+		return temp.SchemeManager.ID, temp.SchemeManager.Type, nil
+	} else {
+		return "", "", errors.New("unsupported file format")
 	}
-	return temp.ID, temp.Type, nil
 }
 
 func Unmarshal(filename string, bts []byte, dest interface{}) error {
@@ -378,6 +403,8 @@ func Unmarshal(filename string, bts []byte, dest interface{}) error {
 		return xml.Unmarshal(bts, dest)
 	case ".json":
 		return json.Unmarshal(bts, dest)
+	case ".jsonld":
+		return jsonld.Unmarshal(bts, dest)
 	default:
 		return errors.New("unsupported file format")
 	}
@@ -396,7 +423,7 @@ func SchemeFilename(dir string) (string, error) {
 	return "", errors.New("no scheme file found")
 }
 
-var SchemeFilenames = []string{"description.xml", "description.json"}
+var SchemeFilenames = []string{"description.xml", "description.json", "description.jsonld"}
 
 // Helper for absorbing errors in the `defer x.Close()` pattern
 func Close(o io.Closer) {

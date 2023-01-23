@@ -148,17 +148,36 @@ func issuerKeys(src, dest, foldername string, demo bool) ([]*xj.Node, error) {
 		return ks, errors.WrapPrefix(err, "Error reading files in src directory", 0)
 	}
 
+	// 	// Convert converts the given XML document to JSON
+	// func Convert(r io.Reader, ps ...plugin) (*bytes.Buffer, error) {
+	// 	// Decode XML document
+	// 	root := &Node{}
+	// 	err := NewDecoder(r, ps...).Decode(root)
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
+
+	// 	// Then encode it in JSON
+	// 	buf := new(bytes.Buffer)
+	// 	e := NewEncoder(buf, ps...)
+	// 	err = e.Encode(root)
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
+
+	// 	return buf, nil
+	// }
 	for _, file := range files {
 		// Convert to json
 		path := filepath.Join(folderPath, file.Name())
 		xmlFile, err := os.Open(path)
 		if err != nil {
-			return ks, errors.WrapPrefix(err, "Error converting to json", 0)
+			return ks, errors.WrapPrefix(err, "Opening XML", 0)
 		}
 
 		// Decode XML document
 		root := &xj.Node{}
-		err = xj.NewDecoder(xmlFile).Decode(root)
+		err = xj.NewDecoder(xmlFile, xj.WithTypeConverter(xj.Float, xj.Bool, xj.Int, xj.Null)).Decode(root)
 		if err != nil {
 			return nil, err
 		}
@@ -284,7 +303,7 @@ func convertIssuerDesc(src, dest string, demo bool, skeys, pkeys []*xj.Node) err
 
 	// Decode XML document
 	root := &xj.Node{}
-	err = xj.NewDecoder(xmlFile).Decode(root)
+	err = xj.NewDecoder(xmlFile, xj.WithTypeConverter(xj.Float, xj.Bool, xj.Int, xj.Null)).Decode(root)
 	if err != nil {
 		return err
 	}
@@ -305,7 +324,7 @@ func convertIssuerDesc(src, dest string, demo bool, skeys, pkeys []*xj.Node) err
 
 	// Then encode it in JSON
 	buf := new(bytes.Buffer)
-	e := xj.NewEncoder(buf)
+	e := xj.NewEncoder(buf, xj.WithTypeConverter(xj.Float, xj.Bool, xj.Int, xj.Null))
 	err = e.Encode(root)
 	if err != nil {
 		return err
@@ -361,7 +380,7 @@ func convertSchemeManager(src, dest string, demo bool) error {
 
 	// Decode XML document
 	root := &xj.Node{}
-	err = xj.NewDecoder(xmlFile).Decode(root)
+	err = xj.NewDecoder(xmlFile, xj.WithTypeConverter(xj.Float, xj.Bool, xj.Int, xj.Null)).Decode(root)
 	if err != nil {
 		return err
 	}
@@ -374,7 +393,7 @@ func convertSchemeManager(src, dest string, demo bool) error {
 
 	// Then encode it in JSON
 	buf := new(bytes.Buffer)
-	e := xj.NewEncoder(buf)
+	e := xj.NewEncoder(buf, xj.WithTypeConverter(xj.Float, xj.Bool, xj.Int, xj.Null))
 	err = e.Encode(root)
 	if err != nil {
 		return err
@@ -456,3 +475,7 @@ func copyFile(src, dst string) (int64, error) {
 	nBytes, err := io.Copy(destination, source)
 	return nBytes, err
 }
+
+// if err = conf.writeIndex(scheme.path(), indexbts, sigbts); err != nil {
+// 	return false, nil, nil, err
+// }
