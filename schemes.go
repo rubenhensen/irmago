@@ -414,7 +414,7 @@ func (conf *Configuration) parseSchemeFile(
 func convertJSONSchemeToXML(path string, bts []byte, description interface{}) error {
 	temp := struct {
 		SchemeManager struct {
-			Version         int              `json:"-version"`
+			Version         int              `json:"version"`
 			ID              string           `json:"Id"`
 			Name            TranslatedString `json:"Name"`
 			Contact         string           `json:"Contact"`

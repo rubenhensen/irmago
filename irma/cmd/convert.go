@@ -177,7 +177,7 @@ func issuerKeys(src, dest, foldername string, demo bool) ([]*xj.Node, error) {
 
 		// Decode XML document
 		root := &xj.Node{}
-		err = xj.NewDecoder(xmlFile, xj.WithTypeConverter(xj.Float, xj.Bool, xj.Int, xj.Null)).Decode(root)
+		err = xj.NewDecoder(xmlFile, xj.WithTypeConverter(xj.Float, xj.Bool, xj.Int, xj.Null), xj.WithAttrPrefix("")).Decode(root)
 		if err != nil {
 			return nil, err
 		}
@@ -303,7 +303,7 @@ func convertIssuerDesc(src, dest string, demo bool, skeys, pkeys []*xj.Node) err
 
 	// Decode XML document
 	root := &xj.Node{}
-	err = xj.NewDecoder(xmlFile, xj.WithTypeConverter(xj.Float, xj.Bool, xj.Int, xj.Null)).Decode(root)
+	err = xj.NewDecoder(xmlFile, xj.WithTypeConverter(xj.Float, xj.Bool, xj.Int, xj.Null), xj.WithAttrPrefix("")).Decode(root)
 	if err != nil {
 		return err
 	}
@@ -324,7 +324,7 @@ func convertIssuerDesc(src, dest string, demo bool, skeys, pkeys []*xj.Node) err
 
 	// Then encode it in JSON
 	buf := new(bytes.Buffer)
-	e := xj.NewEncoder(buf, xj.WithTypeConverter(xj.Float, xj.Bool, xj.Int, xj.Null))
+	e := xj.NewEncoder(buf, xj.WithTypeConverter(xj.Float, xj.Bool, xj.Int, xj.Null), xj.WithAttrPrefix(""))
 	err = e.Encode(root)
 	if err != nil {
 		return err
@@ -380,7 +380,7 @@ func convertSchemeManager(src, dest string, demo bool) error {
 
 	// Decode XML document
 	root := &xj.Node{}
-	err = xj.NewDecoder(xmlFile, xj.WithTypeConverter(xj.Float, xj.Bool, xj.Int, xj.Null)).Decode(root)
+	err = xj.NewDecoder(xmlFile, xj.WithTypeConverter(xj.Float, xj.Bool, xj.Int, xj.Null), xj.WithAttrPrefix("")).Decode(root)
 	if err != nil {
 		return err
 	}
@@ -393,7 +393,7 @@ func convertSchemeManager(src, dest string, demo bool) error {
 
 	// Then encode it in JSON
 	buf := new(bytes.Buffer)
-	e := xj.NewEncoder(buf, xj.WithTypeConverter(xj.Float, xj.Bool, xj.Int, xj.Null))
+	e := xj.NewEncoder(buf, xj.WithTypeConverter(xj.Float, xj.Bool, xj.Int, xj.Null), xj.WithAttrPrefix(""))
 	err = e.Encode(root)
 	if err != nil {
 		return err
