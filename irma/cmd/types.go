@@ -86,6 +86,15 @@ var typesCmd = &cobra.Command{
 				}
 			}
 
+			// wd, err := os.Getwd()
+			// if err != nil {
+			// 	die("Failed to get wd", err)
+			// }
+
+			// flags := typesCmd.Flags()
+			// flags.StringP("url", "u", "https://privacybydesign.foundation/schememanager/pbdf", "External URL to scheme manager.")
+			// flags.StringP("src", "s", wd, "Filepath to the scheme manager where all types should be exported from. Defaults to <working-directory>.")
+			// flags.StringP("dest", "d", filepath.Join(wd, "typeScheme"), "Filepath to destination folder types should be exported to. Defaults to <working-directory>/typeScheme")
 			buf, err := json.Marshal(val)
 			if err != nil {
 				return errors.WrapPrefix(err, "Error creating json", 0)
@@ -137,87 +146,68 @@ var typesCmd = &cobra.Command{
 			}
 		}
 
+		v3 := filepath.Join(dest, "v3")
+		if err = common.AssertPathExists(v3); err != nil {
+			if err := os.Mkdir(v3, os.ModePerm); err != nil {
+				return errors.WrapPrefix(err, "Error creating JSON directory", 0)
+			}
+		}
+		for _, val := range attributeTypes {
+			smFolder := filepath.Join(v3, val.SchemeManagerID)
+			// Check and create schememanager folder
+			if err = common.AssertPathExists(smFolder); err != nil {
+				if err := os.Mkdir(smFolder, os.ModePerm); err != nil {
+					return errors.WrapPrefix(err, "Error creating directory", 0)
+				}
+			}
+
+			buf, err := json.Marshal(val)
+			if err != nil {
+				return errors.WrapPrefix(err, "Error creating json", 0)
+			}
+
+			// Pretty format JSON
+			prettyJson, err := PrettyString(string(buf))
+			if err != nil {
+				return errors.WrapPrefix(err, "Error pretty printing json", 0)
+			}
+
+			// Write to file
+			bts := []byte(prettyJson)
+			if err := os.WriteFile(filepath.Join(smFolder, val.CredentialTypeID+".jsonld"), bts, 0644); err != nil {
+				return errors.WrapPrefix(err, "Failed to write description", 0)
+			}
+
+			issuerFolder := filepath.Join(smFolder, val.IssuerID)
+			// Check and create issuer folder
+			if err = common.AssertPathExists(issuerFolder); err != nil {
+				if err := os.Mkdir(issuerFolder, os.ModePerm); err != nil {
+					return errors.WrapPrefix(err, "Error creating directory", 0)
+				}
+			}
+
+			buf, err = json.Marshal(val)
+			if err != nil {
+				return errors.WrapPrefix(err, "Error creating json", 0)
+			}
+
+			// Pretty format JSON
+			prettyJson, err = PrettyString(string(buf))
+			if err != nil {
+				return errors.WrapPrefix(err, "Error pretty printing json", 0)
+			}
+
+			// Write to file
+			bts = []byte(prettyJson)
+			if err := os.WriteFile(filepath.Join(issuerFolder, val.CredentialTypeID+".jsonld"), bts, 0644); err != nil {
+				return errors.WrapPrefix(err, "Failed to write description", 0)
+			}
+		}
+
 		return nil
 	},
 }
 
 func init() {
 	schemeCmd.AddCommand(typesCmd)
-	// wd, err := os.Getwd()
-	// if err != nil {
-	// 	die("Failed to get wd", err)
-	// }
-
-	// flags := typesCmd.Flags()
-	// flags.StringP("url", "u", "https://privacybydesign.foundation/schememanager/pbdf", "External URL to scheme manager.")
-	// flags.StringP("src", "s", wd, "Filepath to the scheme manager where all types should be exported from. Defaults to <working-directory>.")
-	// flags.StringP("dest", "d", filepath.Join(wd, "typeScheme"), "Filepath to destination folder types should be exported to. Defaults to <working-directory>/typeScheme")
 }
-
-// func createTypeScheme() error {
-
-// if pkg == nil {
-// 	port, _ := flags.GetInt("port")
-// 	privatekeysPath, _ := flags.GetString("privkeys")
-// 	verbosity, _ := cmd.Flags().GetCount("verbose")
-// 	result, err = libraryRequest(request, irmaconfig, url, port, privatekeysPath, noqr, verbosity, pairing)
-// } else {
-// 	result, err = serverRequest(pkg, noqr, pairing)
-// }
-// if err != nil {
-// 	die("Session failed", err)
-// }
-
-// printSessionResult(result)
-
-// Done!
-// if httpServer != nil {
-// 	_ = httpServer.Close()
-// }
-
-// }
-
-// func RequestorServerConfiguration() *requestorserver.Configuration {
-// 	irmaServerConf := myIrmaServerConfiguration()
-// 	irmaServerConf.URL = requestorServerURL + "/irma"
-// 	return &requestorserver.Configuration{
-// 		Configuration:                  irmaServerConf,
-// 		DisableRequestorAuthentication: true,
-// 		ListenAddress:                  "localhost",
-// 		Port:                           requestorServerPort,
-// 		MaxRequestAge:                  3,
-// 		Permissions: requestorserver.Permissions{
-// 			Disclosing: []string{"*"},
-// 			Signing:    []string{"*"},
-// 			Issuing:    []string{"*"},
-// 		},
-// 	}
-// }
-
-// func myIrmaServerConfiguration() *server.Configuration {
-// 	return &server.Configuration{
-// 		URL:                   fmt.Sprintf("http://localhost:%d", irmaServerPort),
-// 		Logger:                logger,
-// 		DisableSchemesUpdate:  false,
-// 		SchemesPath:           filepath.Join(testdata, "irma_configuration"),
-// 		IssuerPrivateKeysPath: filepath.Join(testdata, "privatekeys"),
-// 		RevocationSettings: irma.RevocationSettings{
-// 			revocationTestCred:  {RevocationServerURL: revocationServerURL, SSE: true},
-// 			revKeyshareTestCred: {RevocationServerURL: revocationServerURL},
-// 		},
-// 		JwtPrivateKeyFile: jwtPrivkeyPath,
-// 		StaticSessions: map[string]interface{}{
-// 			"staticsession": irma.ServiceProviderRequest{
-// 				RequestorBaseRequest: irma.RequestorBaseRequest{
-// 					CallbackURL: staticSessionServerURL,
-// 				},
-// 				Request: &irma.DisclosureRequest{
-// 					BaseRequest: irma.BaseRequest{LDContext: irma.LDContextDisclosureRequest},
-// 					Disclose: irma.AttributeConDisCon{
-// 						{{irma.NewAttributeRequest("irma-demo.RU.studentCard.level")}},
-// 					},
-// 				},
-// 			},
-// 		},
-// 	}
-// }
