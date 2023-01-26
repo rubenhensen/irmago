@@ -1,14 +1,14 @@
 {
-    "ID": "id",
+    "ID": "price",
     "Name": {
-        "en": "Access Pass ID",
+        "en": "Price",
         "nl": ""
     },
     "Description": {
-        "en": "Access Pass ID number",
+        "en": "Price",
         "nl": ""
     },
-    "Index": 0,
+    "Index": 5,
     "CredentialTypeID": "nethuiAccessPass",
     "IssuerID": "inz-internetnz",
     "SchemeManagerID": "irma-demo"

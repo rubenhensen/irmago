@@ -1,14 +1,14 @@
 {
-    "ID": "firstnames",
+    "ID": "prefix",
     "Name": {
-        "en": "First names",
-        "nl": "Voornamen"
+        "en": "Prefix",
+        "nl": "Tussenvoegsel"
     },
     "Description": {
-        "en": "All of your first names",
-        "nl": "Al uw voornamen"
+        "en": "Family name prefix",
+        "nl": "Tussenvoegsel van uw achternaam"
     },
-    "Index": 0,
+    "Index": 3,
     "CredentialTypeID": "fullName",
     "IssuerID": "MijnOverheid",
     "SchemeManagerID": "irma-demo"

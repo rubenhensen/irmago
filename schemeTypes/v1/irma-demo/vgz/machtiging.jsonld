@@ -1,14 +1,14 @@
 {
-    "ID": "clientfullname",
+    "ID": "clientnumber",
     "Name": {
-        "en": "Insured person",
-        "nl": "Verzekerde"
+        "en": "VGZ Customer number",
+        "nl": "VGZ Klantnummer"
     },
     "Description": {
-        "en": "The name of the VGZ customer who mandated you",
-        "nl": "De naam van de VGZ verzekerde die deze machtiging aan u gegevens heeft"
+        "en": "The VGZ customer number of the VGZ client who mandated you",
+        "nl": "Het VGZ klantnummer van de VGZ verzekerde die deze machtiging aan u gegeven heeft"
     },
-    "Index": 1,
+    "Index": 0,
     "CredentialTypeID": "machtiging",
     "IssuerID": "vgz",
     "SchemeManagerID": "irma-demo"

@@ -1,15 +1,15 @@
 {
-    "ID": "end",
+    "ID": "election",
     "Name": {
-        "en": "End date",
+        "en": "Election",
         "nl": ""
     },
     "Description": {
-        "en": "The date after which votes can no longer be registered",
+        "en": "Election Title",
         "nl": ""
     },
-    "Index": 2,
-    "DisplayIndex": 2,
+    "Index": 0,
+    "DisplayIndex": 0,
     "CredentialTypeID": "votingcard",
     "IssuerID": "inz-internetnz",
     "SchemeManagerID": "irma-demo"

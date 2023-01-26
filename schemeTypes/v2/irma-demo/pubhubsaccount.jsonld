@@ -1,14 +1,14 @@
 {
-    "ID": "mobilenumber",
+    "ID": "registrationdate",
     "Name": {
-        "en": "Mobile phone number",
-        "nl": "Mobiele telefoonnummer"
+        "en": "Registration date",
+        "nl": "Registratiedatum"
     },
     "Description": {
-        "en": "Your mobile phone number",
-        "nl": "Je mobiel telefoonnummer"
+        "en": "Your registration date",
+        "nl": "Jouw registratie datum"
     },
-    "Index": 1,
+    "Index": 2,
     "CredentialTypeID": "pubhubsaccount",
     "IssuerID": "PubHubs",
     "SchemeManagerID": "irma-demo"

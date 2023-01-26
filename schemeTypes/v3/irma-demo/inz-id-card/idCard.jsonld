@@ -1,0 +1,10 @@
+{
+    "ID": "",
+    "Name": null,
+    "Description": null,
+    "Index": 10,
+    "RevocationAttribute": true,
+    "CredentialTypeID": "idCard",
+    "IssuerID": "inz-id-card",
+    "SchemeManagerID": "irma-demo"
+}

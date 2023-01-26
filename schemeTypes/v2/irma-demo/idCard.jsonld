@@ -1,14 +1,14 @@
 {
-    "ID": "lastName",
+    "ID": "number",
     "Name": {
-        "en": "Person last name",
+        "en": "Card ID Number",
         "nl": ""
     },
     "Description": {
-        "en": "Person last name",
+        "en": "Your card number",
         "nl": ""
     },
-    "Index": 1,
+    "Index": 9,
     "CredentialTypeID": "idCard",
     "IssuerID": "inz-id-card",
     "SchemeManagerID": "irma-demo"

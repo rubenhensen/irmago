@@ -1,14 +1,14 @@
 {
-    "ID": "debtCollector",
+    "ID": "incomeUsedForBVV",
     "Name": {
-        "en": "Bailiff",
-        "nl": "Gerechtsdeurwaarder"
+        "en": "Income used for BVV",
+        "nl": "Gehanteerde inkomen voor BVV"
     },
     "Description": {
-        "en": "Coordinating Bailiff",
-        "nl": "Coördinerend Gerechtsdeurwaarder"
+        "en": "Income used calculating Beslagvrije Voet",
+        "nl": "Gehanteerde inkomen voor berekening Beslagvrije Voet"
     },
-    "Index": 1,
+    "Index": 2,
     "CredentialTypeID": "demoBVV",
     "IssuerID": "discipl",
     "SchemeManagerID": "irma-demo"

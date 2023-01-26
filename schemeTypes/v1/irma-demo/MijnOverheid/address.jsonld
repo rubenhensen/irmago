@@ -1,14 +1,14 @@
 {
-    "ID": "zipcode",
+    "ID": "city",
     "Name": {
-        "en": "ZIP code",
-        "nl": "Postcode"
+        "en": "City",
+        "nl": "Stad"
     },
     "Description": {
-        "en": "Your ZIP code",
-        "nl": "Uw postcode"
+        "en": "The city you live in",
+        "nl": "Uw woonplaats"
     },
-    "Index": 3,
+    "Index": 1,
     "CredentialTypeID": "address",
     "IssuerID": "MijnOverheid",
     "SchemeManagerID": "irma-demo"

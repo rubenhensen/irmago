@@ -1,16 +1,16 @@
 {
-    "ID": "over21",
+    "ID": "over16",
     "Name": {
-        "en": "Over 21",
-        "nl": "Ouder dan 21"
+        "en": "Over 16",
+        "nl": "Ouder dan 16"
     },
     "Description": {
-        "en": "Whether you are over 21",
-        "nl": "Of je ouder dan 21 bent"
+        "en": "Whether you are over 16",
+        "nl": "Of je ouder dan 16 bent"
     },
-    "Index": 3,
+    "Index": 1,
     "DisplayHint": "yesno",
     "CredentialTypeID": "ageLimits",
-    "IssuerID": "nijmegen",
+    "IssuerID": "pbdf",
     "SchemeManagerID": "pbdf"
 }

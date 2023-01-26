@@ -1,14 +1,14 @@
 {
-    "ID": "homePostcodeDigits",
+    "ID": "workPostcodeDigits",
     "Name": {
-        "en": "4 digits of postcode of residential address",
-        "nl": "4 cijfers van de postcode van het woonadres"
+        "en": "4 digits of postcode of work address",
+        "nl": "4 cijfers van de postcode van het werkadres"
     },
     "Description": {
-        "en": "Lives in the city/neightborhood with the given 4 digits of the postal code",
-        "nl": "Woont in het gebied aangeduid met deze 4 cijfers van de postcode"
+        "en": "Works or has economic ties with the area denoted ny the four postcode digits",
+        "nl": "Werkt of heeft economische binding met het gebied aangeduid met de 4 cijfers van de postcode"
     },
-    "Index": 0,
+    "Index": 1,
     "CredentialTypeID": "locality2",
     "IssuerID": "gebiedonline",
     "SchemeManagerID": "irma-demo"

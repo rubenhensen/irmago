@@ -1,14 +1,14 @@
 {
-    "ID": "over12",
+    "ID": "over65",
     "Name": {
-        "en": "Over 12",
-        "nl": "Ouder dan 12"
+        "en": "Over 65",
+        "nl": "Ouder dan 65"
     },
     "Description": {
-        "en": "Whether you are over 12",
-        "nl": "Of je ouder dan 12 bent"
+        "en": "Whether you are over 65",
+        "nl": "Of je ouder dan 65 bent"
     },
-    "Index": 8,
+    "Index": 12,
     "DisplayHint": "yesno",
     "CredentialTypeID": "idin",
     "IssuerID": "pbdf",

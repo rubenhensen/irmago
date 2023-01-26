@@ -1,15 +1,16 @@
 {
-    "ID": "voteURL",
+    "ID": "votingnumber",
     "Name": {
-        "en": "Election website",
-        "nl": "Verkiezingswebsite"
+        "en": "Anonymous voting number",
+        "nl": "Anonieme stemcode"
     },
     "Description": {
-        "en": "The URL on which votes can be registered",
-        "nl": "De URL waarop u uw stem uit kan brengen"
+        "en": "Anonymous voting number",
+        "nl": "Anonieme stemcode"
     },
-    "Index": 2,
-    "DisplayIndex": 1,
+    "RandomBlind": true,
+    "Index": 1,
+    "DisplayIndex": 4,
     "CredentialTypeID": "stempas",
     "IssuerID": "stemmen",
     "SchemeManagerID": "irma-demo"

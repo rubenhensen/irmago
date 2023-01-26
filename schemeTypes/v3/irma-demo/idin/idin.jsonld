@@ -1,0 +1,15 @@
+{
+    "ID": "zipcode",
+    "Name": {
+        "en": "Zip code",
+        "nl": "Postcode"
+    },
+    "Description": {
+        "en": "Your postal code, as registered at your bank",
+        "nl": "Uw postcode, zoals geregistreerd bij uw bank"
+    },
+    "Index": 5,
+    "CredentialTypeID": "idin",
+    "IssuerID": "idin",
+    "SchemeManagerID": "irma-demo"
+}

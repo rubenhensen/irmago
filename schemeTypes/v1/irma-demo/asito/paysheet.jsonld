@@ -1,14 +1,14 @@
 {
-    "ID": "netSalaryDeductions",
+    "ID": "employeePremium",
     "Name": {
-        "en": "Net salary deductions",
-        "nl": "Netto inhoudingen"
+        "en": "Employee premium",
+        "nl": "Werknemers premie"
     },
     "Description": {
-        "en": "Net salary deductions",
-        "nl": "Netto inhoudingen"
+        "en": "Employee premium",
+        "nl": "Werknemers premie"
     },
-    "Index": 5,
+    "Index": 3,
     "CredentialTypeID": "paysheet",
     "IssuerID": "asito",
     "SchemeManagerID": "irma-demo"

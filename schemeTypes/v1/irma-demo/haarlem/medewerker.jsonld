@@ -1,14 +1,14 @@
 {
-    "ID": "organisatie",
+    "ID": "personeelsnummer",
     "Name": {
-        "en": "Organisation",
-        "nl": "Organisatie"
+        "en": "Employee number",
+        "nl": "Personeelsnummer"
     },
     "Description": {
-        "en": "Organisation within this municipality",
-        "nl": "Organisatie binnen gemeente"
+        "en": "Unique number for employee registration",
+        "nl": "Uniek nummer voor personeelregistratie"
     },
-    "Index": 1,
+    "Index": 0,
     "CredentialTypeID": "medewerker",
     "IssuerID": "haarlem",
     "SchemeManagerID": "irma-demo"

@@ -1,14 +1,14 @@
 {
-    "ID": "familyname",
+    "ID": "licensed",
     "Name": {
-        "en": "familyname",
-        "nl": "familyname"
+        "en": "licensed",
+        "nl": "licensed"
     },
     "Description": {
         "en": "",
         "nl": ""
     },
-    "Index": 1,
+    "Index": 4,
     "CredentialTypeID": "drivinglicense",
     "IssuerID": "MijnOverheid",
     "SchemeManagerID": "irma-demo"

@@ -1,15 +1,15 @@
 {
-    "ID": "usertype",
+    "ID": "usercode",
     "Name": {
-        "en": "User type",
-        "nl": "Gebruikerstype"
+        "en": "User code",
+        "nl": "Gebruikerscode"
     },
     "Description": {
-        "en": "Your user type",
-        "nl": "Je gebuikerstype"
+        "en": "User code that uniquely identifies you",
+        "nl": "Gebruikerscode die jou uniek identificeert"
     },
-    "Index": 0,
-    "DisplayIndex": 0,
+    "Index": 1,
+    "DisplayIndex": 1,
     "CredentialTypeID": "hix",
     "IssuerID": "chipsoft",
     "SchemeManagerID": "irma-demo"

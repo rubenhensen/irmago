@@ -1,14 +1,15 @@
 {
-    "ID": "assurancelevel",
+    "ID": "photo",
     "Name": {
-        "en": "Assurance level",
-        "nl": "Betrouwbaarheidsniveau"
+        "en": "Photo",
+        "nl": "Foto"
     },
     "Description": {
-        "en": "The level of assurance according to eIDAS ",
-        "nl": "Het betrouwbaarheidsniveau volgens eIDAS"
+        "en": "The portrait photo as included in your passport",
+        "nl": "De portretfoto die in je paspoort is opgenomen"
     },
-    "Index": 11,
+    "Index": 13,
+    "DisplayHint": "portraitPhoto",
     "CredentialTypeID": "passport",
     "IssuerID": "pilot-amsterdam",
     "SchemeManagerID": "pbdf"

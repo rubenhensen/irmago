@@ -1,14 +1,14 @@
 {
-    "ID": "sn",
+    "ID": "subject-id",
     "Name": {
-        "en": "Surname",
+        "en": "Identifier",
         "nl": ""
     },
     "Description": {
-        "en": "Surname or family name.",
+        "en": "A unique identification of subjects. May be either a globally-unique identifier, or a pairwise identifier suitable for more specialized uses.",
         "nl": ""
     },
-    "Index": 5,
+    "Index": 2,
     "CredentialTypeID": "edugain-proxy",
     "IssuerID": "geant-incubator",
     "SchemeManagerID": "irma-demo"

@@ -1,14 +1,14 @@
 {
-    "ID": "city",
+    "ID": "dateOfBirth",
     "Name": {
-        "en": "city",
+        "en": "dateOfBirth",
         "nl": ""
     },
     "Description": {
-        "en": "The city at which you live",
+        "en": "Your date of birth",
         "nl": ""
     },
-    "Index": 6,
+    "Index": 2,
     "CredentialTypeID": "idinData",
     "IssuerID": "RU",
     "SchemeManagerID": "irma-demo"

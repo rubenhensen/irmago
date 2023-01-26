@@ -1,0 +1,16 @@
+{
+    "ID": "over16",
+    "Name": {
+        "en": "Over 16",
+        "nl": "Ouder dan 16"
+    },
+    "Description": {
+        "en": "Whether you are over 16",
+        "nl": "Of je ouder dan 16 bent"
+    },
+    "Index": 5,
+    "DisplayHint": "yesno",
+    "CredentialTypeID": "passport",
+    "IssuerID": "pilot-amsterdam",
+    "SchemeManagerID": "pbdf"
+}

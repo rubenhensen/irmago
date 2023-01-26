@@ -1,14 +1,14 @@
 {
-    "ID": "purchaseDate",
+    "ID": "type",
     "Name": {
-        "en": "Membership since",
+        "en": "Membership Type",
         "nl": ""
     },
     "Description": {
-        "en": "Date of the first membership purchase",
+        "en": "The selected type of membership",
         "nl": ""
     },
-    "Index": 2,
+    "Index": 1,
     "CredentialTypeID": "membership",
     "IssuerID": "inz-internetnz",
     "SchemeManagerID": "irma-demo"

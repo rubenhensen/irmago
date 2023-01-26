@@ -1,0 +1,15 @@
+{
+    "ID": "grossSalaryComponents",
+    "Name": {
+        "en": "Gross salary components",
+        "nl": "Bruto componenten"
+    },
+    "Description": {
+        "en": "Gross salary components",
+        "nl": "Bruto componenten"
+    },
+    "Index": 1,
+    "CredentialTypeID": "paysheet",
+    "IssuerID": "asito",
+    "SchemeManagerID": "irma-demo"
+}

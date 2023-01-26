@@ -1,15 +1,16 @@
 {
-    "ID": "familyname",
+    "ID": "over65",
     "Name": {
-        "en": "Family name",
-        "nl": "Geslachtsnaam"
+        "en": "Over 65",
+        "nl": "Ouder dan 65"
     },
     "Description": {
-        "en": "Your family name, as given to you at birth",
-        "nl": "Je achternaam, zoals bij je geboorte toegekend"
+        "en": "Whether you are over 65",
+        "nl": "Of je ouder dan 65 bent"
     },
-    "Index": 3,
-    "DisplayIndex": 5,
+    "Index": 15,
+    "DisplayIndex": 12,
+    "DisplayHint": "yesno",
     "CredentialTypeID": "personalData",
     "IssuerID": "gemeente",
     "SchemeManagerID": "irma-demo"

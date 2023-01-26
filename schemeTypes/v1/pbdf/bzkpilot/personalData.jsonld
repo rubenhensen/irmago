@@ -1,15 +1,16 @@
 {
-    "ID": "firstnames",
+    "ID": "over65",
     "Name": {
-        "en": "First names",
-        "nl": "Voornamen"
+        "en": "Over 65",
+        "nl": "Ouder dan 65"
     },
     "Description": {
-        "en": "Your first names",
-        "nl": "Je voornamen"
+        "en": "Whether you are over 65",
+        "nl": "Of je ouder dan 65 bent"
     },
-    "Index": 2,
-    "DisplayIndex": 2,
+    "Index": 11,
+    "DisplayIndex": 11,
+    "DisplayHint": "yesno",
     "CredentialTypeID": "personalData",
     "IssuerID": "bzkpilot",
     "SchemeManagerID": "pbdf"

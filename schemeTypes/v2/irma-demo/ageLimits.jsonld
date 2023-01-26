@@ -1,15 +1,15 @@
 {
-    "ID": "over18",
+    "ID": "over12",
     "Name": {
-        "en": "Over 18",
-        "nl": "Ouder dan 18"
+        "en": "Over 12",
+        "nl": "Ouder dan 12"
     },
     "Description": {
-        "en": "Whether you are over 18",
-        "nl": "Of u ouder dan 18 bent"
+        "en": "If you are over 12",
+        "nl": "Of u ouder dan 12 bent"
     },
-    "Index": 2,
+    "Index": 0,
     "CredentialTypeID": "ageLimits",
-    "IssuerID": "nijmegen",
+    "IssuerID": "idin",
     "SchemeManagerID": "irma-demo"
 }

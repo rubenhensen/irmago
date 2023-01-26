@@ -1,14 +1,15 @@
 {
-    "ID": "dateofbirth",
+    "ID": "nationality",
     "Name": {
-        "en": "Date of birth",
-        "nl": "Geboortedatum"
+        "en": "Dutch nationality",
+        "nl": "Nederlandse nationaliteit"
     },
     "Description": {
-        "en": "Your date of birth",
-        "nl": "Je geboortedatum"
+        "en": "Whether you have the dutch nationality",
+        "nl": "Of je de Nederlandse nationaliteit bezit"
     },
-    "Index": 6,
+    "Index": 8,
+    "DisplayHint": "yesno",
     "CredentialTypeID": "personalData",
     "IssuerID": "nijmegen",
     "SchemeManagerID": "pbdf"

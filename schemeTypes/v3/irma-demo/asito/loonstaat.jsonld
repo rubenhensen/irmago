@@ -1,0 +1,15 @@
+{
+    "ID": "socialInsurancePay",
+    "Name": {
+        "en": "Pay for payroll tax and social insurance law",
+        "nl": "Loon voor de loonbelasting/volksverzekeringen"
+    },
+    "Description": {
+        "en": "Column 12: Pay for payroll tax and social insurance law",
+        "nl": "Kolom 12: Loon voor de loonbelasting/volksverzekeringen"
+    },
+    "Index": 11,
+    "CredentialTypeID": "loonstaat",
+    "IssuerID": "asito",
+    "SchemeManagerID": "irma-demo"
+}

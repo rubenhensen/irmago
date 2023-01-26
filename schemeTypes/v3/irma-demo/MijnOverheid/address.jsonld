@@ -1,0 +1,15 @@
+{
+    "ID": "country",
+    "Name": {
+        "en": "Country",
+        "nl": "Land"
+    },
+    "Description": {
+        "en": "The country you live in",
+        "nl": "Het land waarin u woont"
+    },
+    "Index": 0,
+    "CredentialTypeID": "address",
+    "IssuerID": "MijnOverheid",
+    "SchemeManagerID": "irma-demo"
+}

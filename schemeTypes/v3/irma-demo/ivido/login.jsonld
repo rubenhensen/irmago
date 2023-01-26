@@ -1,0 +1,15 @@
+{
+    "ID": "identifier",
+    "Name": {
+        "en": "Identifier",
+        "nl": "Identifier"
+    },
+    "Description": {
+        "en": "Unique identifier for Ivido",
+        "nl": "Unieke identifier voor Ivido"
+    },
+    "Index": 0,
+    "CredentialTypeID": "login",
+    "IssuerID": "ivido",
+    "SchemeManagerID": "irma-demo"
+}

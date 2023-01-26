@@ -1,0 +1,15 @@
+{
+    "ID": "bsn",
+    "Name": {
+        "en": "BSN",
+        "nl": "BSN"
+    },
+    "Description": {
+        "en": "Your Dutch Citizen service number (BSN)",
+        "nl": "Je Burgerservicenummer (BSN)"
+    },
+    "Index": 0,
+    "CredentialTypeID": "bsn",
+    "IssuerID": "nijmegen",
+    "SchemeManagerID": "pbdf"
+}

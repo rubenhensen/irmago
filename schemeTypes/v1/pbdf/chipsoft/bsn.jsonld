@@ -1,15 +1,15 @@
 {
-    "ID": "prefix",
+    "ID": "bsn",
     "Name": {
-        "en": "Prefix",
-        "nl": "Voorvoegsel"
+        "en": "BSN from healthcare",
+        "nl": "BSN vanuit de zorg"
     },
     "Description": {
-        "en": "Prefix of your family name",
-        "nl": "Voorvoegsel van je achternaam"
+        "en": "Your Dutch Citizen service number (BSN) from healthcare",
+        "nl": "Je Burgerservicenummer (BSN) vanuit de zorg"
     },
-    "Index": 3,
-    "DisplayIndex": 3,
+    "Index": 0,
+    "DisplayIndex": 0,
     "CredentialTypeID": "bsn",
     "IssuerID": "chipsoft",
     "SchemeManagerID": "pbdf"

@@ -1,0 +1,16 @@
+{
+    "ID": "familyname",
+    "Name": {
+        "en": "Family name",
+        "nl": "Geslachtsnaam"
+    },
+    "Description": {
+        "en": "Your family name, as given to you at birth",
+        "nl": "Uw achternaam, zoals aan u toegekend bij uw geboorte"
+    },
+    "Index": 4,
+    "DisplayIndex": 4,
+    "CredentialTypeID": "bsn",
+    "IssuerID": "chipsoft",
+    "SchemeManagerID": "irma-demo"
+}

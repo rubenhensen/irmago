@@ -1,15 +1,15 @@
 {
-    "ID": "municipality",
+    "ID": "zipcode",
     "Name": {
-        "en": "Municipality",
-        "nl": "Gemeente"
+        "en": "Postal code",
+        "nl": "Postcode"
     },
     "Description": {
-        "en": "Your municipality",
-        "nl": "Je gemeente"
+        "en": "Your postal code",
+        "nl": "Je postcode"
     },
-    "Index": 3,
-    "DisplayIndex": 4,
+    "Index": 2,
+    "DisplayIndex": 2,
     "CredentialTypeID": "address",
     "IssuerID": "gemeente",
     "SchemeManagerID": "irma-demo"

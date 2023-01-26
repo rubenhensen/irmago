@@ -1,14 +1,14 @@
 {
-    "ID": "eppn",
+    "ID": "emailadres",
     "Name": {
-        "en": "Institution user ID",
-        "nl": "Instelling gebruikers-ID"
+        "en": "Email address",
+        "nl": "E-mailadres"
     },
     "Description": {
-        "en": "Your ID at your institute",
-        "nl": "Je ID bij je instelling"
+        "en": "Your email address",
+        "nl": "Je e-mailadres"
     },
-    "Index": 0,
+    "Index": 1,
     "CredentialTypeID": "surfdrive",
     "IssuerID": "surf",
     "SchemeManagerID": "pbdf"

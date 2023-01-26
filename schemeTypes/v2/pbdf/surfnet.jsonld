@@ -1,14 +1,14 @@
 {
-    "ID": "familyname",
+    "ID": "email",
     "Name": {
-        "en": "Family name",
-        "nl": "Achternaam"
+        "en": "Email address",
+        "nl": "E-mailadres"
     },
     "Description": {
-        "en": "Your family name, as registered by your institute",
-        "nl": "Je achternaam, zoals geregistreerd bij je instantie"
+        "en": "Your email address at your institute",
+        "nl": "Je e-mailadres bij je instantie"
     },
-    "Index": 5,
+    "Index": 6,
     "CredentialTypeID": "surfnet",
     "IssuerID": "pbdf",
     "SchemeManagerID": "pbdf"

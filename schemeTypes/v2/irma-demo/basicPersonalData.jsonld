@@ -1,15 +1,14 @@
 {
-    "ID": "photo",
+    "ID": "firstnames",
     "Name": {
-        "en": "Photo",
-        "nl": "Foto"
+        "en": "First names",
+        "nl": "Voornamen"
     },
     "Description": {
-        "en": "",
-        "nl": ""
+        "en": "Your first names",
+        "nl": "Uw voornamen"
     },
-    "Index": 11,
-    "DisplayHint": "portraitPhoto",
+    "Index": 0,
     "CredentialTypeID": "basicPersonalData",
     "IssuerID": "digidproef",
     "SchemeManagerID": "irma-demo"

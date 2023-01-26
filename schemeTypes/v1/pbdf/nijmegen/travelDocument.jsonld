@@ -1,14 +1,14 @@
 {
-    "ID": "number",
+    "ID": "documentissuer",
     "Name": {
-        "en": "Document number",
-        "nl": "Documentnummer"
+        "en": "Document issuer",
+        "nl": "Uitgever"
     },
     "Description": {
-        "en": "The travel document number",
-        "nl": "Het documentnummer"
+        "en": "Issuer of the travel document",
+        "nl": "Autoriteit van afgifte reisdocument"
     },
-    "Index": 1,
+    "Index": 4,
     "CredentialTypeID": "travelDocument",
     "IssuerID": "nijmegen",
     "SchemeManagerID": "pbdf"

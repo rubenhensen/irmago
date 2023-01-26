@@ -1,15 +1,15 @@
 {
-    "ID": "prefix",
+    "ID": "initials",
     "Name": {
-        "en": "Prefix",
-        "nl": "Voorvoegsel"
+        "en": "Initials",
+        "nl": "Voorletters"
     },
     "Description": {
-        "en": "Prefix of your family name",
-        "nl": "Voorvoegsel van uw achternaam"
+        "en": "Your initials, abbreviating your first names",
+        "nl": "Uw voorletters, een afkorting van uw voornamen"
     },
-    "Index": 2,
-    "DisplayIndex": 2,
+    "Index": 0,
+    "DisplayIndex": 0,
     "CredentialTypeID": "personalData",
     "IssuerID": "nijmegen",
     "SchemeManagerID": "irma-demo"

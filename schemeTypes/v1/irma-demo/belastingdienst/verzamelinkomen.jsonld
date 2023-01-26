@@ -1,14 +1,14 @@
 {
-    "ID": "box1",
+    "ID": "totalincome",
     "Name": {
-        "en": "Box 1",
-        "nl": "Box 1"
+        "en": "Total year income",
+        "nl": "Totale verzamelinkomen"
     },
     "Description": {
-        "en": "Box 1: Income from work, or social security benefits and owned house",
-        "nl": "Box 1: Inkomsten uit werk, of een uitkering, en de eigen woning"
+        "en": "Your total year income",
+        "nl": "Uw totale verzamelinkomen"
     },
-    "Index": 2,
+    "Index": 1,
     "CredentialTypeID": "verzamelinkomen",
     "IssuerID": "belastingdienst",
     "SchemeManagerID": "irma-demo"

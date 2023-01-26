@@ -1,0 +1,15 @@
+{
+    "ID": "renewalDate",
+    "Name": {
+        "en": "Membership last renewal at",
+        "nl": ""
+    },
+    "Description": {
+        "en": "Date of the latest renewal",
+        "nl": ""
+    },
+    "Index": 3,
+    "CredentialTypeID": "membership",
+    "IssuerID": "inz-internetnz",
+    "SchemeManagerID": "irma-demo"
+}

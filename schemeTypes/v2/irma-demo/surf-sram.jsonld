@@ -1,14 +1,14 @@
 {
-    "ID": "subject-id",
+    "ID": "displayName",
     "Name": {
-        "en": "subject Identifier",
+        "en": "Display Name",
         "nl": ""
     },
     "Description": {
-        "en": "A unique identification of subjects. May be either a globally-unique identifier, or a pairwise identifier suitable for more specialized uses.",
+        "en": "Preferred name of a person to be used when displaying entries.",
         "nl": ""
     },
-    "Index": 0,
+    "Index": 8,
     "CredentialTypeID": "surf-sram",
     "IssuerID": "geant-incubator",
     "SchemeManagerID": "irma-demo"

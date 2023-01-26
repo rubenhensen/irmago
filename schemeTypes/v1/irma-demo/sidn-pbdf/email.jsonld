@@ -1,14 +1,14 @@
 {
-    "ID": "domain",
+    "ID": "email",
     "Name": {
-        "en": "Email domain name",
-        "nl": "E-mail domeinnaam"
+        "en": "Email address",
+        "nl": "E-mailadres"
     },
     "Description": {
-        "en": "The domain name of your email address",
-        "nl": "De domeinnaam van je e-mailadres"
+        "en": "Your verified email address",
+        "nl": "Je geverifieerde e-mailadres"
     },
-    "Index": 1,
+    "Index": 0,
     "CredentialTypeID": "email",
     "IssuerID": "sidn-pbdf",
     "SchemeManagerID": "irma-demo"

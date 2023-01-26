@@ -1,0 +1,15 @@
+{
+    "ID": "bic",
+    "Name": {
+        "en": "BIC",
+        "nl": "BIC"
+    },
+    "Description": {
+        "en": "The Bank Identifier Code of your bank",
+        "nl": "De Bank Identifier Code van uw bank"
+    },
+    "Index": 2,
+    "CredentialTypeID": "ideal",
+    "IssuerID": "ideal",
+    "SchemeManagerID": "irma-demo"
+}

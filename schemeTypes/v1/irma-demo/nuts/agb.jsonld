@@ -1,14 +1,14 @@
 {
-    "ID": "agbcode",
+    "ID": "role",
     "Name": {
-        "en": "agbcode",
-        "nl": "agbcode"
+        "en": "role",
+        "nl": "rol"
     },
     "Description": {
-        "en": "uniquely identifying key for individual care providers and care organisations",
-        "nl": "unieke identificerende sleutel van individuele zorgverleners en zorgorganisaties"
+        "en": "care provider role related to the uniquely identifying key",
+        "nl": "zorgverlenersrol met betrekking tot de unieke code"
     },
-    "Index": 0,
+    "Index": 1,
     "CredentialTypeID": "agb",
     "IssuerID": "nuts",
     "SchemeManagerID": "irma-demo"

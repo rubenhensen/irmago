@@ -1,14 +1,14 @@
 {
-    "ID": "municipality",
+    "ID": "city",
     "Name": {
-        "en": "Municipality",
-        "nl": "Gemeente"
+        "en": "City",
+        "nl": "Woonplaats"
     },
     "Description": {
-        "en": "Your municipality",
-        "nl": "Je gemeente"
+        "en": "Your city of residence",
+        "nl": "Je woonplaats"
     },
-    "Index": 3,
+    "Index": 4,
     "CredentialTypeID": "address",
     "IssuerID": "nijmegen",
     "SchemeManagerID": "pbdf"

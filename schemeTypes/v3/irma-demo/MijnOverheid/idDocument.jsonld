@@ -1,0 +1,15 @@
+{
+    "ID": "nationality",
+    "Name": {
+        "en": "Nationality",
+        "nl": "Nationaliteit"
+    },
+    "Description": {
+        "en": "The nationality of the owner",
+        "nl": "Nationaliteit van de eigenaar"
+    },
+    "Index": 3,
+    "CredentialTypeID": "idDocument",
+    "IssuerID": "MijnOverheid",
+    "SchemeManagerID": "irma-demo"
+}

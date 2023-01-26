@@ -1,14 +1,14 @@
 {
-    "ID": "firstname",
+    "ID": "profileurl",
     "Name": {
-        "en": "First name",
-        "nl": "Voornaam"
+        "en": "Profile",
+        "nl": "Profiel"
     },
     "Description": {
-        "en": "Your first name, as registered by LinkedIn",
-        "nl": "Je voornaam, zoals geregistreerd bij LinkedIn"
+        "en": "URL to your LinkedIn profile",
+        "nl": "URL naar je LinkedIn-profiel"
     },
-    "Index": 1,
+    "Index": 4,
     "CredentialTypeID": "linkedin",
     "IssuerID": "pbdf",
     "SchemeManagerID": "irma-demo"

@@ -1,0 +1,15 @@
+{
+    "ID": "logincode",
+    "Name": {
+        "en": "Login code of Gebiedonline",
+        "nl": "Login code van Gebiedonline"
+    },
+    "Description": {
+        "en": "Person can log into any Gebiedonline platform with specified code.",
+        "nl": "Persoon kan in een Gebiedonline platform inloggen met code."
+    },
+    "Index": 0,
+    "CredentialTypeID": "stakeholder",
+    "IssuerID": "gebiedonline",
+    "SchemeManagerID": "irma-demo"
+}

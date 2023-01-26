@@ -1,14 +1,14 @@
 {
-    "ID": "eduPersonEntitlement",
+    "ID": "eduPersonAffiliation",
     "Name": {
-        "en": "Entitlements",
+        "en": "Affiliation",
         "nl": ""
     },
     "Description": {
-        "en": "URI (either URN or URL) that indicates a set of rights to specific resources.",
+        "en": "Specifies the person's relationship(s) to the institution in broad categories such as student, faculty, staff, alum.",
         "nl": ""
     },
-    "Index": 15,
+    "Index": 12,
     "CredentialTypeID": "surf-sram",
     "IssuerID": "geant-incubator",
     "SchemeManagerID": "irma-demo"

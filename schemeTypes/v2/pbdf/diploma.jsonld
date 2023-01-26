@@ -1,14 +1,14 @@
 {
-    "ID": "prefix",
+    "ID": "city",
     "Name": {
-        "en": "Prefix",
-        "nl": "Tussenvoegsel"
+        "en": "City",
+        "nl": "Stad"
     },
     "Description": {
-        "en": "Your family name prefix from your diploma",
-        "nl": "Je tussenvoegsel uit je diploma"
+        "en": "The city of the institute where this degree has been achieved",
+        "nl": "De stad van de instantie waar dit diploma behaald is"
     },
-    "Index": 1,
+    "Index": 10,
     "CredentialTypeID": "diploma",
     "IssuerID": "pbdf",
     "SchemeManagerID": "pbdf"

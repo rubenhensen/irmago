@@ -1,14 +1,14 @@
 {
-    "ID": "fullname",
+    "ID": "email",
     "Name": {
-        "en": "Full name",
-        "nl": "Volledige naam"
+        "en": "Email address",
+        "nl": "E-mailadres"
     },
     "Description": {
-        "en": "Your full name, as registered by LinkedIn",
-        "nl": "Je volledige naam, zoals geregistreerd bij LinkedIn"
+        "en": "Your email address, as registered by LinkedIn",
+        "nl": "Je e-mailadres, zoals geregistreerd bij LinkedIn"
     },
-    "Index": 0,
+    "Index": 3,
     "CredentialTypeID": "linkedin",
     "IssuerID": "pbdf",
     "SchemeManagerID": "pbdf"

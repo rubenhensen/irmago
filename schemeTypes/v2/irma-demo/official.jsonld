@@ -1,14 +1,14 @@
 {
-    "ID": "dateOfDeath",
+    "ID": "suspensionStart",
     "Name": {
-        "en": "Date of death",
-        "nl": "Overlijdensdatum"
+        "en": "Start date of suspension",
+        "nl": "Aanvangsdatum van de schorsing"
     },
     "Description": {
-        "en": "Date of death of the official",
-        "nl": "Overlijdensdatum van de functionaris"
+        "en": "Indicates when the official's suspension started",
+        "nl": "Geeft aan wanneer de schorsing van de functionaris is gestart"
     },
-    "Index": 24,
+    "Index": 39,
     "CredentialTypeID": "official",
     "IssuerID": "kvk",
     "SchemeManagerID": "irma-demo"

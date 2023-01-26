@@ -1,14 +1,14 @@
 {
-    "ID": "ouderDan21",
+    "ID": "aowLeeftijdBehaald",
     "Name": {
-        "en": "Older than 21",
-        "nl": "Ouder dan 21"
+        "en": "Retirement age",
+        "nl": "AOW leeftijd behaald"
     },
     "Description": {
-        "en": "Older than 21",
-        "nl": "Ouder dan 21"
+        "en": "Retirement age",
+        "nl": "AOW leeftijd behaald"
     },
-    "Index": 3,
+    "Index": 2,
     "CredentialTypeID": "demoVIL",
     "IssuerID": "discipl",
     "SchemeManagerID": "irma-demo"

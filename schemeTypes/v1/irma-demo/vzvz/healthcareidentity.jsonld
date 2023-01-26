@@ -1,14 +1,14 @@
 {
-    "ID": "initials",
+    "ID": "issuancemethod",
     "Name": {
-        "en": "Initials",
-        "nl": "Voorletters"
+        "en": "Issuance method",
+        "nl": "Uitgiftemethode"
     },
     "Description": {
-        "en": "Your initials, abbreviating your first names",
-        "nl": "Uw voorletters, een afkorting van uw voornamen"
+        "en": "The way in which your healthcare identity was issued",
+        "nl": "De wijze waarop uw zorgidentiteit is uitgegeven"
     },
-    "Index": 1,
+    "Index": 6,
     "CredentialTypeID": "healthcareidentity",
     "IssuerID": "vzvz",
     "SchemeManagerID": "irma-demo"

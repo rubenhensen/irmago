@@ -1,14 +1,14 @@
 {
-    "ID": "degree",
+    "ID": "familyname",
     "Name": {
-        "en": "Degree",
-        "nl": "Opleiding"
+        "en": "Family name",
+        "nl": "Achternaam"
     },
     "Description": {
-        "en": "Type of education",
-        "nl": "Soort opleiding"
+        "en": "Your family name from your diploma",
+        "nl": "Uw achternaam uit uw diploma"
     },
-    "Index": 6,
+    "Index": 2,
     "CredentialTypeID": "demodiploma",
     "IssuerID": "DemoDuo",
     "SchemeManagerID": "irma-demo"

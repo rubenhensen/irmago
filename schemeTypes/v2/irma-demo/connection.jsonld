@@ -1,14 +1,14 @@
 {
-    "ID": "eangas",
+    "ID": "pseudonym",
     "Name": {
-        "en": "Gas meter code",
-        "nl": "Gasmetercode"
+        "en": "Pseudonym",
+        "nl": "Pseudoniem"
     },
     "Description": {
-        "en": "EAN code of your gas connection",
-        "nl": "EAN-code van uw gassaansluiting"
+        "en": "Pseudonym for pseudonymous communication",
+        "nl": "Pseudoniem voor pseudonieme communicatie"
     },
-    "Index": 0,
+    "Index": 2,
     "CredentialTypeID": "connection",
     "IssuerID": "alliander",
     "SchemeManagerID": "irma-demo"

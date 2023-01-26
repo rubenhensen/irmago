@@ -1,0 +1,16 @@
+{
+    "ID": "over18",
+    "Name": {
+        "en": "Over 18",
+        "nl": "Ouder dan 18"
+    },
+    "Description": {
+        "en": "Whether you are over 18",
+        "nl": "Of je ouder dan 18 bent"
+    },
+    "Index": 10,
+    "DisplayHint": "yesno",
+    "CredentialTypeID": "idin",
+    "IssuerID": "pbdf",
+    "SchemeManagerID": "pbdf"
+}

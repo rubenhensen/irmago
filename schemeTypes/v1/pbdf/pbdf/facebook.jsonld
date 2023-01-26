@@ -1,14 +1,14 @@
 {
-    "ID": "familyname",
+    "ID": "firstname",
     "Name": {
-        "en": "Family name",
-        "nl": "Achternaam"
+        "en": "First name",
+        "nl": "Voornaam"
     },
     "Description": {
-        "en": "Your family name, as registered by Facebook",
-        "nl": "Je achternaam, zoals geregistreerd bij Facebook"
+        "en": "Your first name, as registered by Facebook",
+        "nl": "Je voornaam, zoals geregistreerd bij Facebook"
     },
-    "Index": 2,
+    "Index": 1,
     "CredentialTypeID": "facebook",
     "IssuerID": "pbdf",
     "SchemeManagerID": "pbdf"

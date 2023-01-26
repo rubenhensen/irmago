@@ -1,0 +1,15 @@
+{
+    "ID": "logincode",
+    "Name": {
+        "en": "Login code",
+        "nl": "Logincode"
+    },
+    "Description": {
+        "en": "My personal code to get access to my user account",
+        "nl": "Mijn persoonlijke code om toegang te krijgen tot mijn gebruikersaccount"
+    },
+    "Index": 0,
+    "CredentialTypeID": "useridentification",
+    "IssuerID": "gebiedonline",
+    "SchemeManagerID": "pbdf"
+}

@@ -1,14 +1,15 @@
 {
-    "ID": "uraName",
+    "ID": "hasRole01-011",
     "Name": {
-        "en": "Ura name",
-        "nl": "Ura naam"
+        "en": "Doctor Cardio-thoracic surgery",
+        "nl": "Dokter thoraxchirurgie"
     },
     "Description": {
-        "en": "The name of a ura healthcare organisation",
-        "nl": "De naam van een ura zorgaanbieder"
+        "en": "Whether you have the Doctor Cardio-thoracic surgery role",
+        "nl": "Of u de Dokter thoraxchirurgie role hebt"
     },
-    "Index": 0,
+    "Index": 6,
+    "DisplayHint": "yesno",
     "CredentialTypeID": "uzi",
     "IssuerID": "uzipoc-cibg",
     "SchemeManagerID": "irma-demo"

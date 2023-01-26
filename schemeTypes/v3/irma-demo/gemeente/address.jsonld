@@ -1,0 +1,16 @@
+{
+    "ID": "houseNumber",
+    "Name": {
+        "en": "House number",
+        "nl": "Huisnummer"
+    },
+    "Description": {
+        "en": "Your house number, with possible extension",
+        "nl": "Je huisnummer, met eventuele toevoeging"
+    },
+    "Index": 1,
+    "DisplayIndex": 1,
+    "CredentialTypeID": "address",
+    "IssuerID": "gemeente",
+    "SchemeManagerID": "irma-demo"
+}

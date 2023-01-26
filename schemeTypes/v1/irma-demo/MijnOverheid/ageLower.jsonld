@@ -1,14 +1,14 @@
 {
-    "ID": "over18",
+    "ID": "over21",
     "Name": {
-        "en": "Over 18",
-        "nl": "Ouder dan 18"
+        "en": "Over 21",
+        "nl": "Ouder dan 21"
     },
     "Description": {
-        "en": "If you are over 18",
-        "nl": "Of u ouder bent dan 18"
+        "en": "If you are over 21",
+        "nl": "Of u ouder bent dan 21"
     },
-    "Index": 2,
+    "Index": 3,
     "CredentialTypeID": "ageLower",
     "IssuerID": "MijnOverheid",
     "SchemeManagerID": "irma-demo"

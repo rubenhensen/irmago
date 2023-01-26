@@ -1,14 +1,14 @@
 {
-    "ID": "over50",
+    "ID": "over75",
     "Name": {
-        "en": "Over 50",
-        "nl": "Ouder dan 50"
+        "en": "Over 75",
+        "nl": "Ouder dan 75"
     },
     "Description": {
-        "en": "If you are over 50",
-        "nl": "Of u ouder bent dan 50"
+        "en": "If you are over 75",
+        "nl": "\u003eOf u ouder bent dan 75"
     },
-    "Index": 0,
+    "Index": 3,
     "CredentialTypeID": "ageHigher",
     "IssuerID": "MijnOverheid",
     "SchemeManagerID": "irma-demo"

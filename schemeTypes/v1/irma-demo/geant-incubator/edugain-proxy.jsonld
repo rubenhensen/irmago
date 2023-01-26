@@ -1,14 +1,14 @@
 {
-    "ID": "subject-id",
+    "ID": "eduPersonAssurance",
     "Name": {
-        "en": "Identifier",
+        "en": "Assurance",
         "nl": ""
     },
     "Description": {
-        "en": "A unique identification of subjects. May be either a globally-unique identifier, or a pairwise identifier suitable for more specialized uses.",
+        "en": "This attribute represents identity assurance profiles, which are the set of standards that are met by an identity assertion, based on the Issuer's identity management processes, the type of authentication credential used, the strength of its binding, etc.",
         "nl": ""
     },
-    "Index": 2,
+    "Index": 7,
     "CredentialTypeID": "edugain-proxy",
     "IssuerID": "geant-incubator",
     "SchemeManagerID": "irma-demo"

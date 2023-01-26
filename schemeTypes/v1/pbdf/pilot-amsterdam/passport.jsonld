@@ -1,14 +1,14 @@
 {
-    "ID": "assurancelevel",
+    "ID": "dateofbirth",
     "Name": {
-        "en": "Assurance level",
-        "nl": "Betrouwbaarheidsniveau"
+        "en": "Date of birth",
+        "nl": "Geboortedatum"
     },
     "Description": {
-        "en": "The level of assurance according to eIDAS ",
-        "nl": "Het betrouwbaarheidsniveau volgens eIDAS"
+        "en": "Your date of birth",
+        "nl": "Je geboortedatum"
     },
-    "Index": 11,
+    "Index": 3,
     "CredentialTypeID": "passport",
     "IssuerID": "pilot-amsterdam",
     "SchemeManagerID": "pbdf"

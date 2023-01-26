@@ -1,14 +1,14 @@
 {
-    "ID": "leeftijdkinderen",
+    "ID": "sociaalmedischeindicatie",
     "Name": {
-        "en": "Leeftijd kinderen",
-        "nl": "Leeftijd kinderen"
+        "en": "Sociaal Medische Indicatie",
+        "nl": "Sociaal Medische Indicatie"
     },
     "Description": {
-        "en": "De leeftijd van kinderen van een ouder",
-        "nl": "De leeftijd van kinderen van een ouder"
+        "en": "Of iemand een Sociaal Medische Indicatie heeft",
+        "nl": "Of iemand een Sociaal Medische Indicatie heeft"
     },
-    "Index": 12,
+    "Index": 16,
     "CredentialTypeID": "TWIattributes",
     "IssuerID": "TWIpilot",
     "SchemeManagerID": "irma-demo"

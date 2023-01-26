@@ -1,14 +1,14 @@
 {
-    "ID": "surnamePrefix",
+    "ID": "entityName",
     "Name": {
-        "en": "Surname prefix",
-        "nl": "Tussenvoegsel"
+        "en": "Ura name",
+        "nl": "Ura naam"
     },
     "Description": {
-        "en": "Your surname prefix",
-        "nl": "Uw tussenvoegsel"
+        "en": "The name of an ura healthcare organisation",
+        "nl": "De naam van een ura zorgaanbieder"
     },
-    "Index": 1,
+    "Index": 3,
     "CredentialTypeID": "uzi-2",
     "IssuerID": "uzipoc-cibg",
     "SchemeManagerID": "irma-demo"

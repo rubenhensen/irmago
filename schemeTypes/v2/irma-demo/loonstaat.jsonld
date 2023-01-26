@@ -1,14 +1,14 @@
 {
-    "ID": "careerSavingsPlanDiscount",
+    "ID": "healthInsuranceLawPay",
     "Name": {
-        "en": "Career savings plan discount",
-        "nl": "Levensloop_verlofkorting"
+        "en": "Pay for Health Insurance law",
+        "nl": "Loon voor de Zorgverzekeringswet"
     },
     "Description": {
-        "en": "Column 19: Career savings plan discount",
-        "nl": "Kolom 19: Levensloop_verlofkorting"
+        "en": "Column 12: Pay for Health Insurance law",
+        "nl": "Kolom 12: Loon voor de Zorgverzekeringswet"
     },
-    "Index": 16,
+    "Index": 10,
     "CredentialTypeID": "loonstaat",
     "IssuerID": "asito",
     "SchemeManagerID": "irma-demo"

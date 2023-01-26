@@ -1,0 +1,15 @@
+{
+    "ID": "vrn",
+    "Name": {
+        "en": "Vehicle registration number",
+        "nl": "Kentekennummer"
+    },
+    "Description": {
+        "en": "The identifying numbers on the license plate of your vehicle.",
+        "nl": "Het nummer op de kentekenplaat van uw voertuig."
+    },
+    "Index": 0,
+    "CredentialTypeID": "vrn",
+    "IssuerID": "rdw",
+    "SchemeManagerID": "irma-demo"
+}

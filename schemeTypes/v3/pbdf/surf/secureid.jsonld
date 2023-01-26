@@ -1,0 +1,15 @@
+{
+    "ID": "environment",
+    "Name": {
+        "en": "Environment",
+        "nl": "Omgeving"
+    },
+    "Description": {
+        "en": "The SURFsecureID environment",
+        "nl": "De SURFsecureID-omgeving"
+    },
+    "Index": 1,
+    "CredentialTypeID": "secureid",
+    "IssuerID": "surf",
+    "SchemeManagerID": "pbdf"
+}

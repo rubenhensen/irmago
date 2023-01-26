@@ -1,0 +1,16 @@
+{
+    "ID": "over65",
+    "Name": {
+        "en": "Over 65",
+        "nl": "Ouder dan 65"
+    },
+    "Description": {
+        "en": "Whether you are over 65",
+        "nl": "Of je ouder dan 65 bent"
+    },
+    "Index": 4,
+    "DisplayHint": "yesno",
+    "CredentialTypeID": "ageLimits",
+    "IssuerID": "pbdf",
+    "SchemeManagerID": "pbdf"
+}

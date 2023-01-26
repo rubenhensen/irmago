@@ -1,15 +1,15 @@
 {
-    "ID": "bsn",
+    "ID": "prefix",
     "Name": {
-        "en": "BSN from healthcare",
-        "nl": "BSN vanuit de zorg"
+        "en": "Prefix",
+        "nl": "Voorvoegsel"
     },
     "Description": {
-        "en": "Your Dutch Citizen service number (BSN) from healthcare",
-        "nl": "Uw Burgerservicenummer (BSN) vanuit de zorg"
+        "en": "Prefix of your family name",
+        "nl": "Voorvoegsel van uw achternaam"
     },
-    "Index": 0,
-    "DisplayIndex": 0,
+    "Index": 3,
+    "DisplayIndex": 3,
     "CredentialTypeID": "bsn",
     "IssuerID": "chipsoft",
     "SchemeManagerID": "irma-demo"

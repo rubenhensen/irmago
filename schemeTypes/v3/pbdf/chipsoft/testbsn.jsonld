@@ -1,0 +1,16 @@
+{
+    "ID": "bsn",
+    "Name": {
+        "en": "Test BSN from healthcare",
+        "nl": "Test BSN vanuit de zorg"
+    },
+    "Description": {
+        "en": "Test BSN from healthcare",
+        "nl": "Test BSN vanuit de zorg"
+    },
+    "Index": 0,
+    "DisplayIndex": 0,
+    "CredentialTypeID": "testbsn",
+    "IssuerID": "chipsoft",
+    "SchemeManagerID": "pbdf"
+}

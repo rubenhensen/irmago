@@ -1,16 +1,15 @@
 {
-    "ID": "prefix",
+    "ID": "over65",
     "Name": {
-        "en": "Prefix",
-        "nl": "Voorvoegsel"
+        "en": "Over 65",
+        "nl": "Ouder dan 65"
     },
     "Description": {
-        "en": "Prefix of your family name",
-        "nl": "Voorvoegsel van je achternaam"
+        "en": "Whether you are over 65",
+        "nl": "Of u ouder dan 65 bent"
     },
-    "Index": 2,
-    "DisplayIndex": 3,
+    "Index": 13,
     "CredentialTypeID": "personalData",
-    "IssuerID": "gemeente",
+    "IssuerID": "gemeenten",
     "SchemeManagerID": "irma-demo"
 }

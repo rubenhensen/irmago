@@ -1,14 +1,14 @@
 {
-    "ID": "neighbourhood",
+    "ID": "locality",
     "Name": {
-        "en": "Stakeholder neighbourhood",
-        "nl": "Belanghebbende in wijk"
+        "en": "Stakeholder local neighbourhood",
+        "nl": "Belanghebbende in locale buurt"
     },
     "Description": {
-        "en": "Lives or works in neighbourhood",
-        "nl": "Belanghebbende; woont of werkt in de wijk"
+        "en": "Lives or works in local (sub-) neighbourhood",
+        "nl": "Belanghebbende; woont of werkt in de buurt"
     },
-    "Index": 1,
+    "Index": 0,
     "CredentialTypeID": "locality",
     "IssuerID": "gebiedonline",
     "SchemeManagerID": "irma-demo"

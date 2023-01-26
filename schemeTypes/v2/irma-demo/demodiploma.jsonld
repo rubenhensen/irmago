@@ -1,14 +1,14 @@
 {
-    "ID": "degree",
+    "ID": "city",
     "Name": {
-        "en": "Degree",
-        "nl": "Opleiding"
+        "en": "City",
+        "nl": "Stad"
     },
     "Description": {
-        "en": "Type of education",
-        "nl": "Soort opleiding"
+        "en": "The city of the institute where this degree has been achieved",
+        "nl": "De stad van de instantie waar dit diploma behaald is"
     },
-    "Index": 6,
+    "Index": 10,
     "CredentialTypeID": "demodiploma",
     "IssuerID": "DemoDuo",
     "SchemeManagerID": "irma-demo"

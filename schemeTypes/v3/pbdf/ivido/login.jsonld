@@ -1,0 +1,15 @@
+{
+    "ID": "identifier",
+    "Name": {
+        "en": "Identifier",
+        "nl": "Identificatiecode"
+    },
+    "Description": {
+        "en": "Unique identifier for Ivido",
+        "nl": "Unieke identificatiecode voor Ivido"
+    },
+    "Index": 0,
+    "CredentialTypeID": "login",
+    "IssuerID": "ivido",
+    "SchemeManagerID": "pbdf"
+}

@@ -1,14 +1,14 @@
 {
-    "ID": "number",
+    "ID": "expirydate",
     "Name": {
-        "en": "Document number",
-        "nl": "Documentnummer"
+        "en": "Expiry date",
+        "nl": "Verloopdatum"
     },
     "Description": {
-        "en": "The travel document number",
-        "nl": "Het documentnummer"
+        "en": "Expiry date of the travel document",
+        "nl": "Verloopdatum van het reisdocument"
     },
-    "Index": 1,
+    "Index": 3,
     "CredentialTypeID": "travelDocument",
     "IssuerID": "nijmegen",
     "SchemeManagerID": "pbdf"

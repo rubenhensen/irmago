@@ -1,14 +1,14 @@
 {
-    "ID": "clientfullname",
+    "ID": "mandateid",
     "Name": {
-        "en": "Insured person",
-        "nl": "Verzekerde"
+        "en": "MandateID",
+        "nl": "Machtiging ID"
     },
     "Description": {
-        "en": "The name of the VGZ customer who mandated you",
-        "nl": "De naam van de VGZ verzekerde die deze machtiging aan je gegevens heeft"
+        "en": "A unique ID for this mandate",
+        "nl": "Een uniek ID voor deze machtiging"
     },
-    "Index": 1,
+    "Index": 2,
     "CredentialTypeID": "machtiging",
     "IssuerID": "vgz",
     "SchemeManagerID": "pbdf"

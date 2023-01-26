@@ -1,0 +1,15 @@
+{
+    "ID": "bijstandsgerechtigd",
+    "Name": {
+        "en": "Bijstandsgerechtigd",
+        "nl": "Bijstandsgerechtigd"
+    },
+    "Description": {
+        "en": "Indicatie dat een inwoner bijstandsgerechtigd is",
+        "nl": "Indicatie dat een inwoner bijstandsgerechtigd is"
+    },
+    "Index": 0,
+    "CredentialTypeID": "bijstandsgerechtigd",
+    "IssuerID": "enschede",
+    "SchemeManagerID": "irma-demo"
+}

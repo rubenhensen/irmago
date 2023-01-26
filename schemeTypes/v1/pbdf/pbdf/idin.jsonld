@@ -1,15 +1,14 @@
 {
-    "ID": "over12",
+    "ID": "zipcode",
     "Name": {
-        "en": "Over 12",
-        "nl": "Ouder dan 12"
+        "en": "Postal code",
+        "nl": "Postcode"
     },
     "Description": {
-        "en": "Whether you are over 12",
-        "nl": "Of je ouder dan 12 bent"
+        "en": "Your postal code, as registered at your bank",
+        "nl": "Je postcode, zoals geregistreerd bij je bank"
     },
-    "Index": 8,
-    "DisplayHint": "yesno",
+    "Index": 5,
     "CredentialTypeID": "idin",
     "IssuerID": "pbdf",
     "SchemeManagerID": "pbdf"

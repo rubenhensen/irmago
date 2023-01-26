@@ -1,14 +1,14 @@
 {
-    "ID": "initials",
+    "ID": "surnamePrefix",
     "Name": {
-        "en": "Initials",
-        "nl": "Initialen"
+        "en": "Surname prefix",
+        "nl": "Tussenvoegsel"
     },
     "Description": {
-        "en": "Your initials",
-        "nl": "Uw initialen"
+        "en": "Your surname prefix",
+        "nl": "Uw tussenvoegsel"
     },
-    "Index": 0,
+    "Index": 1,
     "CredentialTypeID": "uzi-2",
     "IssuerID": "uzipoc-cibg",
     "SchemeManagerID": "irma-demo"

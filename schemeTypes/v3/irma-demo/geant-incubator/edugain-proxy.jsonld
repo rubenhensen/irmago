@@ -1,0 +1,15 @@
+{
+    "ID": "givenName",
+    "Name": {
+        "en": "Given Name",
+        "nl": ""
+    },
+    "Description": {
+        "en": "Name strings that are the part of a person's name that is not their surname",
+        "nl": ""
+    },
+    "Index": 4,
+    "CredentialTypeID": "edugain-proxy",
+    "IssuerID": "geant-incubator",
+    "SchemeManagerID": "irma-demo"
+}

@@ -1,0 +1,17 @@
+{
+    "ID": "photo",
+    "Name": {
+        "en": "Photo",
+        "nl": "Foto"
+    },
+    "Description": {
+        "en": "Your picture",
+        "nl": "Je foto"
+    },
+    "Index": 15,
+    "DisplayIndex": 15,
+    "DisplayHint": "portraitPhoto",
+    "CredentialTypeID": "personalData",
+    "IssuerID": "bzkpilot",
+    "SchemeManagerID": "pbdf"
+}

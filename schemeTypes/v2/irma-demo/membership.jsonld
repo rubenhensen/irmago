@@ -1,14 +1,14 @@
 {
-    "ID": "purchaseDate",
+    "ID": "validUntil",
     "Name": {
-        "en": "Membership since",
+        "en": "Membership expiration date",
         "nl": ""
     },
     "Description": {
-        "en": "Date of the first membership purchase",
+        "en": "Membership last renewal expiration date",
         "nl": ""
     },
-    "Index": 2,
+    "Index": 4,
     "CredentialTypeID": "membership",
     "IssuerID": "inz-internetnz",
     "SchemeManagerID": "irma-demo"

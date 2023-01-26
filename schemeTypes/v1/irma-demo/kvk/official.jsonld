@@ -1,14 +1,14 @@
 {
-    "ID": "registrationStart",
+    "ID": "position",
     "Name": {
-        "en": "Start date of registration",
-        "nl": "Aanvangsdatum van de registratie"
+        "en": "Position",
+        "nl": "Functie"
     },
     "Description": {
-        "en": "The start date of the organization's registration",
-        "nl": "De aanvangsdatum van de registratie van de maatschappelijke activiteit"
+        "en": "Position of the official",
+        "nl": "Functie van de functionaris"
     },
-    "Index": 14,
+    "Index": 2,
     "CredentialTypeID": "official",
     "IssuerID": "kvk",
     "SchemeManagerID": "irma-demo"

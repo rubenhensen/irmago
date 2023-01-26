@@ -1,14 +1,14 @@
 {
-    "ID": "email",
+    "ID": "type",
     "Name": {
-        "en": "Email address",
-        "nl": "E-mailadres"
+        "en": "Type",
+        "nl": "Type"
     },
     "Description": {
-        "en": "Your email address at your institution",
-        "nl": "Je e-mailadres bij je instelling"
+        "en": "Your role at your institution",
+        "nl": "Je rol bij je instelling"
     },
-    "Index": 7,
+    "Index": 1,
     "CredentialTypeID": "surfnet-2",
     "IssuerID": "pbdf",
     "SchemeManagerID": "irma-demo"

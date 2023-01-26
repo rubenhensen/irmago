@@ -1,15 +1,14 @@
 {
-    "ID": "over16",
+    "ID": "assurancelevel",
     "Name": {
-        "en": "Over 16",
-        "nl": "Ouder dan 16"
+        "en": "Assurance level",
+        "nl": "Betrouwbaarheidsniveau"
     },
     "Description": {
-        "en": "Whether you are over 16",
-        "nl": "Of je ouder dan 16 bent"
+        "en": "The level of assurance according to eIDAS ",
+        "nl": "Het betrouwbaarheidsniveau volgens eIDAS"
     },
-    "Index": 5,
-    "DisplayHint": "yesno",
+    "Index": 11,
     "CredentialTypeID": "idcard",
     "IssuerID": "pilot-amsterdam",
     "SchemeManagerID": "pbdf"

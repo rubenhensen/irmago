@@ -1,15 +1,15 @@
 {
-    "ID": "dateofbirth",
+    "ID": "testresult",
     "Name": {
-        "en": "Date of birth",
-        "nl": "Geboortedatum"
+        "en": "Test result",
+        "nl": "Testuitslag"
     },
     "Description": {
-        "en": "Your date of birth",
-        "nl": "Uw geboortedatum"
+        "en": "Your test result for the corona virus (SARS-CoV-2)",
+        "nl": "Uw testuitslag voor het coronavirus (SARS-CoV-2)"
     },
-    "Index": 6,
-    "DisplayIndex": 7,
+    "Index": 7,
+    "DisplayIndex": 0,
     "CredentialTypeID": "coronatest",
     "IssuerID": "ggd",
     "SchemeManagerID": "irma-demo"

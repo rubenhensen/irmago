@@ -1,14 +1,14 @@
 {
-    "ID": "sociaalmedischeindicatie",
+    "ID": "rechtinkomenstoeslag",
     "Name": {
-        "en": "Sociaal Medische Indicatie",
-        "nl": "Sociaal Medische Indicatie"
+        "en": "Recht Inkomenstoeslag",
+        "nl": "Recht Inkomenstoeslag"
     },
     "Description": {
-        "en": "Of iemand een Sociaal Medische Indicatie heeft",
-        "nl": "Of iemand een Sociaal Medische Indicatie heeft"
+        "en": "Indicatie of iemand recht heeft op Inkomenstoeslag",
+        "nl": "Indicatie of iemand recht heeft op Inkomenstoeslag"
     },
-    "Index": 16,
+    "Index": 19,
     "CredentialTypeID": "TWIattributes",
     "IssuerID": "TWIpilot",
     "SchemeManagerID": "irma-demo"

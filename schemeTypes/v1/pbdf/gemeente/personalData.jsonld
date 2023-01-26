@@ -1,15 +1,15 @@
 {
-    "ID": "nationality",
+    "ID": "over16",
     "Name": {
-        "en": "Dutch nationality",
-        "nl": "Nederlandse nationaliteit"
+        "en": "Over 16",
+        "nl": "Ouder dan 16"
     },
     "Description": {
-        "en": "Whether you have the dutch nationality",
-        "nl": "Of je de Nederlandse nationaliteit bezit"
+        "en": "Whether you are over 16",
+        "nl": "Of je ouder dan 16 bent"
     },
-    "Index": 6,
-    "DisplayIndex": 13,
+    "Index": 12,
+    "DisplayIndex": 9,
     "DisplayHint": "yesno",
     "CredentialTypeID": "personalData",
     "IssuerID": "gemeente",

@@ -1,14 +1,14 @@
 {
-    "ID": "careerSavingsPlanDiscount",
+    "ID": "payFromFunds",
     "Name": {
-        "en": "Career savings plan discount",
-        "nl": "Levensloop_verlofkorting"
+        "en": "Pay from funds",
+        "nl": "Uitkeringen uit fondsen"
     },
     "Description": {
-        "en": "Column 19: Career savings plan discount",
-        "nl": "Kolom 19: Levensloop_verlofkorting"
+        "en": "Column 5: Pay from funds",
+        "nl": "Kolom 5: Fooien en uitkeringen uit fondsen"
     },
-    "Index": 16,
+    "Index": 7,
     "CredentialTypeID": "loonstaat",
     "IssuerID": "asito",
     "SchemeManagerID": "irma-demo"

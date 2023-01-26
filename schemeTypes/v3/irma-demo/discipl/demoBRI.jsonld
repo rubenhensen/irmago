@@ -1,0 +1,16 @@
+{
+    "ID": "registeredIncome",
+    "Name": {
+        "en": "Registered income",
+        "nl": "Het geregistreerde inkomen"
+    },
+    "Description": {
+        "en": "The registered income is the income that the tax authorities register in the basic income registration (BRI).",
+        "nl": "Het geregistreerde inkomen is het inkomen dat de belastingdienst registreert in de basisregistratie inkomen (BRI)."
+    },
+    "Index": 0,
+    "DisplayIndex": 1,
+    "CredentialTypeID": "demoBRI",
+    "IssuerID": "discipl",
+    "SchemeManagerID": "irma-demo"
+}

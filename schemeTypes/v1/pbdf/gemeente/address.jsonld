@@ -1,15 +1,15 @@
 {
-    "ID": "street",
+    "ID": "houseNumber",
     "Name": {
-        "en": "Street",
-        "nl": "Straat"
+        "en": "House number",
+        "nl": "Huisnummer"
     },
     "Description": {
-        "en": "Your street",
-        "nl": "Je straat"
+        "en": "Your house number, with possible extension",
+        "nl": "Je huisnummer, met eventuele toevoeging"
     },
-    "Index": 0,
-    "DisplayIndex": 0,
+    "Index": 1,
+    "DisplayIndex": 1,
     "CredentialTypeID": "address",
     "IssuerID": "gemeente",
     "SchemeManagerID": "pbdf"

@@ -1,14 +1,14 @@
 {
-    "ID": "fullname",
+    "ID": "iban",
     "Name": {
-        "en": "Account holder",
-        "nl": "Rekeninghouder"
+        "en": "IBAN",
+        "nl": "IBAN"
     },
     "Description": {
-        "en": "Your full name, as registered at your bank",
-        "nl": "Uw volledige naam, zoals geregistreerd bij uw bank"
+        "en": "The IBAN of your bank account",
+        "nl": "De IBAN van uw bankrekening"
     },
-    "Index": 0,
+    "Index": 1,
     "CredentialTypeID": "ideal",
     "IssuerID": "ideal",
     "SchemeManagerID": "irma-demo"

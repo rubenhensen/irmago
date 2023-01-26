@@ -1,0 +1,15 @@
+{
+    "ID": "street",
+    "Name": {
+        "en": "Street",
+        "nl": "Straat"
+    },
+    "Description": {
+        "en": "Your street",
+        "nl": "Je straat"
+    },
+    "Index": 0,
+    "CredentialTypeID": "address",
+    "IssuerID": "nijmegen",
+    "SchemeManagerID": "pbdf"
+}

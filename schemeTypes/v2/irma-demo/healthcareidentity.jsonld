@@ -1,14 +1,14 @@
 {
-    "ID": "initials",
+    "ID": "prefix",
     "Name": {
-        "en": "Initials",
-        "nl": "Voorletters"
+        "en": "Prefix",
+        "nl": "Voorvoegsel"
     },
     "Description": {
-        "en": "Your initials, abbreviating your first names",
-        "nl": "Uw voorletters, een afkorting van uw voornamen"
+        "en": "Prefix of your family name",
+        "nl": "Voorvoegsel van uw achternaam"
     },
-    "Index": 1,
+    "Index": 3,
     "CredentialTypeID": "healthcareidentity",
     "IssuerID": "vzvz",
     "SchemeManagerID": "irma-demo"

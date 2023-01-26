@@ -1,14 +1,14 @@
 {
-    "ID": "firstnames",
+    "ID": "dateofbirth",
     "Name": {
-        "en": "First names",
-        "nl": "Voornamen"
+        "en": "Date of birth",
+        "nl": "Geboortedatum"
     },
     "Description": {
-        "en": "Your first names",
-        "nl": "Uw voornamen"
+        "en": "Your date of birth",
+        "nl": "Uw geboortedatum"
     },
-    "Index": 1,
+    "Index": 8,
     "CredentialTypeID": "personalData",
     "IssuerID": "gemeenten",
     "SchemeManagerID": "irma-demo"

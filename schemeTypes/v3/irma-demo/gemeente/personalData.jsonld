@@ -1,0 +1,16 @@
+{
+    "ID": "countryofbirth",
+    "Name": {
+        "en": "Country of birth",
+        "nl": "Geboorteland"
+    },
+    "Description": {
+        "en": "Your country of birth",
+        "nl": "Je geboorteland"
+    },
+    "Index": 10,
+    "DisplayIndex": 15,
+    "CredentialTypeID": "personalData",
+    "IssuerID": "gemeente",
+    "SchemeManagerID": "irma-demo"
+}

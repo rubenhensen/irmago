@@ -1,14 +1,14 @@
 {
-    "ID": "userid",
+    "ID": "email",
     "Name": {
-        "en": "userid",
-        "nl": "userid"
+        "en": "Email address",
+        "nl": "E-mailadres"
     },
     "Description": {
-        "en": "userid in iRvN environment",
-        "nl": "userid in iRvN omgeving"
+        "en": "Your verified email address",
+        "nl": "Je geverifieerde e-mailadres"
     },
-    "Index": 2,
+    "Index": 0,
     "CredentialTypeID": "account",
     "IssuerID": "irvn",
     "SchemeManagerID": "irma-demo"

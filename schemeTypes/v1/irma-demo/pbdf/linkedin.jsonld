@@ -1,14 +1,14 @@
 {
-    "ID": "firstname",
+    "ID": "email",
     "Name": {
-        "en": "First name",
-        "nl": "Voornaam"
+        "en": "Email address",
+        "nl": "E-mailadres"
     },
     "Description": {
-        "en": "Your first name, as registered by LinkedIn",
-        "nl": "Je voornaam, zoals geregistreerd bij LinkedIn"
+        "en": "Your email address, as registered by LinkedIn",
+        "nl": "Je e-mailadres, zoals geregistreerd bij LinkedIn"
     },
-    "Index": 1,
+    "Index": 3,
     "CredentialTypeID": "linkedin",
     "IssuerID": "pbdf",
     "SchemeManagerID": "irma-demo"

@@ -1,14 +1,14 @@
 {
-    "ID": "initials",
+    "ID": "over65",
     "Name": {
-        "en": "Initials",
-        "nl": "Initialen"
+        "en": "Over 65",
+        "nl": "Ouder dan 65"
     },
     "Description": {
-        "en": "First letters of your given name(s), as registered at your bank",
-        "nl": "Uw initialen, zoals geregistreerd bij uw bank"
+        "en": "If you are over 65",
+        "nl": "Of u ouder dan 65 bent"
     },
-    "Index": 0,
+    "Index": 12,
     "CredentialTypeID": "idin",
     "IssuerID": "idin",
     "SchemeManagerID": "irma-demo"

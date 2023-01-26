@@ -1,14 +1,14 @@
 {
-    "ID": "uniqueid",
+    "ID": "organization",
     "Name": {
-        "en": "Login code",
-        "nl": "Inlogcode"
+        "en": "Organization",
+        "nl": "Organisatie"
     },
     "Description": {
-        "en": "Your unique login code.",
-        "nl": "Je unieke inlogcode."
+        "en": "The organization that uses this login.",
+        "nl": "De organisatie die gebruik maakt van deze login."
     },
-    "Index": 0,
+    "Index": 1,
     "CredentialTypeID": "uniqueid",
     "IssuerID": "sidn-pbdf",
     "SchemeManagerID": "pbdf"
