@@ -1,0 +1,15 @@
+{
+    "ID": "maasid",
+    "Name": {
+        "en": "MaaS ID",
+        "nl": "MaaS ID"
+    },
+    "Description": {
+        "en": "MaaS ID",
+        "nl": "MaaS ID"
+    },
+    "Index": 0,
+    "CredentialTypeID": "maasid",
+    "IssuerID": "maas",
+    "SchemeManagerID": "irma-demo"
+}

@@ -1,0 +1,15 @@
+{
+    "ID": "registrationStart",
+    "Name": {
+        "en": "Start date of registration",
+        "nl": "Aanvangsdatum van de registratie"
+    },
+    "Description": {
+        "en": "The start date of the organization's registration",
+        "nl": "De aanvangsdatum van de registratie van de maatschappelijke activiteit"
+    },
+    "Index": 14,
+    "CredentialTypeID": "official",
+    "IssuerID": "kvk",
+    "SchemeManagerID": "irma-demo"
+}

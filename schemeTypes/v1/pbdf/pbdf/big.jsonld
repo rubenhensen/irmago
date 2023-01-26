@@ -1,0 +1,15 @@
+{
+    "ID": "startdate",
+    "Name": {
+        "en": "Start date",
+        "nl": "Startdatum"
+    },
+    "Description": {
+        "en": "Start date of this registration",
+        "nl": "Startdatum van je registratie"
+    },
+    "Index": 1,
+    "CredentialTypeID": "big",
+    "IssuerID": "pbdf",
+    "SchemeManagerID": "pbdf"
+}

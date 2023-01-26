@@ -1,0 +1,16 @@
+{
+    "ID": "familyname",
+    "Name": {
+        "en": "Family name",
+        "nl": "Geslachtsnaam"
+    },
+    "Description": {
+        "en": "Your family name, as given to you at birth",
+        "nl": "Je achternaam, zoals bij je geboorte toegekend"
+    },
+    "Index": 3,
+    "DisplayIndex": 5,
+    "CredentialTypeID": "personalData",
+    "IssuerID": "gemeente",
+    "SchemeManagerID": "irma-demo"
+}

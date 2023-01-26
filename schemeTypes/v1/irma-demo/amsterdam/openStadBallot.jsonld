@@ -1,0 +1,15 @@
+{
+    "ID": "ballot",
+    "Name": {
+        "en": "Ballot",
+        "nl": "Stembiljet"
+    },
+    "Description": {
+        "en": "The right to vote",
+        "nl": "Het recht om te stemmen"
+    },
+    "Index": 0,
+    "CredentialTypeID": "openStadBallot",
+    "IssuerID": "amsterdam",
+    "SchemeManagerID": "irma-demo"
+}

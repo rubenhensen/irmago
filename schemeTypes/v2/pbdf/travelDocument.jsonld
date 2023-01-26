@@ -1,0 +1,15 @@
+{
+    "ID": "number",
+    "Name": {
+        "en": "Document number",
+        "nl": "Documentnummer"
+    },
+    "Description": {
+        "en": "The travel document number",
+        "nl": "Het documentnummer"
+    },
+    "Index": 1,
+    "CredentialTypeID": "travelDocument",
+    "IssuerID": "nijmegen",
+    "SchemeManagerID": "pbdf"
+}

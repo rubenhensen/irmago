@@ -1,0 +1,15 @@
+{
+    "ID": "homePostcodeDigits",
+    "Name": {
+        "en": "4 digits of postcode of residential address",
+        "nl": "4 cijfers van de postcode van het woonadres"
+    },
+    "Description": {
+        "en": "Lives in the city/neightborhood with the given 4 digits of the postal code",
+        "nl": "Woont in het gebied aangeduid met deze 4 cijfers van de postcode"
+    },
+    "Index": 0,
+    "CredentialTypeID": "locality2",
+    "IssuerID": "gebiedonline",
+    "SchemeManagerID": "irma-demo"
+}

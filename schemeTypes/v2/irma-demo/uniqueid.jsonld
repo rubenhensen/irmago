@@ -1,0 +1,15 @@
+{
+    "ID": "uniqueid",
+    "Name": {
+        "en": "Login code",
+        "nl": "Inlogcode"
+    },
+    "Description": {
+        "en": "Your unique login code.",
+        "nl": "Je unieke inlogcode."
+    },
+    "Index": 0,
+    "CredentialTypeID": "uniqueid",
+    "IssuerID": "sidn-pbdf",
+    "SchemeManagerID": "irma-demo"
+}

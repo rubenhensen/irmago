@@ -1,0 +1,15 @@
+{
+    "ID": "fullname",
+    "Name": {
+        "en": "Account holder",
+        "nl": "Rekeninghouder"
+    },
+    "Description": {
+        "en": "Your full name, as registered at your bank",
+        "nl": "Je volledige naam, zoals geregistreerd bij je bank"
+    },
+    "Index": 0,
+    "CredentialTypeID": "ideal",
+    "IssuerID": "pbdf",
+    "SchemeManagerID": "pbdf"
+}

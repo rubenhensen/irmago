@@ -1,0 +1,15 @@
+{
+    "ID": "dateofbirth",
+    "Name": {
+        "en": "dateofbirth",
+        "nl": "dateofbirth"
+    },
+    "Description": {
+        "en": "",
+        "nl": ""
+    },
+    "Index": 2,
+    "CredentialTypeID": "drivinglicense",
+    "IssuerID": "MijnOverheid",
+    "SchemeManagerID": "irma-demo"
+}

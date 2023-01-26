@@ -1,0 +1,15 @@
+{
+    "ID": "initials",
+    "Name": {
+        "en": "Initials",
+        "nl": "Initialen"
+    },
+    "Description": {
+        "en": "First letters of your given name(s), as registered at your bank",
+        "nl": "Uw initialen, zoals geregistreerd bij uw bank"
+    },
+    "Index": 0,
+    "CredentialTypeID": "idin",
+    "IssuerID": "idin",
+    "SchemeManagerID": "irma-demo"
+}

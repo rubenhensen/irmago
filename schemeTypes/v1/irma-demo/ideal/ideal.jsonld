@@ -1,0 +1,15 @@
+{
+    "ID": "fullname",
+    "Name": {
+        "en": "Account holder",
+        "nl": "Rekeninghouder"
+    },
+    "Description": {
+        "en": "Your full name, as registered at your bank",
+        "nl": "Uw volledige naam, zoals geregistreerd bij uw bank"
+    },
+    "Index": 0,
+    "CredentialTypeID": "ideal",
+    "IssuerID": "ideal",
+    "SchemeManagerID": "irma-demo"
+}

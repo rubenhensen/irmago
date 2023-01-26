@@ -1,0 +1,15 @@
+{
+    "ID": "district",
+    "Name": {
+        "en": "District",
+        "nl": "Wijk"
+    },
+    "Description": {
+        "en": "The district where I live",
+        "nl": "De wijk waar ik woon"
+    },
+    "Index": 1,
+    "CredentialTypeID": "livingarea",
+    "IssuerID": "gebiedonline",
+    "SchemeManagerID": "pbdf"
+}

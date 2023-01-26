@@ -1,0 +1,15 @@
+{
+    "ID": "assurancelevel",
+    "Name": {
+        "en": "Assurance level",
+        "nl": "Betrouwbaarheidsniveau"
+    },
+    "Description": {
+        "en": "The level of assurance according to eIDAS ",
+        "nl": "Het betrouwbaarheidsniveau volgens eIDAS"
+    },
+    "Index": 11,
+    "CredentialTypeID": "passport",
+    "IssuerID": "pilot-amsterdam",
+    "SchemeManagerID": "pbdf"
+}

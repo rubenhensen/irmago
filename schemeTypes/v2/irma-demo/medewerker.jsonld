@@ -1,0 +1,15 @@
+{
+    "ID": "organisatie",
+    "Name": {
+        "en": "Organisation",
+        "nl": "Organisatie"
+    },
+    "Description": {
+        "en": "Organisation within this municipality",
+        "nl": "Organisatie binnen gemeente"
+    },
+    "Index": 1,
+    "CredentialTypeID": "medewerker",
+    "IssuerID": "haarlem",
+    "SchemeManagerID": "irma-demo"
+}

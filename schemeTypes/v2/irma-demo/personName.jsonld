@@ -1,0 +1,15 @@
+{
+    "ID": "fullName",
+    "Name": {
+        "en": "Person full name",
+        "nl": ""
+    },
+    "Description": {
+        "en": "Person full name",
+        "nl": ""
+    },
+    "Index": 0,
+    "CredentialTypeID": "personName",
+    "IssuerID": "inz-personal-data",
+    "SchemeManagerID": "irma-demo"
+}

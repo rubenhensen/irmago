@@ -1,0 +1,15 @@
+{
+    "ID": "debtCollector",
+    "Name": {
+        "en": "Bailiff",
+        "nl": "Gerechtsdeurwaarder"
+    },
+    "Description": {
+        "en": "Coordinating Bailiff",
+        "nl": "Coördinerend Gerechtsdeurwaarder"
+    },
+    "Index": 1,
+    "CredentialTypeID": "demoBVV",
+    "IssuerID": "discipl",
+    "SchemeManagerID": "irma-demo"
+}

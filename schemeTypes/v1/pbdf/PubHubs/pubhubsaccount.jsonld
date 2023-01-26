@@ -1,0 +1,15 @@
+{
+    "ID": "mobilenumber",
+    "Name": {
+        "en": "Mobile phone number",
+        "nl": "Mobiele telefoonnummer"
+    },
+    "Description": {
+        "en": "Your mobile phone number",
+        "nl": "Je mobiel telefoonnummer"
+    },
+    "Index": 1,
+    "CredentialTypeID": "pubhubsaccount",
+    "IssuerID": "PubHubs",
+    "SchemeManagerID": "pbdf"
+}

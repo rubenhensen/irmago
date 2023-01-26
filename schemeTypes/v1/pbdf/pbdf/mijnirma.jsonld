@@ -1,0 +1,15 @@
+{
+    "ID": "email",
+    "Name": {
+        "en": "Username",
+        "nl": "Gebruikersnaam"
+    },
+    "Description": {
+        "en": "Your MyIRMA username",
+        "nl": "Je MijnIRMA-gebruikersnaam"
+    },
+    "Index": 0,
+    "CredentialTypeID": "mijnirma",
+    "IssuerID": "pbdf",
+    "SchemeManagerID": "pbdf"
+}

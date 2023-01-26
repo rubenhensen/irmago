@@ -1,0 +1,15 @@
+{
+    "ID": "userid",
+    "Name": {
+        "en": "userid",
+        "nl": "userid"
+    },
+    "Description": {
+        "en": "userid in iRvN environment",
+        "nl": "userid in iRvN omgeving"
+    },
+    "Index": 2,
+    "CredentialTypeID": "account",
+    "IssuerID": "irvn",
+    "SchemeManagerID": "irma-demo"
+}

@@ -1,0 +1,15 @@
+{
+    "ID": "fullname",
+    "Name": {
+        "en": "Full name",
+        "nl": "Volledige naam"
+    },
+    "Description": {
+        "en": "Your full name, as registered by LinkedIn",
+        "nl": "Je volledige naam, zoals geregistreerd bij LinkedIn"
+    },
+    "Index": 0,
+    "CredentialTypeID": "linkedin",
+    "IssuerID": "pbdf",
+    "SchemeManagerID": "pbdf"
+}

@@ -1,0 +1,10 @@
+{
+    "ID": "",
+    "Name": null,
+    "Description": null,
+    "Index": 1,
+    "RevocationAttribute": true,
+    "CredentialTypeID": "root",
+    "IssuerID": "MijnOverheid",
+    "SchemeManagerID": "irma-demo"
+}

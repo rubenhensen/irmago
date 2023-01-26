@@ -1,0 +1,16 @@
+{
+    "ID": "photo",
+    "Name": {
+        "en": "Photo",
+        "nl": "Foto"
+    },
+    "Description": {
+        "en": "",
+        "nl": ""
+    },
+    "Index": 11,
+    "DisplayHint": "portraitPhoto",
+    "CredentialTypeID": "basicPersonalData",
+    "IssuerID": "digidproef",
+    "SchemeManagerID": "irma-demo"
+}

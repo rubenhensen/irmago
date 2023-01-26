@@ -1,0 +1,15 @@
+{
+    "ID": "studentID",
+    "Name": {
+        "en": "Student number",
+        "nl": "Studentnummer"
+    },
+    "Description": {
+        "en": "Your student number",
+        "nl": "Uw studentnummer"
+    },
+    "Index": 2,
+    "CredentialTypeID": "studentCard",
+    "IssuerID": "RU",
+    "SchemeManagerID": "irma-demo"
+}

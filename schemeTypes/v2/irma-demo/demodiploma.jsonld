@@ -1,0 +1,15 @@
+{
+    "ID": "degree",
+    "Name": {
+        "en": "Degree",
+        "nl": "Opleiding"
+    },
+    "Description": {
+        "en": "Type of education",
+        "nl": "Soort opleiding"
+    },
+    "Index": 6,
+    "CredentialTypeID": "demodiploma",
+    "IssuerID": "DemoDuo",
+    "SchemeManagerID": "irma-demo"
+}

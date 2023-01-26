@@ -1,0 +1,15 @@
+{
+    "ID": "sociaalmedischeindicatie",
+    "Name": {
+        "en": "Sociaal Medische Indicatie",
+        "nl": "Sociaal Medische Indicatie"
+    },
+    "Description": {
+        "en": "Of iemand een Sociaal Medische Indicatie heeft",
+        "nl": "Of iemand een Sociaal Medische Indicatie heeft"
+    },
+    "Index": 16,
+    "CredentialTypeID": "TWIattributes",
+    "IssuerID": "TWIpilot",
+    "SchemeManagerID": "irma-demo"
+}

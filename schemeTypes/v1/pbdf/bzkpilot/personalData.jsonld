@@ -1,0 +1,16 @@
+{
+    "ID": "firstnames",
+    "Name": {
+        "en": "First names",
+        "nl": "Voornamen"
+    },
+    "Description": {
+        "en": "Your first names",
+        "nl": "Je voornamen"
+    },
+    "Index": 2,
+    "DisplayIndex": 2,
+    "CredentialTypeID": "personalData",
+    "IssuerID": "bzkpilot",
+    "SchemeManagerID": "pbdf"
+}

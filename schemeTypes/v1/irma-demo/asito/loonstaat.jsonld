@@ -1,0 +1,15 @@
+{
+    "ID": "careerSavingsPlanDiscount",
+    "Name": {
+        "en": "Career savings plan discount",
+        "nl": "Levensloop_verlofkorting"
+    },
+    "Description": {
+        "en": "Column 19: Career savings plan discount",
+        "nl": "Kolom 19: Levensloop_verlofkorting"
+    },
+    "Index": 16,
+    "CredentialTypeID": "loonstaat",
+    "IssuerID": "asito",
+    "SchemeManagerID": "irma-demo"
+}

@@ -1,0 +1,16 @@
+{
+    "ID": "zipcode",
+    "Name": {
+        "en": "Zip code",
+        "nl": "Postcode"
+    },
+    "Description": {
+        "en": "Your zip code",
+        "nl": "Uw postcode"
+    },
+    "Index": 2,
+    "DisplayIndex": 2,
+    "CredentialTypeID": "address",
+    "IssuerID": "digidproef",
+    "SchemeManagerID": "irma-demo"
+}

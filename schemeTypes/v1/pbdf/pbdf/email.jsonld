@@ -1,0 +1,15 @@
+{
+    "ID": "email",
+    "Name": {
+        "en": "Email address",
+        "nl": "E-mailadres"
+    },
+    "Description": {
+        "en": "Your verified email address",
+        "nl": "Je geverifieerde e-mailadres"
+    },
+    "Index": 0,
+    "CredentialTypeID": "email",
+    "IssuerID": "pbdf",
+    "SchemeManagerID": "pbdf"
+}

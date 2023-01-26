@@ -1,0 +1,15 @@
+{
+    "ID": "leeftijdkinderen",
+    "Name": {
+        "en": "Leeftijd kinderen",
+        "nl": "Leeftijd kinderen"
+    },
+    "Description": {
+        "en": "De leeftijd van kinderen van een ouder",
+        "nl": "De leeftijd van kinderen van een ouder"
+    },
+    "Index": 12,
+    "CredentialTypeID": "TWIattributes",
+    "IssuerID": "TWIpilot",
+    "SchemeManagerID": "irma-demo"
+}

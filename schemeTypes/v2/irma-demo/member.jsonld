@@ -1,0 +1,15 @@
+{
+    "ID": "fullname",
+    "Name": {
+        "en": "Full name",
+        "nl": "Volledige naam"
+    },
+    "Description": {
+        "en": "Your full name",
+        "nl": "Uw volledige naam"
+    },
+    "Index": 2,
+    "CredentialTypeID": "member",
+    "IssuerID": "IRMATube",
+    "SchemeManagerID": "irma-demo"
+}

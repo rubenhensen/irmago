@@ -1,0 +1,15 @@
+{
+    "ID": "fullAddress",
+    "Name": {
+        "en": "Full address",
+        "nl": ""
+    },
+    "Description": {
+        "en": "Number, Road name, Suburb/locality, City/Town name",
+        "nl": ""
+    },
+    "Index": 0,
+    "CredentialTypeID": "address",
+    "IssuerID": "inz-postal-service",
+    "SchemeManagerID": "irma-demo"
+}

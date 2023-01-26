@@ -1,0 +1,16 @@
+{
+    "ID": "prefix",
+    "Name": {
+        "en": "Prefix",
+        "nl": "Voorvoegsel"
+    },
+    "Description": {
+        "en": "Prefix of your family name",
+        "nl": "Voorvoegsel van je achternaam"
+    },
+    "Index": 3,
+    "DisplayIndex": 3,
+    "CredentialTypeID": "bsn",
+    "IssuerID": "chipsoft",
+    "SchemeManagerID": "pbdf"
+}

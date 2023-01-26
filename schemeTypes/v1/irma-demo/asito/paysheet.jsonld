@@ -1,0 +1,15 @@
+{
+    "ID": "netSalaryDeductions",
+    "Name": {
+        "en": "Net salary deductions",
+        "nl": "Netto inhoudingen"
+    },
+    "Description": {
+        "en": "Net salary deductions",
+        "nl": "Netto inhoudingen"
+    },
+    "Index": 5,
+    "CredentialTypeID": "paysheet",
+    "IssuerID": "asito",
+    "SchemeManagerID": "irma-demo"
+}

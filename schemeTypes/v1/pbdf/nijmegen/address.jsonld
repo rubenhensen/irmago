@@ -1,0 +1,15 @@
+{
+    "ID": "municipality",
+    "Name": {
+        "en": "Municipality",
+        "nl": "Gemeente"
+    },
+    "Description": {
+        "en": "Your municipality",
+        "nl": "Je gemeente"
+    },
+    "Index": 3,
+    "CredentialTypeID": "address",
+    "IssuerID": "nijmegen",
+    "SchemeManagerID": "pbdf"
+}

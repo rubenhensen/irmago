@@ -1,0 +1,15 @@
+{
+    "ID": "belowexceptionsocialhousing",
+    "Name": {
+        "en": "Below social housing exception threshold",
+        "nl": "Onder uitzonderingsgrens Sociale Huurwoning"
+    },
+    "Description": {
+        "en": "Is your household's total year income below the exception threshold for social housing?",
+        "nl": "Valt het totale jaarinkomen van uw huishouden onder de uitzonderingsgrens Sociale Huurwoning?"
+    },
+    "Index": 3,
+    "CredentialTypeID": "verzamelinkomenhuishouden",
+    "IssuerID": "belastingdienst",
+    "SchemeManagerID": "irma-demo"
+}

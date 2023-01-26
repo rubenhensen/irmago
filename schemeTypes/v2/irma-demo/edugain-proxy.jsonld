@@ -1,0 +1,15 @@
+{
+    "ID": "sn",
+    "Name": {
+        "en": "Surname",
+        "nl": ""
+    },
+    "Description": {
+        "en": "Surname or family name.",
+        "nl": ""
+    },
+    "Index": 5,
+    "CredentialTypeID": "edugain-proxy",
+    "IssuerID": "geant-incubator",
+    "SchemeManagerID": "irma-demo"
+}

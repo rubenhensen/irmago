@@ -1,0 +1,15 @@
+{
+    "ID": "documentnumber",
+    "Name": {
+        "en": "Document number",
+        "nl": "Documentnummer"
+    },
+    "Description": {
+        "en": "The document number of your ID card",
+        "nl": "Het documentnummer van je ID-kaart"
+    },
+    "Index": 12,
+    "CredentialTypeID": "idcard",
+    "IssuerID": "pilot-amsterdam",
+    "SchemeManagerID": "pbdf"
+}

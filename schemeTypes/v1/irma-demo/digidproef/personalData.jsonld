@@ -1,0 +1,16 @@
+{
+    "ID": "initials",
+    "Name": {
+        "en": "Initials",
+        "nl": "Voorletters"
+    },
+    "Description": {
+        "en": "Your initials, abbreviating your first names",
+        "nl": "Uw voorletters, een afkorting van uw voornamen"
+    },
+    "Index": 0,
+    "DisplayIndex": 1,
+    "CredentialTypeID": "personalData",
+    "IssuerID": "digidproef",
+    "SchemeManagerID": "irma-demo"
+}

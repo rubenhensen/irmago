@@ -1,0 +1,16 @@
+{
+    "ID": "municipality",
+    "Name": {
+        "en": "Municipality",
+        "nl": "Gemeente"
+    },
+    "Description": {
+        "en": "Your municipality",
+        "nl": "Je gemeente"
+    },
+    "Index": 3,
+    "DisplayIndex": 4,
+    "CredentialTypeID": "address",
+    "IssuerID": "gemeente",
+    "SchemeManagerID": "irma-demo"
+}

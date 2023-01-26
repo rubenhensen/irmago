@@ -1,0 +1,15 @@
+{
+    "ID": "number",
+    "Name": {
+        "en": "NHI number",
+        "nl": ""
+    },
+    "Description": {
+        "en": "NHI number",
+        "nl": ""
+    },
+    "Index": 0,
+    "CredentialTypeID": "nhi",
+    "IssuerID": "inz-nhi",
+    "SchemeManagerID": "irma-demo"
+}

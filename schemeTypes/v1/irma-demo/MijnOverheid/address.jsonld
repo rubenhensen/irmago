@@ -1,0 +1,15 @@
+{
+    "ID": "zipcode",
+    "Name": {
+        "en": "ZIP code",
+        "nl": "Postcode"
+    },
+    "Description": {
+        "en": "Your ZIP code",
+        "nl": "Uw postcode"
+    },
+    "Index": 3,
+    "CredentialTypeID": "address",
+    "IssuerID": "MijnOverheid",
+    "SchemeManagerID": "irma-demo"
+}

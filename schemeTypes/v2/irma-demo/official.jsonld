@@ -1,0 +1,15 @@
+{
+    "ID": "dateOfDeath",
+    "Name": {
+        "en": "Date of death",
+        "nl": "Overlijdensdatum"
+    },
+    "Description": {
+        "en": "Date of death of the official",
+        "nl": "Overlijdensdatum van de functionaris"
+    },
+    "Index": 24,
+    "CredentialTypeID": "official",
+    "IssuerID": "kvk",
+    "SchemeManagerID": "irma-demo"
+}

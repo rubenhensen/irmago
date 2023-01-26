@@ -1,0 +1,15 @@
+{
+    "ID": "dateofbirth",
+    "Name": {
+        "en": "Date of birth",
+        "nl": "Geboortedatum"
+    },
+    "Description": {
+        "en": "Your date of birth",
+        "nl": "Je geboortedatum"
+    },
+    "Index": 6,
+    "CredentialTypeID": "personalData",
+    "IssuerID": "nijmegen",
+    "SchemeManagerID": "pbdf"
+}

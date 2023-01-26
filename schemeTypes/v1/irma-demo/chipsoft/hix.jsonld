@@ -1,0 +1,16 @@
+{
+    "ID": "usertype",
+    "Name": {
+        "en": "User type",
+        "nl": "Gebruikerstype"
+    },
+    "Description": {
+        "en": "Your user type",
+        "nl": "Je gebuikerstype"
+    },
+    "Index": 0,
+    "DisplayIndex": 0,
+    "CredentialTypeID": "hix",
+    "IssuerID": "chipsoft",
+    "SchemeManagerID": "irma-demo"
+}

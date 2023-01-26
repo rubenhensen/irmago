@@ -1,0 +1,15 @@
+{
+    "ID": "uraName",
+    "Name": {
+        "en": "Ura name",
+        "nl": "Ura naam"
+    },
+    "Description": {
+        "en": "The name of a ura healthcare organisation",
+        "nl": "De naam van een ura zorgaanbieder"
+    },
+    "Index": 0,
+    "CredentialTypeID": "uzi",
+    "IssuerID": "uzipoc-cibg",
+    "SchemeManagerID": "irma-demo"
+}

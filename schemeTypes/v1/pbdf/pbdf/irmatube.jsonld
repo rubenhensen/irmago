@@ -1,0 +1,15 @@
+{
+    "ID": "type",
+    "Name": {
+        "en": "Type",
+        "nl": "Type"
+    },
+    "Description": {
+        "en": "Your membership type",
+        "nl": "Je lidmaatschapstype"
+    },
+    "Index": 0,
+    "CredentialTypeID": "irmatube",
+    "IssuerID": "pbdf",
+    "SchemeManagerID": "pbdf"
+}

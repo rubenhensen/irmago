@@ -1,0 +1,15 @@
+{
+    "ID": "number",
+    "Name": {
+        "en": "national student number",
+        "nl": ""
+    },
+    "Description": {
+        "en": "national student number",
+        "nl": ""
+    },
+    "Index": 0,
+    "CredentialTypeID": "nsn",
+    "IssuerID": "inz-nsn",
+    "SchemeManagerID": "irma-demo"
+}

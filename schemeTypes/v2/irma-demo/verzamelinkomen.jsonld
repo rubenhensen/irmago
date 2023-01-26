@@ -1,0 +1,15 @@
+{
+    "ID": "box1",
+    "Name": {
+        "en": "Box 1",
+        "nl": "Box 1"
+    },
+    "Description": {
+        "en": "Box 1: Income from work, or social security benefits and owned house",
+        "nl": "Box 1: Inkomsten uit werk, of een uitkering, en de eigen woning"
+    },
+    "Index": 2,
+    "CredentialTypeID": "verzamelinkomen",
+    "IssuerID": "belastingdienst",
+    "SchemeManagerID": "irma-demo"
+}

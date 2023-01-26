@@ -1,0 +1,15 @@
+{
+    "ID": "pseudonym",
+    "Name": {
+        "en": "Pseudonym",
+        "nl": "Pseudoniem"
+    },
+    "Description": {
+        "en": "Pseudonym for pseudonymous communication",
+        "nl": "Pseudoniem voor pseudonieme communicatie"
+    },
+    "Index": 0,
+    "CredentialTypeID": "login",
+    "IssuerID": "coronameting",
+    "SchemeManagerID": "irma-demo"
+}

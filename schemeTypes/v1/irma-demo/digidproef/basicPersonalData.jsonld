@@ -1,0 +1,15 @@
+{
+    "ID": "bsn",
+    "Name": {
+        "en": "BSN",
+        "nl": "BSN"
+    },
+    "Description": {
+        "en": "Your Dutch Citizen service number (BSN)",
+        "nl": "Uw Burgerservicenummer (BSN)"
+    },
+    "Index": 10,
+    "CredentialTypeID": "basicPersonalData",
+    "IssuerID": "digidproef",
+    "SchemeManagerID": "irma-demo"
+}

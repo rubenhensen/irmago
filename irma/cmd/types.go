@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"fmt"
+	"encoding/json"
 	"os"
 	"path/filepath"
 
@@ -34,8 +34,10 @@ var typesCmd = &cobra.Command{
 		switch len(args) {
 		case 0:
 			dest = filepath.Join(wd, "schemeTypes")
-			if err := os.Mkdir(dest, os.ModePerm); err != nil {
-				return errors.WrapPrefix(err, "Error creating JSON directory", 0)
+			if err = common.AssertPathExists(filepath.Join(wd, "schemeTypes")); err != nil {
+				if err := os.Mkdir(dest, os.ModePerm); err != nil {
+					return errors.WrapPrefix(err, "Error creating JSON directory", 0)
+				}
 			}
 		case 1:
 			dest, err = filepath.Abs(args[0])
@@ -61,8 +63,14 @@ var typesCmd = &cobra.Command{
 		}
 
 		attributeTypes := irmaconfig.AttributeTypes
-		for key, val := range attributeTypes {
-			smFolder := filepath.Join(dest, val.SchemeManagerID)
+		v1 := filepath.Join(dest, "v1")
+		if err = common.AssertPathExists(v1); err != nil {
+			if err := os.Mkdir(v1, os.ModePerm); err != nil {
+				return errors.WrapPrefix(err, "Error creating JSON directory", 0)
+			}
+		}
+		for _, val := range attributeTypes {
+			smFolder := filepath.Join(v1, val.SchemeManagerID)
 			// Check and create schememanager folder
 			if err = common.AssertPathExists(smFolder); err != nil {
 				if err := os.Mkdir(smFolder, os.ModePerm); err != nil {
@@ -70,7 +78,7 @@ var typesCmd = &cobra.Command{
 				}
 			}
 
-			issuerFolder := filepath.Join(dest, val.IssuerID)
+			issuerFolder := filepath.Join(smFolder, val.IssuerID)
 			// Check and create issuer folder
 			if err = common.AssertPathExists(issuerFolder); err != nil {
 				if err := os.Mkdir(issuerFolder, os.ModePerm); err != nil {
@@ -78,105 +86,56 @@ var typesCmd = &cobra.Command{
 				}
 			}
 
-			// issuerFolder := filepath.Join(dest, val.IssuerID)
-			// // Check and create issuer folder
-			// if err = common.AssertPathExists(dest); err != nil {
-			// 	if err := os.Mkdir(dest, os.ModePerm); err != nil {
-			// 		return errors.WrapPrefix(err, "Error creating directory", 0)
-			// 	}
-			// }
-			fmt.Printf("attr. key: %v , val: %v\n", key, val)
+			buf, err := json.Marshal(val)
+			if err != nil {
+				return errors.WrapPrefix(err, "Error creating json", 0)
+			}
 
-			// ID:					"profile"
-			// Optional:			""
-			// Name:				github.com/privacybydesign/irmago.TranslatedString ["en": "Profile", "nl": "Profiel", ]
-			// Description:			github.com/privacybydesign/irmago.TranslatedString ["en": "Education profile", "nl": "Opleidingsprofiel", ]
-			// RandomBlind:			false
-			// Index:				7
-			// DisplayIndex:		*int nil
-			// DisplayHint:			""
-			// RevocationAttribute:	false
-			// CredentialTypeID:	"demodiploma"
-			// IssuerID:			"DemoDuo"
-			// SchemeManagerID:		"irma-demo"
+			// Pretty format JSON
+			prettyJson, err := PrettyString(string(buf))
+			if err != nil {
+				return errors.WrapPrefix(err, "Error pretty printing json", 0)
+			}
 
+			// Write to file
+			bts := []byte(prettyJson)
+			if err := os.WriteFile(filepath.Join(issuerFolder, val.CredentialTypeID+".jsonld"), bts, 0644); err != nil {
+				return errors.WrapPrefix(err, "Failed to write description", 0)
+			}
 		}
 
-		// func (s *Server) handleTypeRequest(typeRequest []string) (irma.VCType, *irma.RemoteError) {
-		// 	conf := s.GetConfig()
+		v2 := filepath.Join(dest, "v2")
+		if err = common.AssertPathExists(v2); err != nil {
+			if err := os.Mkdir(v2, os.ModePerm); err != nil {
+				return errors.WrapPrefix(err, "Error creating JSON directory", 0)
+			}
+		}
+		for _, val := range attributeTypes {
+			smFolder := filepath.Join(v2, val.SchemeManagerID)
+			// Check and create schememanager folder
+			if err = common.AssertPathExists(smFolder); err != nil {
+				if err := os.Mkdir(smFolder, os.ModePerm); err != nil {
+					return errors.WrapPrefix(err, "Error creating directory", 0)
+				}
+			}
 
-		// 	credID := irma.NewCredentialTypeIdentifier(typeRequest[1] + "." + typeRequest[2] + "." + typeRequest[3])
-		// 	credentialType := conf.IrmaConfiguration.CredentialTypes[credID]
+			buf, err := json.Marshal(val)
+			if err != nil {
+				return errors.WrapPrefix(err, "Error creating json", 0)
+			}
 
-		// 	vcType := irma.VCType{}
+			// Pretty format JSON
+			prettyJson, err := PrettyString(string(buf))
+			if err != nil {
+				return errors.WrapPrefix(err, "Error pretty printing json", 0)
+			}
 
-		// 	LDContext := make(map[string]string)
-		// 	LDContext["irma"] = "http://irma.app/irma-schema/"
-		// 	LDContext["schema"] = "http://schema.org/"
-
-		// 	vcType = make(map[string]interface{})
-		// 	vcType["@context"] = LDContext
-
-		// 	for _, attr := range credentialType.AttributeTypes {
-		// 		vcAttType := irma.VCAttributeType{}
-		// 		if len(attr.DataType) != 0 {
-		// 			vcAttType.Type = "schema:" + attr.DataType
-		// 		} else {
-		// 			// If no type is specified, use schema:Text as default
-		// 			vcAttType.Type = "schema:Text"
-		// 		}
-		// 		vcAttType.Comment = attr.Description["en"]
-		// 		vcAttType.ID = "irma:" + attr.GetAttributeTypeIdentifier().String()
-		// 		vcType["irma:"+attr.ID] = vcAttType
-		// 	}
-
-		// 	return vcType, nil
-		// }
-
-		// if jsonPkg == "" {
-		// 	request, irmaconfig, err = configureSession(cmd)
-		// 	if err != nil {
-		// 		die("", err)
-		// 	}
-		// 	if serverURL != "" {
-		// 		authMethod, _ := flags.GetString("authmethod")
-		// 		key, _ := flags.GetString("key")
-		// 		name, _ := flags.GetString("name")
-		// 		pkg, err = postRequest(serverURL, request, name, authMethod, key)
-		// 		if err != nil {
-		// 			die("Session could not be started", err)
-		// 		}
-		// 	}
-		// } else {
-		// 	pkg = &server.SessionPackage{}
-		// 	err = json.Unmarshal([]byte(jsonPkg), pkg)
-		// 	if err != nil {
-		// 		die("Failed to parse session package", err)
-		// 	}
-		// }
-
-		// wd, err := os.Getwd()
-		// if err != nil {
-		// 	die("Failed to get wd", err)
-		// }
-
-		// if url != defaulturl && src != wd {
-		// 	die("Failed to read configuration", errors.New("--url can't be combined with --src"))
-		// }
-
-		// if err = common.AssertPathExists(src); err != nil {
-		// 	return errors.WrapPrefix(err, "Source directory does not exist", 0)
-		// }
-
-		// if err = common.AssertPathExists(dest); err != nil {
-		// 	if err := os.Mkdir(dest, os.ModePerm); err != nil {
-		// 		return errors.WrapPrefix(err, "Error creating destination directory", 0)
-		// 	}
-		// }
-
-		// if err := createTypeScheme(url); err != nil {
-		// 	die("Failed to convert scheme", err)
-		// }
+			// Write to file
+			bts := []byte(prettyJson)
+			if err := os.WriteFile(filepath.Join(smFolder, val.CredentialTypeID+".jsonld"), bts, 0644); err != nil {
+				return errors.WrapPrefix(err, "Failed to write description", 0)
+			}
+		}
 
 		return nil
 	},

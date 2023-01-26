@@ -1,0 +1,15 @@
+{
+    "ID": "kindpakketEligible",
+    "Name": {
+        "en": "Eligible for kindpakket",
+        "nl": "Recht op kindpakket"
+    },
+    "Description": {
+        "en": "Eligible for kindpakket",
+        "nl": "Recht op kindpakket"
+    },
+    "Index": 0,
+    "CredentialTypeID": "demoKindpakket",
+    "IssuerID": "forus",
+    "SchemeManagerID": "irma-demo"
+}

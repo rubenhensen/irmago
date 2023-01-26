@@ -1,0 +1,15 @@
+{
+    "ID": "city",
+    "Name": {
+        "en": "city",
+        "nl": ""
+    },
+    "Description": {
+        "en": "The city at which you live",
+        "nl": ""
+    },
+    "Index": 6,
+    "CredentialTypeID": "idinData",
+    "IssuerID": "RU",
+    "SchemeManagerID": "irma-demo"
+}

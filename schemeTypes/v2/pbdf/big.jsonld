@@ -1,0 +1,15 @@
+{
+    "ID": "bignumber",
+    "Name": {
+        "en": "BIG number",
+        "nl": "BIG nummer"
+    },
+    "Description": {
+        "en": "Your BIG code",
+        "nl": "Je BIG-nummer"
+    },
+    "Index": 0,
+    "CredentialTypeID": "big",
+    "IssuerID": "pbdf",
+    "SchemeManagerID": "pbdf"
+}

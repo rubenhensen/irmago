@@ -1,0 +1,15 @@
+{
+    "ID": "address",
+    "Name": {
+        "en": "Address",
+        "nl": "Adres"
+    },
+    "Description": {
+        "en": "Your address, as registered at your bank",
+        "nl": "Uw adres, zoals geregistreerd bij uw bank"
+    },
+    "Index": 4,
+    "CredentialTypeID": "idin",
+    "IssuerID": "idin",
+    "SchemeManagerID": "irma-demo"
+}

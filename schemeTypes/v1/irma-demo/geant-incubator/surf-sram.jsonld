@@ -1,0 +1,15 @@
+{
+    "ID": "eduPersonEntitlement",
+    "Name": {
+        "en": "Entitlements",
+        "nl": ""
+    },
+    "Description": {
+        "en": "URI (either URN or URL) that indicates a set of rights to specific resources.",
+        "nl": ""
+    },
+    "Index": 15,
+    "CredentialTypeID": "surf-sram",
+    "IssuerID": "geant-incubator",
+    "SchemeManagerID": "irma-demo"
+}

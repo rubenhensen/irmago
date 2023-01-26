@@ -1,0 +1,15 @@
+{
+    "ID": "eangas",
+    "Name": {
+        "en": "Gas meter code",
+        "nl": "Gasmetercode"
+    },
+    "Description": {
+        "en": "EAN code of your gas connection",
+        "nl": "EAN-code van uw gassaansluiting"
+    },
+    "Index": 0,
+    "CredentialTypeID": "connection",
+    "IssuerID": "alliander",
+    "SchemeManagerID": "irma-demo"
+}

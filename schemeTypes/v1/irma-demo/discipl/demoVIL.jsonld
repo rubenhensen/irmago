@@ -1,0 +1,15 @@
+{
+    "ID": "ouderDan21",
+    "Name": {
+        "en": "Older than 21",
+        "nl": "Ouder dan 21"
+    },
+    "Description": {
+        "en": "Older than 21",
+        "nl": "Ouder dan 21"
+    },
+    "Index": 3,
+    "CredentialTypeID": "demoVIL",
+    "IssuerID": "discipl",
+    "SchemeManagerID": "irma-demo"
+}

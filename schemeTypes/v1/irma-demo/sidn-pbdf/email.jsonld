@@ -1,0 +1,15 @@
+{
+    "ID": "domain",
+    "Name": {
+        "en": "Email domain name",
+        "nl": "E-mail domeinnaam"
+    },
+    "Description": {
+        "en": "The domain name of your email address",
+        "nl": "De domeinnaam van je e-mailadres"
+    },
+    "Index": 1,
+    "CredentialTypeID": "email",
+    "IssuerID": "sidn-pbdf",
+    "SchemeManagerID": "irma-demo"
+}

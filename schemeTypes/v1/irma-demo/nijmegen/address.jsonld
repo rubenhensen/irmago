@@ -1,0 +1,15 @@
+{
+    "ID": "street",
+    "Name": {
+        "en": "Street",
+        "nl": "Straat"
+    },
+    "Description": {
+        "en": "Your street",
+        "nl": "Uw straat"
+    },
+    "Index": 0,
+    "CredentialTypeID": "address",
+    "IssuerID": "nijmegen",
+    "SchemeManagerID": "irma-demo"
+}

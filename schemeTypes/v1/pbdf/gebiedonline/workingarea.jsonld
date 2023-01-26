@@ -1,0 +1,15 @@
+{
+    "ID": "district",
+    "Name": {
+        "en": "District",
+        "nl": "Wijk"
+    },
+    "Description": {
+        "en": "The district(s) where I work",
+        "nl": "De wijk(en) waar ik werk"
+    },
+    "Index": 1,
+    "CredentialTypeID": "workingarea",
+    "IssuerID": "gebiedonline",
+    "SchemeManagerID": "pbdf"
+}

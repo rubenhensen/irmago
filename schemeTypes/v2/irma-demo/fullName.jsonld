@@ -1,0 +1,15 @@
+{
+    "ID": "firstnames",
+    "Name": {
+        "en": "First names",
+        "nl": "Voornamen"
+    },
+    "Description": {
+        "en": "All of your first names",
+        "nl": "Al uw voornamen"
+    },
+    "Index": 0,
+    "CredentialTypeID": "fullName",
+    "IssuerID": "MijnOverheid",
+    "SchemeManagerID": "irma-demo"
+}

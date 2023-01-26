@@ -1,0 +1,15 @@
+{
+    "ID": "agbcode",
+    "Name": {
+        "en": "AGB-code",
+        "nl": "AGB-code"
+    },
+    "Description": {
+        "en": "Uniquely identifying code for individual healthcare professional",
+        "nl": "Uniek identificerende code van individuele zorgverleners"
+    },
+    "Index": 0,
+    "CredentialTypeID": "agb",
+    "IssuerID": "nuts",
+    "SchemeManagerID": "pbdf"
+}

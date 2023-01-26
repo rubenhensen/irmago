@@ -1,0 +1,17 @@
+{
+    "ID": "nationality",
+    "Name": {
+        "en": "Dutch nationality",
+        "nl": "Nederlandse nationaliteit"
+    },
+    "Description": {
+        "en": "Whether you have the dutch nationality",
+        "nl": "Of je de Nederlandse nationaliteit bezit"
+    },
+    "Index": 6,
+    "DisplayIndex": 13,
+    "DisplayHint": "yesno",
+    "CredentialTypeID": "personalData",
+    "IssuerID": "gemeente",
+    "SchemeManagerID": "pbdf"
+}

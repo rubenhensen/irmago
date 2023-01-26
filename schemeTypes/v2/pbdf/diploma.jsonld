@@ -1,0 +1,15 @@
+{
+    "ID": "prefix",
+    "Name": {
+        "en": "Prefix",
+        "nl": "Tussenvoegsel"
+    },
+    "Description": {
+        "en": "Your family name prefix from your diploma",
+        "nl": "Je tussenvoegsel uit je diploma"
+    },
+    "Index": 1,
+    "CredentialTypeID": "diploma",
+    "IssuerID": "pbdf",
+    "SchemeManagerID": "pbdf"
+}

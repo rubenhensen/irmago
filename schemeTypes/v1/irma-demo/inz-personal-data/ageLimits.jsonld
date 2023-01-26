@@ -1,0 +1,15 @@
+{
+    "ID": "over65",
+    "Name": {
+        "en": "Over 65",
+        "nl": ""
+    },
+    "Description": {
+        "en": "Over 65",
+        "nl": ""
+    },
+    "Index": 1,
+    "CredentialTypeID": "ageLimits",
+    "IssuerID": "inz-personal-data",
+    "SchemeManagerID": "irma-demo"
+}

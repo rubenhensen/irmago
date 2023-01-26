@@ -1,0 +1,15 @@
+{
+    "ID": "emailadres",
+    "Name": {
+        "en": "Email address",
+        "nl": "E-mailadres"
+    },
+    "Description": {
+        "en": "Your email address",
+        "nl": "Uw e-mailadres"
+    },
+    "Index": 1,
+    "CredentialTypeID": "surfdrive",
+    "IssuerID": "surf",
+    "SchemeManagerID": "irma-demo"
+}

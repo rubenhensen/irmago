@@ -1,0 +1,15 @@
+{
+    "ID": "over65",
+    "Name": {
+        "en": "Over 65",
+        "nl": ""
+    },
+    "Description": {
+        "en": "Over 65",
+        "nl": ""
+    },
+    "Index": 6,
+    "CredentialTypeID": "idCard",
+    "IssuerID": "inz-id-card",
+    "SchemeManagerID": "irma-demo"
+}
