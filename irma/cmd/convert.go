@@ -3,6 +3,7 @@ package cmd
 import (
 	"bytes"
 	"encoding/json"
+	"encoding/xml"
 	"fmt"
 	"io"
 	"os"
@@ -97,9 +98,11 @@ func convertScheme(src, dest string) error {
 		return errors.WrapPrefix(err, "Error reading files in src directory", 0)
 	}
 
+	smid := getSchemeManagerID(src)
+
 	for _, file := range files {
 		if file.IsDir() {
-			convertIssuer(filepath.Join(src, file.Name()), filepath.Join(dest, file.Name()), demo)
+			convertIssuer(filepath.Join(src, file.Name()), filepath.Join(dest, file.Name()), smid, file.Name(), demo)
 		}
 
 		if file.Name() == "description.xml" {
@@ -111,6 +114,19 @@ func convertScheme(src, dest string) error {
 	}
 
 	return nil
+}
+
+func getSchemeManagerID(src string) string {
+	type Result struct {
+		Id string `xml:"Id"`
+	}
+	content, err := os.ReadFile(filepath.Join(src, "description.xml"))
+	if err != nil {
+		panic("error reading file")
+	}
+	r := &Result{}
+	xml.Unmarshal(content, r)
+	return r.Id
 }
 
 func isDemo(src string) (bool, error) {
@@ -188,7 +204,7 @@ func issuerKeys(src, dest, foldername string, demo bool) ([]*xj.Node, error) {
 	return ks, nil
 }
 
-func convertIssuer(src, dest string, demo bool) error {
+func convertIssuer(src, dest, schemeManagerId, issuerId string, demo bool) error {
 	var err error
 
 	if err = common.AssertPathExists(dest); err != nil {
@@ -221,13 +237,8 @@ func convertIssuer(src, dest string, demo bool) error {
 		}
 
 		if file.IsDir() && file.Name() == "Issues" {
-			// Create credential folder
-			if err = common.AssertPathExists(filepath.Join(dest, "Issues")); err != nil {
-				if err := os.Mkdir(filepath.Join(dest, "Issues"), os.ModePerm); err != nil {
-					return errors.WrapPrefix(err, "Error creating directory", 0)
-				}
-			}
-			convertCredentials(filepath.Join(src, "Issues"), filepath.Join(dest, "Issues"), demo)
+			// Remove issues folder for simpler folder structure
+			convertCredentials(filepath.Join(src, "Issues"), dest, schemeManagerId, issuerId, file.Name(), demo)
 			continue
 		}
 
@@ -237,12 +248,12 @@ func convertIssuer(src, dest string, demo bool) error {
 	}
 
 	// Convert desription.xml and embed pk/sk
-	convertIssuerDesc(src, dest, demo, skeys, pkeys)
+	convertIssuerDesc(src, dest, schemeManagerId, issuerId, demo, skeys, pkeys)
 
 	return nil
 }
 
-func convertCredentials(src, dest string, demo bool) error {
+func convertCredentials(src, dest, schemeManagerId, issuerId, credentialID string, demo bool) error {
 	var err error
 
 	// Get all file names root dir
@@ -270,9 +281,51 @@ func convertCredentials(src, dest string, demo bool) error {
 			return errors.WrapPrefix(err, "Error opening file", 0)
 		}
 
-		buf, err := xj.Convert(xmlFile)
+		// Decode XML document
+		root := &xj.Node{}
+		err = xj.NewDecoder(xmlFile, xj.WithTypeConverter(xj.Float, xj.Bool, xj.Int, xj.Null), xj.WithAttrPrefix("")).Decode(root)
 		if err != nil {
-			return errors.WrapPrefix(err, "Error converting to json", 0)
+			return err
+		}
+
+		RemoveInterKey(root, "IssueSpecification")
+		AddAttr(root, "", "@context", "http://hensen.io/~rubenhensen/context.jsonld")
+		AddAttr(root, "", "@type", "IssueSpecification")
+		// Replace ID with @id
+		val, err := GetAttr(root, "CredentialID")
+		if err != nil {
+			return errors.New("Could not get attribute")
+		}
+		RemoveAttr(root, "CredentialID")
+		AddAttr(root, "", "@id", "https://privacybydesign.foundation/ld/"+schemeManagerId+"/"+issuerId+"/"+val+".jsonld")
+
+		// Replace schememanager val with {@id: IRI}
+
+		node := &xj.Node{}
+		iri := "https://privacybydesign.foundation/ld/" + schemeManagerId + ".jsonld"
+		AddAttr(node, "", "@id", iri)
+		if err != nil {
+			return errors.New("Could not get attribute")
+		}
+		RemoveAttr(root, "SchemeManager")
+		AddNode(root, "IssueSpecification", "SchemeManager", node)
+
+		// Replace IssuerID val with {@id: IRI}
+		node = &xj.Node{}
+		iri = "https://privacybydesign.foundation/ld/" + schemeManagerId + "/" + issuerId + ".jsonld"
+		AddAttr(node, "", "@id", iri)
+		if err != nil {
+			return errors.New("Could not get attribute")
+		}
+		RemoveAttr(root, "IssuerID")
+		AddNode(root, "IssueSpecification", "IssuerID", node)
+
+		// Then encode it in JSON
+		buf := new(bytes.Buffer)
+		e := xj.NewEncoder(buf, xj.WithTypeConverter(xj.Float, xj.Bool, xj.Int, xj.Null), xj.WithAttrPrefix(""))
+		err = e.Encode(root)
+		if err != nil {
+			return err
 		}
 
 		// Pretty format JSON
@@ -293,7 +346,7 @@ func convertCredentials(src, dest string, demo bool) error {
 	return nil
 }
 
-func convertIssuerDesc(src, dest string, demo bool, skeys, pkeys []*xj.Node) error {
+func convertIssuerDesc(src, dest, schemeManagerId, issuerId string, demo bool, skeys, pkeys []*xj.Node) error {
 	// Get description.xml
 	xmlFilePath := filepath.Join(src, "description.xml")
 	xmlFile, err := os.Open(xmlFilePath)
@@ -307,20 +360,45 @@ func convertIssuerDesc(src, dest string, demo bool, skeys, pkeys []*xj.Node) err
 	if err != nil {
 		return err
 	}
+	RemoveInterKey(root, "Issuer")
 
 	// Add pk and sk
-	AddAttr(root, "Issuer", "PublicKeys", "")
+	AddAttr(root, "", "PublicKeys", "")
 	if demo {
-		AddAttr(root, "Issuer", "PrivateKeys", "")
+		AddAttr(root, "", "PrivateKeys", "")
 	}
 
 	for i, v := range pkeys {
 		AddNode(root, "PublicKeys", strconv.Itoa(i), v)
 	}
 
-	for i, v := range skeys {
-		AddNode(root, "PrivateKeys", strconv.Itoa(i), v)
+	if demo {
+		for i, v := range skeys {
+			AddNode(root, "PrivateKeys", strconv.Itoa(i), v)
+		}
 	}
+
+	AddAttr(root, "", "@context", "http://hensen.io/~rubenhensen/context.jsonld")
+	AddAttr(root, "", "@type", "Issuer")
+
+	// Replace ID with @id
+	val, err := GetAttr(root, "ID")
+	if err != nil {
+		return errors.New("Could not get attribute")
+	}
+	RemoveAttr(root, "ID")
+	AddAttr(root, "", "@id", "https://privacybydesign.foundation/ld/"+schemeManagerId+"/"+val+".jsonld")
+
+	// Replace schememanager val with {@id: IRI}
+	node := &xj.Node{}
+	iri := "https://privacybydesign.foundation/ld/" + schemeManagerId + ".jsonld"
+	AddAttr(node, "", "@id", iri)
+
+	if err != nil {
+		return errors.New("Could not get attribute")
+	}
+	RemoveAttr(root, "SchemeManager")
+	AddNode(root, "Issuer", "SchemeManager", node)
 
 	// Then encode it in JSON
 	buf := new(bytes.Buffer)
@@ -384,12 +462,22 @@ func convertSchemeManager(src, dest string, demo bool) error {
 	if err != nil {
 		return err
 	}
+	RemoveInterKey(root, "SchemeManager")
 
 	// Add pk and sk
-	AddAttr(root, "SchemeManager", "PublicKey", pkFileStr)
+	AddAttr(root, "", "PublicKey", pkFileStr)
 	if demo {
-		AddAttr(root, "SchemeManager", "PrivateKey", skFileStr)
+		AddAttr(root, "", "PrivateKey", skFileStr)
 	}
+
+	AddAttr(root, "", "@context", "http://hensen.io/~rubenhensen/context.jsonld")
+	AddAttr(root, "", "@type", "SchemeManager")
+	val, err := GetAttr(root, "Id")
+	if err != nil {
+		return errors.New("Could not get attribute")
+	}
+	RemoveAttr(root, "Id")
+	AddAttr(root, "", "@id", "https://privacybydesign.foundation/ld/"+val+".jsonld")
 
 	// Then encode it in JSON
 	buf := new(bytes.Buffer)
@@ -414,7 +502,32 @@ func convertSchemeManager(src, dest string, demo bool) error {
 	return nil
 }
 
-func AddAttr(n *xj.Node, searchKey, key, value string) {
+func GetAttr(n *xj.Node, searchKey string) (string, error) {
+	for k, v := range n.Children {
+		if len(v) == 1 && k == searchKey {
+			return v[0].Data, nil
+		} else if len(v) != 1 && k == searchKey {
+			return "", errors.New("Not a single value")
+		} else if len(v) != 0 {
+			for _, v2 := range v {
+				str, err := GetAttr(v2, searchKey)
+				if str != "" && err == nil {
+					return str, err
+				}
+			}
+		} else {
+			continue
+		}
+	}
+	return "", errors.New("Could not find key")
+}
+
+func AddAttr(n *xj.Node, searchKey, key, value string) error {
+	if searchKey == "" {
+		n.AddChild(key, &xj.Node{Data: value})
+		return nil
+	}
+
 	for k, v := range n.Children {
 		if k == searchKey {
 			v[0].AddChild(key, &xj.Node{Data: value})
@@ -423,12 +536,36 @@ func AddAttr(n *xj.Node, searchKey, key, value string) {
 				AddAttr(v2, searchKey, key, value)
 			}
 		} else {
-			panic("could not find key")
+			return errors.New("Could not find key")
 		}
 	}
+	return nil
+}
+
+func RemoveAttr(n *xj.Node, searchKey string) error {
+	if searchKey == "" {
+		return errors.New("Key cannot be empty")
+	}
+
+	for k, v := range n.Children {
+		if k == searchKey {
+			delete(n.Children, searchKey)
+		} else if len(v) != 0 {
+			for _, v2 := range v {
+				RemoveAttr(v2, searchKey)
+			}
+		} else {
+			return errors.New("Could not find key")
+		}
+	}
+	return nil
 }
 
 func AddNode(n *xj.Node, searchKey, key string, node *xj.Node) {
+	if searchKey == "" {
+		n.AddChild(key, node)
+		return
+	}
 	for k, v := range n.Children {
 		if k == searchKey {
 			v[0].AddChild(key, node)
@@ -438,6 +575,18 @@ func AddNode(n *xj.Node, searchKey, key string, node *xj.Node) {
 			}
 		} else {
 			panic("could not find key")
+		}
+	}
+}
+
+func RemoveInterKey(n *xj.Node, searchKey string) {
+	for k, v := range n.Children {
+		if k == searchKey {
+			n.Children = v[0].Children
+		} else if len(v) != 0 {
+			for _, v2 := range v {
+				RemoveInterKey(v2, searchKey)
+			}
 		}
 	}
 }

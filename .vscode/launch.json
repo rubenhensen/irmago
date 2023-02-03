@@ -3,7 +3,7 @@
     "configurations": [
 
         {
-            "name": "IRMA conver",
+            "name": "IRMA convert pbdf windows",
             "type": "go",
             "request": "launch",
             "mode": "auto",
@@ -11,12 +11,25 @@
             "args": [
                 "scheme",
                 "convert", 
-                "C:\\Users\\Ruben\\sidn\\irma-scheme-test",
-                "C:\\Users\\Ruben\\sidn\\irma-scheme-test-json",
+                "C:\\Users\\Ruben\\sidn\\pbdf-schememanager",
+                "C:\\Users\\Ruben\\sidn\\irma-scheme-json\\pbdf",
             ]
         },
         {
-            "name": "IRMA types",
+            "name": "IRMA convert demo windows",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/irma/main.go",
+            "args": [
+                "scheme",
+                "convert", 
+                "C:\\Users\\Ruben\\sidn\\irma-demo-schememanager",
+                "C:\\Users\\Ruben\\sidn\\irma-scheme-json\\irma-demo",
+            ]
+        },
+        {
+            "name": "IRMA types windows",
             "type": "go",
             "request": "launch",
             "mode": "auto",
@@ -24,10 +37,11 @@
             "args": [
                 "scheme",
                 "types",
+                "C:\\Users\\Ruben\\sidn\\irma-scheme-json"
             ]
         },
         {
-            "name": "IRMA sign",
+            "name": "IRMA sign pbdf windows",
             "type": "go",
             "request": "launch",
             "mode": "auto",
@@ -35,8 +49,21 @@
             "args": [
                 "scheme",
                 "sign", 
-                "C:\\Users\\Ruben\\sidn\\irma-scheme-test-json\\sk.pem",
-                "C:\\Users\\Ruben\\sidn\\irma-scheme-test-json",
+                "C:\\Users\\Ruben\\sidn\\irma-scheme-json\\irma-demo\\sk.pem",
+                "C:\\Users\\Ruben\\sidn\\irma-scheme-json\\pbdf",
+            ]
+        },
+        {
+            "name": "IRMA sign demo windows",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/irma/main.go",
+            "args": [
+                "scheme",
+                "sign", 
+                "C:\\Users\\Ruben\\sidn\\irma-scheme-json\\irma-demo\\sk.pem",
+                "C:\\Users\\Ruben\\sidn\\irma-scheme-json\\irma-demo",
             ]
         },
         {
