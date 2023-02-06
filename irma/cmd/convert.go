@@ -18,6 +18,9 @@ import (
 	xj "github.com/basgys/goxml2json"
 )
 
+var Context = "http://hensen.io/~rubenhensen/"
+var SchemeURL = "http://hensen.io/~rubenhensen/"
+
 // signCmd represents the sign command
 var convertCmd = &cobra.Command{
 	Use:   "convert [<src>] [<dest>]",
@@ -164,25 +167,6 @@ func issuerKeys(src, dest, foldername string, demo bool) ([]*xj.Node, error) {
 		return ks, errors.WrapPrefix(err, "Error reading files in src directory", 0)
 	}
 
-	// 	// Convert converts the given XML document to JSON
-	// func Convert(r io.Reader, ps ...plugin) (*bytes.Buffer, error) {
-	// 	// Decode XML document
-	// 	root := &Node{}
-	// 	err := NewDecoder(r, ps...).Decode(root)
-	// 	if err != nil {
-	// 		return nil, err
-	// 	}
-
-	// 	// Then encode it in JSON
-	// 	buf := new(bytes.Buffer)
-	// 	e := NewEncoder(buf, ps...)
-	// 	err = e.Encode(root)
-	// 	if err != nil {
-	// 		return nil, err
-	// 	}
-
-	// 	return buf, nil
-	// }
 	for _, file := range files {
 		// Convert to json
 		path := filepath.Join(folderPath, file.Name())
@@ -289,7 +273,7 @@ func convertCredentials(src, dest, schemeManagerId, issuerId, credentialID strin
 		}
 
 		RemoveInterKey(root, "IssueSpecification")
-		AddAttr(root, "", "@context", "http://hensen.io/~rubenhensen/context.jsonld")
+		AddAttr(root, "", "@context", Context+"context.jsonld")
 		AddAttr(root, "", "@type", "IssueSpecification")
 		// Replace ID with @id
 		val, err := GetAttr(root, "CredentialID")
@@ -297,28 +281,28 @@ func convertCredentials(src, dest, schemeManagerId, issuerId, credentialID strin
 			return errors.New("Could not get attribute")
 		}
 		RemoveAttr(root, "CredentialID")
-		AddAttr(root, "", "@id", "https://privacybydesign.foundation/ld/"+schemeManagerId+"/"+issuerId+"/"+val+".jsonld")
+		AddAttr(root, "", "@id", SchemeURL+schemeManagerId+"/"+issuerId+"/"+val+"/description.jsonld")
 
 		// Replace schememanager val with {@id: IRI}
 
 		node := &xj.Node{}
-		iri := "https://privacybydesign.foundation/ld/" + schemeManagerId + ".jsonld"
+		iri := SchemeURL + schemeManagerId + "/description.jsonld"
 		AddAttr(node, "", "@id", iri)
 		if err != nil {
 			return errors.New("Could not get attribute")
 		}
 		RemoveAttr(root, "SchemeManager")
-		AddNode(root, "IssueSpecification", "SchemeManager", node)
+		AddNode(root, "", "SchemeManagerID", node)
 
 		// Replace IssuerID val with {@id: IRI}
 		node = &xj.Node{}
-		iri = "https://privacybydesign.foundation/ld/" + schemeManagerId + "/" + issuerId + ".jsonld"
+		iri = SchemeURL + schemeManagerId + "/" + issuerId + "/description.jsonld"
 		AddAttr(node, "", "@id", iri)
 		if err != nil {
 			return errors.New("Could not get attribute")
 		}
 		RemoveAttr(root, "IssuerID")
-		AddNode(root, "IssueSpecification", "IssuerID", node)
+		AddNode(root, "", "IssuerID", node)
 
 		// Then encode it in JSON
 		buf := new(bytes.Buffer)
@@ -378,7 +362,7 @@ func convertIssuerDesc(src, dest, schemeManagerId, issuerId string, demo bool, s
 		}
 	}
 
-	AddAttr(root, "", "@context", "http://hensen.io/~rubenhensen/context.jsonld")
+	AddAttr(root, "", "@context", Context+"context.jsonld")
 	AddAttr(root, "", "@type", "Issuer")
 
 	// Replace ID with @id
@@ -387,11 +371,11 @@ func convertIssuerDesc(src, dest, schemeManagerId, issuerId string, demo bool, s
 		return errors.New("Could not get attribute")
 	}
 	RemoveAttr(root, "ID")
-	AddAttr(root, "", "@id", "https://privacybydesign.foundation/ld/"+schemeManagerId+"/"+val+".jsonld")
+	AddAttr(root, "", "@id", SchemeURL+schemeManagerId+"/"+val+"/description.jsonld")
 
 	// Replace schememanager val with {@id: IRI}
 	node := &xj.Node{}
-	iri := "https://privacybydesign.foundation/ld/" + schemeManagerId + ".jsonld"
+	iri := SchemeURL + schemeManagerId + "/description.jsonld"
 	AddAttr(node, "", "@id", iri)
 
 	if err != nil {
@@ -470,14 +454,14 @@ func convertSchemeManager(src, dest string, demo bool) error {
 		AddAttr(root, "", "PrivateKey", skFileStr)
 	}
 
-	AddAttr(root, "", "@context", "http://hensen.io/~rubenhensen/context.jsonld")
+	AddAttr(root, "", "@context", Context+"context.jsonld")
 	AddAttr(root, "", "@type", "SchemeManager")
 	val, err := GetAttr(root, "Id")
 	if err != nil {
 		return errors.New("Could not get attribute")
 	}
 	RemoveAttr(root, "Id")
-	AddAttr(root, "", "@id", "https://privacybydesign.foundation/ld/"+val+".jsonld")
+	AddAttr(root, "", "@id", SchemeURL+val+"/description.jsonld")
 
 	// Then encode it in JSON
 	buf := new(bytes.Buffer)

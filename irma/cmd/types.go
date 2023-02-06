@@ -127,7 +127,7 @@ func managerIssuerCredFolder(attributeTypes map[irma.AttributeTypeIdentifier]*ir
 		RemoveAttr(root, "AttributeType")
 		AddAttr(root, "", "@type", "AttributeType")
 
-		AddAttr(root, "", "@context", "http://hensen.io/~rubenhensen/context.jsonld")
+		AddAttr(root, "", "@context", Context+"context.jsonld")
 		// // Taken from containing CredentialType
 		// CredentialTypeID string `xml:"-"`
 		// IssuerID         string `xml:"-"`
@@ -139,23 +139,24 @@ func managerIssuerCredFolder(attributeTypes map[irma.AttributeTypeIdentifier]*ir
 		// 	return errors.New("Could not get attribute")
 		// }
 		RemoveAttr(root, "id")
-		AddAttr(root, "", "@id", "https://privacybydesign.foundation/ld/"+val.SchemeManagerID+"/"+val.IssuerID+"/"+val.CredentialTypeID+"/"+val.ID+".jsonld")
+		RemoveAttr(root, "attr")
+		AddAttr(root, "", "@id", SchemeURL+val.SchemeManagerID+"/"+val.IssuerID+"/"+val.CredentialTypeID+"/"+val.ID+"/description.jsonld")
 
 		// Replace schememanager val with {@id: IRI}
 		node := &xj.Node{}
-		iri := "https://privacybydesign.foundation/ld/" + val.SchemeManagerID + "/" + val.IssuerID + "/" + val.CredentialTypeID + ".jsonld"
+		iri := SchemeURL + val.SchemeManagerID + "/" + val.IssuerID + "/" + val.CredentialTypeID + "/description.jsonld"
 		AddAttr(node, "", "@id", iri)
 		AddNode(root, "", "CredentialTypeID", node)
 
 		// Replace schememanager val with {@id: IRI}
 		node = &xj.Node{}
-		iri = "https://privacybydesign.foundation/ld/" + val.SchemeManagerID + "/" + val.IssuerID + ".jsonld"
+		iri = SchemeURL + val.SchemeManagerID + "/" + val.IssuerID + "/description.jsonld"
 		AddAttr(node, "", "@id", iri)
 		AddNode(root, "", "IssuerID", node)
 
 		// Replace schememanager val with {@id: IRI}
 		node = &xj.Node{}
-		iri = "https://privacybydesign.foundation/ld/" + val.SchemeManagerID + ".jsonld"
+		iri = SchemeURL + val.SchemeManagerID + "/description.jsonld"
 		AddAttr(node, "", "@id", iri)
 		AddNode(root, "", "SchemeManagerID", node)
 
@@ -183,8 +184,6 @@ func managerIssuerCredFolder(attributeTypes map[irma.AttributeTypeIdentifier]*ir
 			return errors.WrapPrefix(err, "Error pretty printing json", 0)
 		}
 
-		// Add context
-
 		// Write to file
 		bts := []byte(prettyJson)
 		if err := os.WriteFile(filepath.Join(attrFolder, "description.jsonld"), bts, 0644); err != nil {
@@ -196,10 +195,10 @@ func managerIssuerCredFolder(attributeTypes map[irma.AttributeTypeIdentifier]*ir
 
 func getUrl(id string) string {
 	if id == "irma-demo" {
-		return "https://privacybydesign.foundation/ld/irma-demo"
+		return SchemeURL + "irma-demo"
 	}
 	if id == "pbdf" {
-		return "https://privacybydesign.foundation/ld/pbdf"
+		return SchemeURL + "pbdf"
 	}
 	panic("No known id")
 }

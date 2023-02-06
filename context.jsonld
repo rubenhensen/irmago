@@ -1,447 +1,539 @@
 {
   "@context": {
-    "AttributeType": {
-      "@id": "https://yivi.app/2023/credentials#AttributeType",
+    "@version": 1.1,
+    "@protected": true,
+    "id": "@id",
+    "type": "@type",
+    "SchemeManager": {
+      "@id": "http://hensen.io/~rubenhensen/context.jsonld#SchemeManager",
       "@context": {
         "@version": 1.1,
         "@protected": true,
         "id": "@id",
         "type": "@type",
-        "yivi": "https://yivi.app/2023/credentials#",
+        "yivi": "http://hensen.io/~rubenhensen/context.jsonld#",
         "ibm": "http://www.zurich.ibm.com/security/idemix",
-        "xsd": "http://www.w3.org/2001/XMLSchema#"
-      },
-      "attr": {
-        "@id": "yivi:attr"
-      },
-      "Name": {
-        "@id": "yivi:Name",
-        "@container": "@language"
-      },
-      "Description": {
-        "@id": "yivi:Description",
-        "@container": "@language"
-      },
-      "randomblind": {
-        "@id": "yivi:randomblind"
-      },
-      "displayHint": {
-        "@id": "yivi:displayHint"
-      },
-      "revocation": {
-        "@id": "yivi:revocation"
-      }
-    },
-    "IssueSpecification": {
-      "@id": "https://yivi.app/2023/credentials#IssueSpecification",
-      "@context": {
-        "@version": 1.1,
-        "@protected": true,
-        "id": "@id",
-        "type": "@type",
-        "yivi": "https://yivi.app/2023/credentials#",
-        "ibm": "http://www.zurich.ibm.com/security/idemix",
-        "xsd": "http://www.w3.org/2001/XMLSchema#"
-      },
-      "ShortName": {
-        "@id": "yivi:ShortName",
-        "@container": "@language"
-      },
-      "SchemeManager": {
-        "@id": "yivi:SchemeManager",
-        "@type": "@id"
-      },
-      "Description": {
-        "@id": "yivi:Description",
-        "@container": "@language"
-      },
-      "IssueURL": {
-        "@id": "yivi:IssueURL",
-        "@container": "@language"
-      },
-      "version": {
-        "@id": "yivi:version"
-      },
-      "Name": {
-        "@id": "yivi:Name",
-        "@container": "@language"
-      },
-      "IssuerID": {
-        "@id": "yivi:IssuerID",
-        "@type": "@id"
-      },
-      "ShouldBeSingleton": {
-        "@id": "yivi:ShouldBeSingleton"
-      },
-      "Attributes": {
-        "@id": "yivi:Attributes",
-        "@type": "yivi:Attribute",
-        "@container": "@set",
-        "Attribute": {
-          "@id": "yivi:Attribute",
-          "@type": "@id",
-          "Name": {
-            "@id": "yivi:Name",
-            "@container": "@language"
-          },
-          "Description": {
-            "@id": "yivi:Description",
-            "@container": "@language"
-          }
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
+        "Name": {
+          "@id": "yivi:Name",
+          "@container": "@language"
+        },
+        "Url": {
+          "@id": "yivi:Url"
+        },
+        "TimeStampServer": {
+          "@id": "yivi:TimeStampServer"
+        },
+        "version": {
+          "@id": "yivi:version"
+        },
+        "Demo": {
+          "@id": "yivi:Demo"
+        },
+        "Description": {
+          "@id": "yivi:Description",
+          "@container": "@language"
+        },
+        "Contact": {
+          "@id": "yivi:Contact"
+        },
+        "PublicKey": {
+          "@id": "yivi:PublicKey"
+        },
+        "PrivateKey": {
+          "@id": "yivi:PrivateKey"
         }
       }
     },
     "Issuer": {
-      "@id": "https://yivi.app/2023/credentials#Issuer",
+      "@id": "http://hensen.io/~rubenhensen/context.jsonld#Issuer",
       "@context": {
         "@version": 1.1,
         "@protected": true,
         "id": "@id",
         "type": "@type",
-        "yivi": "https://yivi.app/2023/credentials#",
+        "yivi": "http://hensen.io/~rubenhensen/context.jsonld#",
         "ibm": "http://www.zurich.ibm.com/security/idemix",
-        "xsd": "http://www.w3.org/2001/XMLSchema#"
-      },
-      "Name": {
-        "@id": "yivi:Name",
-        "@container": "@language"
-      },
-      "ShortName": {
-        "@id": "yivi:ShortName",
-        "@container": "@language"
-      },
-      "ContactAddress": {
-        "@id": "yivi:ContactAddress"
-      },
-      "ContactEMail": {
-        "@id": "yivi:ContactEMail"
-      },
-      "baseURL": {
-        "@id": "yivi:baseURL"
-      },
-      "PublicKeys": {
-        "@id": "yivi:PublicKeys",
-        "0": {
-          "@id": "yivi:0",
-          "@type": "yivi:IssuerPublicKey"
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
+        "Name": {
+          "@id": "yivi:Name",
+          "@container": "@language"
         },
-        "1": {
-          "@id": "yivi:1",
-          "@type": "yivi:IssuerPublicKey"
+        "ShortName": {
+          "@id": "yivi:ShortName",
+          "@container": "@language"
         },
-        "2": {
-          "@id": "yivi:2",
-          "@type": "yivi:IssuerPublicKey"
+        "ContactAddress": {
+          "@id": "yivi:ContactAddress"
         },
-        "3": {
-          "@id": "yivi:3",
-          "@type": "yivi:IssuerPublicKey"
+        "ContactEMail": {
+          "@id": "yivi:ContactEMail"
         },
-        "4": {
-          "@id": "yivi:4",
-          "@type": "yivi:IssuerPublicKey"
+        "baseURL": {
+          "@id": "yivi:baseURL"
         },
-        "5": {
-          "@id": "yivi:5",
-          "@type": "yivi:IssuerPublicKey"
+        "PublicKeys": {
+          "@id": "yivi:PublicKeys",
+          "@context": {
+            "@version": 1.1,
+            "@protected": true,
+            "id": "@id",
+            "type": "@type",
+            "yivi": "http://hensen.io/~rubenhensen/context.jsonld#",
+            "ibm": "http://www.zurich.ibm.com/security/idemix",
+            "xsd": "http://www.w3.org/2001/XMLSchema#",
+            "0": {
+              "@id": "yivi:0",
+              "@type": "yivi:IssuerPublicKey"
+            },
+            "1": {
+              "@id": "yivi:1",
+              "@type": "yivi:IssuerPublicKey"
+            },
+            "2": {
+              "@id": "yivi:2",
+              "@type": "yivi:IssuerPublicKey"
+            },
+            "3": {
+              "@id": "yivi:3",
+              "@type": "yivi:IssuerPublicKey"
+            },
+            "4": {
+              "@id": "yivi:4",
+              "@type": "yivi:IssuerPublicKey"
+            },
+            "5": {
+              "@id": "yivi:5",
+              "@type": "yivi:IssuerPublicKey"
+            },
+            "6": {
+              "@id": "yivi:6",
+              "@type": "yivi:IssuerPublicKey"
+            },
+            "7": {
+              "@id": "yivi:7",
+              "@type": "yivi:IssuerPublicKey"
+            },
+            "8": {
+              "@id": "yivi:8",
+              "@type": "yivi:IssuerPublicKey"
+            },
+            "9": {
+              "@id": "yivi:9",
+              "@type": "yivi:IssuerPublicKey"
+            },
+            "10": {
+              "@id": "yivi:10",
+              "@type": "yivi:IssuerPublicKey"
+            },
+            "11": {
+              "@id": "yivi:11",
+              "@type": "yivi:IssuerPublicKey"
+            },
+            "12": {
+              "@id": "yivi:12",
+              "@type": "yivi:IssuerPublicKey"
+            },
+            "13": {
+              "@id": "yivi:13",
+              "@type": "yivi:IssuerPublicKey"
+            },
+            "14": {
+              "@id": "yivi:14",
+              "@type": "yivi:IssuerPublicKey"
+            },
+            "15": {
+              "@id": "yivi:15",
+              "@type": "yivi:IssuerPublicKey"
+            },
+            "16": {
+              "@id": "yivi:16",
+              "@type": "yivi:IssuerPublicKey"
+            },
+            "17": {
+              "@id": "yivi:17",
+              "@type": "yivi:IssuerPublicKey"
+            },
+            "18": {
+              "@id": "yivi:18",
+              "@type": "yivi:IssuerPublicKey"
+            },
+            "19": {
+              "@id": "yivi:19",
+              "@type": "yivi:IssuerPublicKey"
+            },
+            "20": {
+              "@id": "yivi:20",
+              "@type": "yivi:IssuerPublicKey"
+            }
+          }
         },
-        "6": {
-          "@id": "yivi:6",
-          "@type": "yivi:IssuerPublicKey"
+        "version": {
+          "@id": "yivi:version"
         },
-        "7": {
-          "@id": "yivi:7",
-          "@type": "yivi:IssuerPublicKey"
+        "SchemeManagerID": {
+          "@id": "yivi:SchemeManagerID",
+          "@type": "@id"
         },
-        "8": {
-          "@id": "yivi:8",
-          "@type": "yivi:IssuerPublicKey"
-        },
-        "9": {
-          "@id": "yivi:9",
-          "@type": "yivi:IssuerPublicKey"
-        },
-        "10": {
-          "@id": "yivi:10",
-          "@type": "yivi:IssuerPublicKey"
-        },
-        "11": {
-          "@id": "yivi:11",
-          "@type": "yivi:IssuerPublicKey"
-        },
-        "12": {
-          "@id": "yivi:12",
-          "@type": "yivi:IssuerPublicKey"
-        },
-        "13": {
-          "@id": "yivi:13",
-          "@type": "yivi:IssuerPublicKey"
-        },
-        "14": {
-          "@id": "yivi:14",
-          "@type": "yivi:IssuerPublicKey"
-        },
-        "15": {
-          "@id": "yivi:15",
-          "@type": "yivi:IssuerPublicKey"
-        },
-        "16": {
-          "@id": "yivi:16",
-          "@type": "yivi:IssuerPublicKey"
-        },
-        "17": {
-          "@id": "yivi:17",
-          "@type": "yivi:IssuerPublicKey"
-        },
-        "18": {
-          "@id": "yivi:18",
-          "@type": "yivi:IssuerPublicKey"
-        },
-        "19": {
-          "@id": "yivi:19",
-          "@type": "yivi:IssuerPublicKey"
-        },
-        "20": {
-          "@id": "yivi:20",
-          "@type": "yivi:IssuerPublicKey"
+        "PrivateKeys": {
+          "@id": "yivi:PrivateKeys",
+          "@context": {
+            "@version": 1.1,
+            "@protected": true,
+            "id": "@id",
+            "type": "@type",
+            "yivi": "http://hensen.io/~rubenhensen/context.jsonld#",
+            "ibm": "http://www.zurich.ibm.com/security/idemix",
+            "xsd": "http://www.w3.org/2001/XMLSchema#",
+            "0": {
+              "@id": "yivi:0",
+              "@type": "yivi:IssuerPrivateKey"
+            },
+            "1": {
+              "@id": "yivi:1",
+              "@type": "yivi:IssuerPrivateKey"
+            },
+            "2": {
+              "@id": "yivi:2",
+              "@type": "yivi:IssuerPrivateKey"
+            },
+            "3": {
+              "@id": "yivi:3",
+              "@type": "yivi:IssuerPrivateKey"
+            },
+            "4": {
+              "@id": "yivi:4",
+              "@type": "yivi:IssuerPrivateKey"
+            },
+            "5": {
+              "@id": "yivi:5",
+              "@type": "yivi:IssuerPrivateKey"
+            },
+            "6": {
+              "@id": "yivi:6",
+              "@type": "yivi:IssuerPrivateKey"
+            },
+            "7": {
+              "@id": "yivi:7",
+              "@type": "yivi:IssuerPrivateKey"
+            },
+            "8": {
+              "@id": "yivi:8",
+              "@type": "yivi:IssuerPrivateKey"
+            },
+            "9": {
+              "@id": "yivi:9",
+              "@type": "yivi:IssuerPrivateKey"
+            },
+            "10": {
+              "@id": "yivi:10",
+              "@type": "yivi:IssuerPrivateKey"
+            },
+            "11": {
+              "@id": "yivi:11",
+              "@type": "yivi:IssuerPrivateKey"
+            },
+            "12": {
+              "@id": "yivi:12",
+              "@type": "yivi:IssuerPrivateKey"
+            },
+            "13": {
+              "@id": "yivi:13",
+              "@type": "yivi:IssuerPrivateKey"
+            },
+            "14": {
+              "@id": "yivi:14",
+              "@type": "yivi:IssuerPrivateKey"
+            },
+            "15": {
+              "@id": "yivi:15",
+              "@type": "yivi:IssuerPrivateKey"
+            },
+            "16": {
+              "@id": "yivi:16",
+              "@type": "yivi:IssuerPrivateKey"
+            },
+            "17": {
+              "@id": "yivi:17",
+              "@type": "yivi:IssuerPrivateKey"
+            },
+            "18": {
+              "@id": "yivi:18",
+              "@type": "yivi:IssuerPrivateKey"
+            },
+            "19": {
+              "@id": "yivi:19",
+              "@type": "yivi:IssuerPrivateKey"
+            },
+            "20": {
+              "@id": "yivi:20",
+              "@type": "yivi:IssuerPrivateKey"
+            }
+          }
         }
-      },
-      "version": {
-        "@id": "yivi:version"
-      },
-      "SchemeManager": {
-        "@id": "yivi:SchemeManager",
-        "@type": "@id"
-      },
-      "PrivateKeys": {
-        "@id": "yivi:PrivateKeys",
-        "0": {
-          "@id": "yivi:0",
-          "@type": "yivi:IssuerPrivateKey"
+      }
+    },
+    "IssueSpecification": {
+      "@id": "http://hensen.io/~rubenhensen/context.jsonld#IssueSpecification",
+      "@context": {
+        "@version": 1.1,
+        "@protected": true,
+        "id": "@id",
+        "type": "@type",
+        "yivi": "http://hensen.io/~rubenhensen/context.jsonld#",
+        "ibm": "http://www.zurich.ibm.com/security/idemix",
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
+        "ShortName": {
+          "@id": "yivi:ShortName",
+          "@container": "@language"
         },
-        "1": {
-          "@id": "yivi:1",
-          "@type": "yivi:IssuerPrivateKey"
+        "SchemeManagerID": {
+          "@id": "yivi:SchemeManagerID",
+          "@type": "@id"
         },
-        "2": {
-          "@id": "yivi:2",
-          "@type": "yivi:IssuerPrivateKey"
+        "Description": {
+          "@id": "yivi:Description",
+          "@container": "@language"
         },
-        "3": {
-          "@id": "yivi:3",
-          "@type": "yivi:IssuerPrivateKey"
+        "IssueURL": {
+          "@id": "yivi:IssueURL",
+          "@container": "@language"
         },
-        "4": {
-          "@id": "yivi:4",
-          "@type": "yivi:IssuerPrivateKey"
+        "version": {
+          "@id": "yivi:version"
         },
-        "5": {
-          "@id": "yivi:5",
-          "@type": "yivi:IssuerPrivateKey"
+        "Name": {
+          "@id": "yivi:Name",
+          "@container": "@language"
         },
-        "6": {
-          "@id": "yivi:6",
-          "@type": "yivi:IssuerPrivateKey"
+        "IssuerID": {
+          "@id": "yivi:IssuerID",
+          "@type": "@id"
         },
-        "7": {
-          "@id": "yivi:7",
-          "@type": "yivi:IssuerPrivateKey"
+        "ShouldBeSingleton": {
+          "@id": "yivi:ShouldBeSingleton"
         },
-        "8": {
-          "@id": "yivi:8",
-          "@type": "yivi:IssuerPrivateKey"
+        "Attributes": {
+          "@id": "yivi:Attributes",
+          "@type": "yivi:Attribute",
+          "@container": "@set",
+          "@context": {
+            "@version": 1.1,
+            "@protected": true,
+            "id": "@id",
+            "type": "@type",
+            "yivi": "http://hensen.io/~rubenhensen/context.jsonld#",
+            "ibm": "http://www.zurich.ibm.com/security/idemix",
+            "xsd": "http://www.w3.org/2001/XMLSchema#",
+            "Attribute": {
+              "@id": "yivi:Attribute",
+              "@type": "@id",
+              "@context": {
+                "@version": 1.1,
+                "@protected": true,
+                "type": "@type",
+                "yivi": "http://hensen.io/~rubenhensen/context.jsonld#",
+                "ibm": "http://www.zurich.ibm.com/security/idemix",
+                "xsd": "http://www.w3.org/2001/XMLSchema#",
+                "id": {
+                  "@id": "yivi:id"
+                },
+                "Name": {
+                  "@id": "yivi:Name",
+                  "@container": "@language"
+                },
+                "Description": {
+                  "@id": "yivi:Description",
+                  "@container": "@language"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "AttributeType": {
+      "@id": "http://hensen.io/~rubenhensen/context.jsonld#AttributeType",
+      "@context": {
+        "@version": 1.1,
+        "@protected": true,
+        "id": "@id",
+        "type": "@type",
+        "yivi": "http://hensen.io/~rubenhensen/context.jsonld#",
+        "ibm": "http://www.zurich.ibm.com/security/idemix",
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
+        "Name": {
+          "@id": "yivi:Name",
+          "@container": "@language"
         },
-        "9": {
-          "@id": "yivi:9",
-          "@type": "yivi:IssuerPrivateKey"
+        "Description": {
+          "@id": "yivi:Description",
+          "@container": "@language"
         },
-        "10": {
-          "@id": "yivi:10",
-          "@type": "yivi:IssuerPrivateKey"
+        "randomblind": {
+          "@id": "yivi:randomblind"
         },
-        "11": {
-          "@id": "yivi:11",
-          "@type": "yivi:IssuerPrivateKey"
+        "displayHint": {
+          "@id": "yivi:displayHint"
         },
-        "12": {
-          "@id": "yivi:12",
-          "@type": "yivi:IssuerPrivateKey"
+        "revocation": {
+          "@id": "yivi:revocation"
+        }
+      }
+    },
+    "IssuerPrivateKey": {
+      "@id": "http://hensen.io/~rubenhensen/context.jsonld#IssuerPrivateKey",
+      "@context": {
+        "@version": 1.1,
+        "@protected": true,
+        "id": "@id",
+        "type": "@type",
+        "ECDSA": {
+          "@id": "ibm:ECDSA"
         },
-        "13": {
-          "@id": "yivi:13",
-          "@type": "yivi:IssuerPrivateKey"
+        "xmlns": {
+          "@id": "ibm:xmlns"
         },
-        "14": {
-          "@id": "yivi:14",
-          "@type": "yivi:IssuerPrivateKey"
+        "Counter": {
+          "@id": "ibm:Counter"
         },
-        "15": {
-          "@id": "yivi:15",
-          "@type": "yivi:IssuerPrivateKey"
-        },
-        "16": {
-          "@id": "yivi:16",
-          "@type": "yivi:IssuerPrivateKey"
-        },
-        "17": {
-          "@id": "yivi:17",
-          "@type": "yivi:IssuerPrivateKey"
-        },
-        "18": {
-          "@id": "yivi:18",
-          "@type": "yivi:IssuerPrivateKey"
-        },
-        "19": {
-          "@id": "yivi:19",
-          "@type": "yivi:IssuerPrivateKey"
-        },
-        "20": {
-          "@id": "yivi:20",
-          "@type": "yivi:IssuerPrivateKey"
+        "Elements": {
+          "@id": "ibm:Elements",
+          "@context": {
+            "@version": 1.1,
+            "@protected": true,
+            "id": "@id",
+            "type": "@type",
+            "yivi": "http://hensen.io/~rubenhensen/context.jsonld#",
+            "ibm": "http://www.zurich.ibm.com/security/idemix",
+            "xsd": "http://www.w3.org/2001/XMLSchema#",
+            "pPrime": {
+              "@id": "ibm:pPrime"
+            },
+            "qPrime": {
+              "@id": "ibm:qPrime"
+            },
+            "p": {
+              "@id": "ibm:p"
+            },
+            "q": {
+              "@id": "ibm:q"
+            }
+          }
         }
       }
     },
     "IssuerPublicKey": {
-      "@id": "yivi:IssuerPublicKey",
-      "Elements": {
-        "@id": "ibm:Elements",
-        "n": {
-          "@id": "ibm:n"
-        },
-        "Z": {
-          "@id": "ibm:Z"
-        },
-        "S": {
-          "@id": "ibm:S"
-        },
-        "Bases": {
-          "@id": "ibm:Bases",
-          "num": "ibm:num",
-          "Base_0": "ibm:Base_0",
-          "Base_1": "ibm:Base_1",
-          "Base_2": "ibm:Base_2",
-          "Base_3": "ibm:Base_3",
-          "Base_4": "ibm:Base_4",
-          "Base_5": "ibm:Base_5",
-          "Base_6": "ibm:Base_6",
-          "Base_7": "ibm:Base_7",
-          "Base_8": "ibm:Base_8",
-          "Base_9": "ibm:Base_9",
-          "Base_10": "ibm:Base_10",
-          "Base_11": "ibm:Base_11",
-          "Base_12": "ibm:Base_12",
-          "Base_13": "ibm:Base_13",
-          "Base_14": "ibm:Base_14",
-          "Base_15": "ibm:Base_15",
-          "Base_16": "ibm:Base_16",
-          "Base_17": "ibm:Base_17",
-          "Base_18": "ibm:Base_18",
-          "Base_19": "ibm:Base_19",
-          "Base_20": "ibm:Base_20"
-        }
-      },
-      "Features": {
-        "@id": "ibm:Features",
-        "Epoch": {
-          "@id": "ibm:Epoch",
-          "length": {
-            "@id": "ibm:length"
-          }
-        }
-      },
-      "xmlns": {
-        "@id": "ibm:xmlns"
-      },
-      "Counter": {
-        "@id": "ibm:Counter"
-      },
-      "ExpiryDate": {
-        "@id": "ibm:ExpiryDate"
-      }
-    },
-    "IssuerPrivateKey": {
-      "@id": "yivi:IssuerPrivateKey",
-      "xmlns": {
-        "@id": "ibm:xmlns"
-      },
-      "Counter": {
-        "@id": "ibm:Counter"
-      },
-      "ExpiryDate": {
-        "@id": "ibm:ExpiryDate"
-      },
-      "Elements": {
-        "@id": "ibm:Elements",
-        "n": {
-          "@id": "ibm:p"
-        },
-        "Z": {
-          "@id": "ibm:q"
-        },
-        "S": {
-          "@id": "ibm:pPrime"
-        },
-        "qPrime": {
-          "@id": "ibm:qPrime"
-        }
-      }
-    },
-    "SchemeManager": {
-      "@id": "https://yivi.app/2023/credentials#SchemeManager",
+      "@id": "http://hensen.io/~rubenhensen/context.jsonld#IssuerPublicKey",
       "@context": {
         "@version": 1.1,
         "@protected": true,
         "id": "@id",
         "type": "@type",
-        "yivi": "https://yivi.app/2023/credentials#",
+        "yivi": "http://hensen.io/~rubenhensen/context.jsonld#",
         "ibm": "http://www.zurich.ibm.com/security/idemix",
-        "xsd": "http://www.w3.org/2001/XMLSchema#"
-      }, 
-      "Name": {
-        "@id": "yivi:Name",
-        "@container": "@language"
-      },
-      "Url": {
-        "@id": "yivi:Url"
-      },
-      "TimeStampServer": {
-        "@id": "yivi:TimeStampServer"
-      },
-      "version": {
-        "@id": "yivi:version"
-      },
-      "Demo": {
-        "@id": "yivi:Demo"
-      },
-      "Description": {
-        "@id": "yivi:Description",
-        "@container": "@language"
-      },
-      "Contact": {
-        "@id": "yivi:Contact"
-      },
-      "PublicKey": {
-        "@id": "yivi:PublicKey"
-      },
-      "PrivateKey": {
-        "@id": "yivi:PrivateKey"
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
+        "Elements": {
+          "@id": "ibm:Elements",
+          "@context": {
+            "@version": 1.1,
+            "@protected": true,
+            "id": "@id",
+            "type": "@type",
+            "yivi": "http://hensen.io/~rubenhensen/context.jsonld#",
+            "ibm": "http://www.zurich.ibm.com/security/idemix",
+            "xsd": "http://www.w3.org/2001/XMLSchema#",
+            "n": {
+              "@id": "ibm:n"
+            },
+            "Z": {
+              "@id": "ibm:Z"
+            },
+            "S": {
+              "@id": "ibm:S"
+            },
+            "G": {
+              "@id": "ibm:G"
+            },
+            "H": {
+              "@id": "ibm:H"
+            },
+            "Bases": {
+              "@id": "ibm:Bases",
+              "@context": {
+                "@version": 1.1,
+                "@protected": true,
+                "id": "@id",
+                "type": "@type",
+                "yivi": "http://hensen.io/~rubenhensen/context.jsonld#",
+                "ibm": "http://www.zurich.ibm.com/security/idemix",
+                "xsd": "http://www.w3.org/2001/XMLSchema#",
+                "num": "ibm:num",
+                "Base_0": "ibm:Base_0",
+                "Base_1": "ibm:Base_1",
+                "Base_2": "ibm:Base_2",
+                "Base_3": "ibm:Base_3",
+                "Base_4": "ibm:Base_4",
+                "Base_5": "ibm:Base_5",
+                "Base_6": "ibm:Base_6",
+                "Base_7": "ibm:Base_7",
+                "Base_8": "ibm:Base_8",
+                "Base_9": "ibm:Base_9",
+                "Base_10": "ibm:Base_10",
+                "Base_11": "ibm:Base_11",
+                "Base_12": "ibm:Base_12",
+                "Base_13": "ibm:Base_13",
+                "Base_14": "ibm:Base_14",
+                "Base_15": "ibm:Base_15",
+                "Base_16": "ibm:Base_16",
+                "Base_17": "ibm:Base_17",
+                "Base_18": "ibm:Base_18",
+                "Base_19": "ibm:Base_19",
+                "Base_20": "ibm:Base_20"
+              }
+            }
+          }
+        },
+        "ECDSA": {
+          "@id": "ibm:ECDSA"
+        },
+        "xmlns": {
+          "@id": "ibm:xmlns"
+        },
+        "Counter": {
+          "@id": "ibm:Counter"
+        },
+        "ExpiryDate": {
+          "@id": "ibm:ExpiryDate"
+        },
+        "Features": {
+          "@id": "ibm:Features",
+          "@context": {
+            "@version": 1.1,
+            "@protected": true,
+            "id": "@id",
+            "type": "@type",
+            "yivi": "http://hensen.io/~rubenhensen/context.jsonld#",
+            "ibm": "http://www.zurich.ibm.com/security/idemix",
+            "xsd": "http://www.w3.org/2001/XMLSchema#",
+            "Epoch": {
+              "@id": "ibm:Epoch",
+              "@context": {
+                "@version": 1.1,
+                "@protected": true,
+                "id": "@id",
+                "type": "@type",
+                "yivi": "http://hensen.io/~rubenhensen/context.jsonld#",
+                "ibm": "http://www.zurich.ibm.com/security/idemix",
+                "xsd": "http://www.w3.org/2001/XMLSchema#",
+                "length": {
+                  "@id": "ibm:length"
+                }
+              }
+            }
+          }
+        }
       }
-
-
-    },
-
-    "Url": "yivi:url",
-    "Name": {
-      "@id": "yivi:Name",
-      "@container": "@language"
-    },
-    "ShortName": {
-      "@id": "yivi:ShortName",
-      "@container": "@language"
-    },
-    "Description": {
-      "@id": "yivi:description",
-      "@container": "@language"
     }
   }
 }
