@@ -95,3 +95,71 @@ func NewVCTranslatedString(attr string) TranslatedString {
 		"nl":       attr,
 	}
 }
+
+// Types required to compute the credentialSchema
+
+type AnyOf struct {
+	Req []string `json:"required"`
+}
+
+type Required struct {
+	Req []string `json:"required"`
+}
+
+type Attribute struct {
+	Ref string `json:"$ref"`
+}
+
+type CredType struct {
+	AdditionalProperties bool                 `json:"additionalProperties"`
+	AnyOf                []AnyOf              `json:"anyOf"`
+	Description          string               `json:"description"`
+	Properties           map[string]Attribute `json:"properties"`
+	Type                 string               `json:"type"`
+}
+
+type Type string
+
+type En struct {
+	Type `json:"type"`
+}
+
+type Nl struct {
+	Type `json:"type"`
+}
+
+type RawValue struct {
+	Type `json:"type"`
+}
+
+type Properties struct {
+	En       `json:"en"`
+	Nl       `json:"nl"`
+	RawValue `json:"rawValue"`
+}
+
+type TranslatedStringSchema struct {
+	Properties `json:"properties"`
+	Required   []string `json:"required"`
+	Type       string   `json:"type"`
+}
+
+type DefaultSchema struct {
+	Type  string `json:"type"`
+	Items []Item `json:"items"`
+}
+
+type Item struct {
+	AdditionalProperties bool `json:"additionalProperties"`
+	Properties           struct {
+		CredType struct {
+			Ref string `json:"$ref"`
+		} `json:"credType"`
+	} `json:"properties"`
+	Required []string `json:"required"`
+}
+
+type Definitions struct {
+	CredType               `json:"credType"`
+	TranslatedStringSchema `json:"translatedString"`
+}

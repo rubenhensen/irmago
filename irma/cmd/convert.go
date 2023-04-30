@@ -222,7 +222,7 @@ func convertIssuer(src, dest, schemeManagerId, issuerId string, demo bool) error
 
 		if file.IsDir() && file.Name() == "Issues" {
 			// Remove issues folder for simpler folder structure
-			convertCredentials(filepath.Join(src, "Issues"), dest, schemeManagerId, issuerId, file.Name(), demo)
+			convertCredentials(filepath.Join(src, "Issues"), dest, schemeManagerId, issuerId, demo)
 			continue
 		}
 
@@ -237,7 +237,7 @@ func convertIssuer(src, dest, schemeManagerId, issuerId string, demo bool) error
 	return nil
 }
 
-func convertCredentials(src, dest, schemeManagerId, issuerId, credentialID string, demo bool) error {
+func convertCredentials(src, dest, schemeManagerId, issuerId string, demo bool) error {
 	var err error
 
 	// Get all file names root dir
@@ -276,15 +276,14 @@ func convertCredentials(src, dest, schemeManagerId, issuerId, credentialID strin
 		AddAttr(root, "", "@context", Context+"context.jsonld")
 		AddAttr(root, "", "@type", "IssueSpecification")
 		// Replace ID with @id
-		val, err := GetAttr(root, "CredentialID")
+		credentialID, err := GetAttr(root, "CredentialID")
 		if err != nil {
 			return errors.New("Could not get attribute")
 		}
 		RemoveAttr(root, "CredentialID")
-		AddAttr(root, "", "@id", SchemeURL+schemeManagerId+"/"+issuerId+"/"+val+"/description.jsonld")
+		AddAttr(root, "", "@id", SchemeURL+schemeManagerId+"/"+issuerId+"/"+credentialID+"/description.jsonld")
 
 		// Replace schememanager val with {@id: IRI}
-
 		node := &xj.Node{}
 		iri := SchemeURL + schemeManagerId + "/description.jsonld"
 		AddAttr(node, "", "@id", iri)
@@ -303,6 +302,8 @@ func convertCredentials(src, dest, schemeManagerId, issuerId, credentialID strin
 		}
 		RemoveAttr(root, "IssuerID")
 		AddNode(root, "", "IssuerID", node)
+
+		ConvertAttributesToIRI(root, schemeManagerId, issuerId, credentialID)
 
 		// Then encode it in JSON
 		buf := new(bytes.Buffer)
@@ -504,6 +505,20 @@ func GetAttr(n *xj.Node, searchKey string) (string, error) {
 		}
 	}
 	return "", errors.New("Could not find key")
+}
+
+func ConvertAttributesToIRI(n *xj.Node, sm, issuer, credential string) error {
+	list := n.Children["Attributes"][0].Children["Attribute"]
+	var ids xj.Nodes
+	for _, v := range list {
+		val, ok := v.Children["id"]
+		if ok {
+			node := &xj.Node{Data: SchemeURL + sm + "/" + issuer + "/" + credential + "/" + val[0].Data + "/description.jsonld"}
+			ids = append(ids, node)
+		}
+	}
+	n.Children["Attributes"] = ids
+	return nil
 }
 
 func AddAttr(n *xj.Node, searchKey, key, value string) error {
