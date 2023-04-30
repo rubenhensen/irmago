@@ -3,6 +3,7 @@
 - het commando `irma scheme types` pakt de schema's van pbdf en genereert type info voor VC.
 - het commando `irma scheme convert` pakt een schema op je PC en converteert deze naar een VC versie. (Ik was er mee bezig om dit ook om te schrijven naar een versie die gewoon het schema van pbdf pakt maar daar is iets mis mee en kan zo gauw even niet vinden wat helaas.)
 - in deze repo staat een statische context.jsonld, die is nodig zodat er een goede vertaalslag gemaakt kan worden door jsonld.
+- Het `scheme sign` commando had ik ook werkend op de jsonld versie van het schema. Ik weet niet of dit nog werkt want dat was ergens halverwege de stage en ik heb het nooit meer geprobeerd. Daarbij is het een beetje nutteloos van VC gebruikt een andere manier van schema integriteit bewaren.
 
 - alles staat vol met mijn domeinnaam. Dat moet natuurlijk aangepast worden.
  
