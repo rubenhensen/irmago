@@ -1,3 +1,17 @@
+# irmago VC changes
+- in session_test.go is een voorbeeld van een VC request.
+- het commando `irma scheme types` pakt de schema's van pbdf en genereert type info voor VC.
+- het commando `irma scheme convert` pakt een schema op je PC en converteert deze naar een VC versie. (Ik was er mee bezig om dit ook om te schrijven naar een versie die gewoon het schema van pbdf pakt maar daar is iets mis mee en kan zo gauw even niet vinden wat helaas.)
+- in deze repo staat een statische context.jsonld, die is nodig zodat er een goede vertaalslag gemaakt kan worden door jsonld.
+
+- alles staat vol met mijn domeinnaam. Dat moet natuurlijk aangepast worden.
+ 
+Voor de rest is de code van daniel omgeschreven naar moderne irma. Er is alleen veel weg omdat dit buiten de scope viel van de stage. Ik hoop dat je er iets aan hebt.
+
+Als er vragen zijn hoor ik het wel.
+Groeeetjes,
+Ruben
+
 # irmago &nbsp; [![GoDoc](https://godoc.org/github.com/privacybydesign/irmago?status.svg)](https://godoc.org/github.com/privacybydesign/irmago) [![Go Report Card](https://goreportcard.com/badge/github.com/privacybydesign/irmago)](https://goreportcard.com/report/github.com/privacybydesign/irmago)
 
 `irmago` is an IRMA implementation in Go. It contains multiple libraries and applications:
